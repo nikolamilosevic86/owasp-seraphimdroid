@@ -3,6 +3,7 @@ package org.owasp.seraphimdroid;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
+import android.widget.Toast;
 
 public class MainScreen extends Activity {
 
@@ -10,6 +11,7 @@ public class MainScreen extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_screen);
+		Toast.makeText(this, "Hello", Toast.LENGTH_LONG).show();
 	}
 
 	@Override
