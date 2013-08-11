@@ -44,7 +44,7 @@ public class SMSReciever extends BroadcastReceiver {
 			FileWriter f;
 				try {
 
-					f = new FileWriter(
+/*					f = new FileWriter(
 							Environment.getExternalStorageDirectory()
 									+ "/SMSLog.txt", true);
 					Date d = new Date(timestamp);
@@ -55,7 +55,8 @@ public class SMSReciever extends BroadcastReceiver {
 					f.write(newDateStr + " - " + smsNumber + " - " + smsData
 							+ "\r\n");
 					f.flush();
-					f.close();
+					f.close();*/
+					Toast.makeText(context, smsData, Toast.LENGTH_LONG).show();
 
 				} catch (Exception ex) {
 					Toast.makeText(context, "Error:" + ex.getMessage(),

@@ -23,6 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+                <receiver android:name="org.owasp.seraphimdroid.SMSReciever" android:exported="true">
+    <intent-filter android:priority="999">
+        <action android:name="android.provider.Telephony.SMS_RECEIVED"></action>
+    </intent-filter>
+    </receiver>
     </application>
 
 </manifest>
