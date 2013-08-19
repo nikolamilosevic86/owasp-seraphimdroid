@@ -4,5 +4,6 @@
     <string name="app_name">Seraphimdroid</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-
+    <string name="ussd_blocked_msg">SeraphimDroid prevented execution of a potentially harmful USSD code: </string>
+    
 </resources>
