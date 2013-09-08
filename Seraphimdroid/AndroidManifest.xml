@@ -7,8 +7,11 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
-     <uses-permission android:name="android.permission.RECEIVE_SMS" /> 
-     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/> 
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<uses-permission android:name="android.permission.READ_CONTACTS" />
+	<uses-permission android:name="android.permission.CALL_PHONE" />
   
     <application
         android:allowBackup="true"
@@ -32,8 +35,9 @@
                 <data android:scheme="tel" />
             </intent-filter>
         </activity>
-        
-        <receiver android:name="org.owasp.seraphimdroid.SMSReciever" android:exported="true">
+		<activity android:name=".outgoingcalls.OutgoingCallLogActivity"/>
+
+	    <receiver android:name="org.owasp.seraphimdroid.SMSReciever" android:exported="true">
 		    <intent-filter android:priority="999">
 		        <action android:name="android.provider.Telephony.SMS_RECEIVED"></action>
 		    </intent-filter>
@@ -45,6 +49,12 @@
 			    	android:name="android.intent.action.NEW_OUTGOING_CALL"
 			    	android:priority="0" /> 
 			</intent-filter> 
+		</receiver>
+
+		<receiver android:name=".outgoingcalls.OutgoingCallInterceptor">
+			<intent-filter android:priority="0">
+				<action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+			</intent-filter>
 		</receiver>
         
     </application>
