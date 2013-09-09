@@ -27,7 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:label="@string/app_name" android:name=".USSDUriInterceptor">
+        <activity android:label="@string/app_name" android:name=".ussd.USSDUriInterceptor">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -43,7 +43,7 @@
 		    </intent-filter>
 		</receiver>
 		
-        <receiver  android:name=".USSDDialInterceptor" android:exported="true"> 
+        <receiver  android:name=".ussd.USSDDialInterceptor" android:exported="true"> 
 			 <intent-filter>   
 			  	<action
 			    	android:name="android.intent.action.NEW_OUTGOING_CALL"

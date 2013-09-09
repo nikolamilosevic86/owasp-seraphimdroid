@@ -1,4 +1,4 @@
-package org.owasp.seraphimdroid;
+package org.owasp.seraphimdroid.ussd;
 
 import java.util.Arrays;
 import java.util.List;
