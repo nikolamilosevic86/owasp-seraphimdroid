@@ -19,6 +19,8 @@ import org.owasp.seraphimdroid.MainScreen;
 import org.owasp.seraphimdroid.R;
 import org.owasp.seraphimdroid.R.drawable;
 import org.owasp.seraphimdroid.R.string;
+import org.owasp.seraphimdroid.activitylog.ActivityLog;
+import org.owasp.seraphimdroid.data.DatabaseAdapter;
 
 
 
@@ -47,12 +49,19 @@ public class USSDUriInterceptor extends Activity {
 			// Allow the USSD code execution
 			processDialIntent(this.dialedNumber);		
 		} else {
-			//Abort execution and show a toast message
-	       	CharSequence text = getString(R.string.ussd_blocked_msg) + " " + number ;
-	       	CharSequence title = getString(R.string.ussd_blocked_title);
         	
-        	//show notification
-        	showNotification(this, title, text);
+          	CharSequence title = getString(R.string.ussd_blocked_title);
+          	CharSequence shortMsg = getString(R.string.ussd_blocked_short_msg) + " " + number;
+        	String detailMsg = getString(R.string.ussd_blocked_msg_1) + " " + number + getString(R.string.ussd_blocked_msg_2);
+  
+      		// Add an entry in log DB
+       		DatabaseAdapter da = new DatabaseAdapter(this);
+       		da.open();
+       		da.addLogItem(0, "USSD", number, detailMsg);
+
+        	// show a notification message
+        	showNotification(this, title, shortMsg);
+        	
 		}
 		finish();
 	}
@@ -76,7 +85,7 @@ public class USSDUriInterceptor extends Activity {
 		         .setContentText(text)
 		         .setTicker(title);
 		
-		 Intent notificationIntent = new Intent(context, MainScreen.class);
+		 Intent notificationIntent = new Intent(context, ActivityLog.class);
 		 PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 
 		   PendingIntent.FLAG_UPDATE_CURRENT);
 		 builder.setContentIntent(contentIntent);

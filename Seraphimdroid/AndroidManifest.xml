@@ -36,6 +36,7 @@
             </intent-filter>
         </activity>
 		<activity android:name=".outgoingcalls.OutgoingCallLogActivity"/>
+		<activity android:name=".activitylog.ActivityLog"/>
 
 	    <receiver android:name="org.owasp.seraphimdroid.SMSReciever" android:exported="true">
 		    <intent-filter android:priority="999">

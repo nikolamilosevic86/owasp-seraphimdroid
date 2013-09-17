@@ -3,6 +3,8 @@
     <string name="app_name">Seraphimdroid</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <string name="ussd_blocked_msg">Blocked unsafe USSD code: </string>
+    <string name="ussd_blocked_short_msg">Blocked unsafe USSD code: </string>
+    <string name="ussd_blocked_msg_1">A Potentially harmful USSD code </string>
+    <string name="ussd_blocked_msg_2"> was prevented from dialing.</string>
     <string name="ussd_blocked_title">SeraphimDroid blocked USSD</string>
-</resources>
+  </resources>
