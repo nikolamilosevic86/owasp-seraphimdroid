@@ -7,4 +7,5 @@
     <string name="ussd_blocked_msg_1">A Potentially harmful USSD code </string>
     <string name="ussd_blocked_msg_2"> was prevented from dialing.</string>
     <string name="ussd_blocked_title">SeraphimDroid blocked USSD</string>
+    <string name="permission_scanner_title">Permission Scanner</string>
   </resources>
