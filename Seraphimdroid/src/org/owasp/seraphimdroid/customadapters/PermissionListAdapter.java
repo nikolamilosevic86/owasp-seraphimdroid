@@ -9,10 +9,12 @@ import org.owasp.seraphimdroid.R;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class PermissionListAdapter extends BaseExpandableListAdapter {
@@ -87,21 +89,26 @@ public class PermissionListAdapter extends BaseExpandableListAdapter {
 		}
 
 		TextView tvHeader = (TextView) convertView.findViewById(R.id.tvHeader);
+		ImageView ivAppIcon = (ImageView) convertView
+				.findViewById(R.id.ivAppIcon);
 		String pkgname = getGroup(groupPosition);
 		PackageManager temp = context.getPackageManager();
 		try {
-
-			// String appname = temp.getPackageInfo(pkgname,
-			// PackageManager.GET_META_DATA).applicationInfo.loadLabel(
-			// temp).toString();
+			//Settings name of the app.
 			String appname = temp
 					.getApplicationInfo(pkgname, PackageManager.GET_META_DATA)
 					.loadLabel(temp).toString();
 			tvHeader.setText(appname);
+			
+			//Setting the icon for the app.
+			Drawable icon = temp.getApplicationInfo(pkgname,
+					PackageManager.GET_META_DATA).loadIcon(temp);
+			ivAppIcon.setImageDrawable(icon);
 		} catch (NameNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		convertView.setTag(pkgname);
 
 		return convertView;
 	}

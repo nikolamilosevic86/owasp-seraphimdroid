@@ -9,7 +9,7 @@
     tools:context=".MainScreen" >
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/btnPermissionScanner"
         android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -22,9 +22,9 @@
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button1"
-        android:layout_alignRight="@+id/button1"
-        android:layout_below="@+id/button1"
+        android:layout_alignLeft="@+id/btnPermissionScanner"
+        android:layout_alignRight="@+id/btnPermissionScanner"
+        android:layout_below="@+id/btnPermissionScanner"
         android:layout_marginTop="34dp"
         android:text="SMS quarantine" />
 

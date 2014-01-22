@@ -39,7 +39,7 @@ public class MainScreen extends Activity {
 		});
 		
 		//Permission Scanner button handler
-		Button btnPermissionScanner = (Button) findViewById(R.id.button1);
+		Button btnPermissionScanner = (Button) findViewById(R.id.btnPermissionScanner);
 		btnPermissionScanner.setOnClickListener(new OnClickListener() {
 			
 			@Override
