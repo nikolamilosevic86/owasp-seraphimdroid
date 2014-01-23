@@ -32,7 +32,6 @@
         android:layout_alignLeft="@+id/tvPermissionHeader"
         android:layout_below="@+id/tvPermissionDescription"
         android:layout_marginTop="10dp"
-        android:fontFamily="Times New Roman"
         android:text="Regular Use"
         android:textColor="@color/safe_green"
         android:textSize="18sp"
