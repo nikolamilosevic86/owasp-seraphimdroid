@@ -45,6 +45,9 @@
         <activity
             android:name=".PermissionScanner"
             android:label="@string/permission_scanner_title" />
+        
+        <activity android:name=".PermissionDescription"
+            android:label="@string/permission_description_title"/>
 
         <receiver
             android:name="org.owasp.seraphimdroid.SMSReciever"

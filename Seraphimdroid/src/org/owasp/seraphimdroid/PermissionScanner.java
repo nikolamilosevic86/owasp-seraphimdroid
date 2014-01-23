@@ -20,6 +20,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class PermissionScanner extends Activity {
 
@@ -31,7 +34,7 @@ public class PermissionScanner extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.permission_scanner_layout);
+		setContentView(R.layout.activity_permission_scanner);
 
 		final PackageManager pm = getPackageManager();
 
@@ -57,11 +60,41 @@ public class PermissionScanner extends Activity {
 							Intent uninstallIntent = new Intent(
 									Intent.ACTION_DELETE, packageUri);
 							startActivity(uninstallIntent);
+
+							String AppName = pkgName;
+							try {
+								AppName = pm
+										.getApplicationInfo(pkgName,
+												PackageManager.GET_META_DATA)
+										.loadLabel(pm).toString();
+							} catch (NameNotFoundException ne) {
+								ne.printStackTrace();
+							}
+
+							Toast.makeText(getApplicationContext(),
+									"Uninstalling: " + AppName,
+									Toast.LENGTH_LONG).show();
 							return true;
 						}
 						return false;
 					}
 				});
+
+		elvAppPermissions.setOnChildClickListener(new OnChildClickListener() {
+
+			@Override
+			public boolean onChildClick(ExpandableListView parent, View child,
+					int groupPosition, int childPosition, long childId) {
+				Intent descriptionIntent = new Intent(getApplicationContext(),
+						PermissionDescription.class);
+
+				String permissionName = ((TextView) child
+						.findViewById(R.id.tvChild)).getText().toString();
+				descriptionIntent.putExtra("PERMISSION_NAME", permissionName);
+				startActivity(descriptionIntent);
+				return true;
+			}
+		});
 
 	}
 
@@ -84,6 +117,7 @@ public class PermissionScanner extends Activity {
 	public void prepareListData() {
 		PackageManager pm = getApplicationContext().getPackageManager();
 
+		// Clear the already stored data
 		packageHeaders.clear();
 		childDataItems.clear();
 

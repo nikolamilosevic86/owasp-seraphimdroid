@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="child_bg">#dfdfdf</color>
+    <color name="malicious_orange">#FF3300</color>
+    <color name="safe_green">#009900</color>
 </resources>
