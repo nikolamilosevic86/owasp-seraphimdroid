@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.owasp.seraphimdroid.customadapters.PermissionListAdapter;
+import org.owasp.seraphimdroid.customclasses.PermissionData;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -29,7 +30,7 @@ public class PermissionScanner extends Activity {
 	private ExpandableListView elvAppPermissions;
 	private List<ApplicationInfo> installedApplications;
 	private ArrayList<String> packageHeaders;
-	private HashMap<String, ArrayList<String>> childDataItems;
+	private HashMap<String, ArrayList<PermissionData>> childDataItems;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class PermissionScanner extends Activity {
 		installedApplications = pm
 				.getInstalledApplications(PackageManager.GET_META_DATA);
 		packageHeaders = new ArrayList<String>();
-		childDataItems = new HashMap<String, ArrayList<String>>();
+		childDataItems = new HashMap<String, ArrayList<PermissionData>>();
 
 		// Setting listener for the listview
 		elvAppPermissions
@@ -136,16 +137,14 @@ public class PermissionScanner extends Activity {
 					// Adding permissions
 					String[] permissions = packInfo.requestedPermissions;
 					if (permissions != null) {
-						ArrayList<String> reqPermissions = new ArrayList<String>();
+						ArrayList<PermissionData> reqPermissions = new ArrayList<PermissionData>();
 						for (String per : permissions) {
-							reqPermissions.add(per);
+							PermissionData pd = new PermissionData(per);							
+							reqPermissions.add(pd);
 						}
 						childDataItems.put(appInfo.packageName, reqPermissions);
 					} else {
-						ArrayList<String> reqPermissions = new ArrayList<String>();
-						reqPermissions.add("No permissions used");
-						childDataItems
-								.put(packInfo.packageName, reqPermissions);
+
 					}
 				}
 			} catch (NameNotFoundException ne) {

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.owasp.seraphimdroid.R;
+import org.owasp.seraphimdroid.customclasses.PermissionData;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -22,17 +23,17 @@ public class PermissionListAdapter extends BaseExpandableListAdapter {
 
 	Context context;
 	List<String> groupHeaders;
-	HashMap<String, ArrayList<String>> childDataItems;
+	HashMap<String, ArrayList<PermissionData>> childDataItems;
 
 	public PermissionListAdapter(Context context, List<String> headers,
-			HashMap<String, ArrayList<String>> child) {
+			HashMap<String, ArrayList<PermissionData>> child) {
 		this.context = context;
 		groupHeaders = headers;
 		childDataItems = child;
 	}
 
 	@Override
-	public String getChild(int groupPosition, int childPosition) {
+	public Object getChild(int groupPosition, int childPosition) {
 		return childDataItems.get(groupHeaders.get(groupPosition)).get(
 				childPosition);
 	}
@@ -52,12 +53,10 @@ public class PermissionListAdapter extends BaseExpandableListAdapter {
 		}
 
 		TextView tvChild = (TextView) convertView.findViewById(R.id.tvChild);
-		String permission = getChild(groupPosition, childPosition);
-		int weight = 0;
+		PermissionData permission = (PermissionData) getChild(groupPosition,
+				childPosition);
 
-		tvChild.setText(permission);
-		convertView.setTag(R.id.tvChild, getWeight(permission));
-
+		tvChild.setText(permission.getPermission());
 		return convertView;
 	}
 
@@ -109,14 +108,14 @@ public class PermissionListAdapter extends BaseExpandableListAdapter {
 			String appname = temp
 					.getApplicationInfo(pkgname, PackageManager.GET_META_DATA)
 					.loadLabel(temp).toString();
-			tvHeader.setText(appname);
+			tvHeader.setText(appname + ": " + weightSum);
 
 			// Setting the icon for the app.
 			Drawable icon = temp.getApplicationInfo(pkgname,
 					PackageManager.GET_META_DATA).loadIcon(temp);
 			ivAppIcon.setImageDrawable(icon);
+
 		} catch (NameNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		convertView.setTag(pkgname);
@@ -134,29 +133,13 @@ public class PermissionListAdapter extends BaseExpandableListAdapter {
 		return true;
 	}
 
-	public Integer getWeight(String permission) {
-		return 0;
-	}
-
 	public int getWeightSum(int groupPosition) {
-		try {
-			int childrenCount = getChildrenCount(groupPosition);
-			int count = 0;
-			int weightSum = 0;
-			while (count != childrenCount) {
-				boolean isLastChild = false;
-				if (count + 1 == childrenCount)
-					isLastChild = true;
-				View row = getChildView(groupPosition, count, isLastChild,
-						null, null);
-				int weight = (Integer) row.getTag(R.id.tvChild);
-				weightSum += weight;
-				++count;
-			}
-			return weightSum;
-		} catch (Exception e) {
+		int childCount = getChildrenCount(groupPosition);
+		int weightSum = 0;
+		for (int count = 0; count != childCount; count++) {
+			weightSum += ((PermissionData) getChild(groupPosition, count))
+					.getWeight();
 		}
-		return 0;
+		return weightSum;
 	}
-
 }
