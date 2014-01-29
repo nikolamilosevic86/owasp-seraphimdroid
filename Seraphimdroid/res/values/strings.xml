@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Seraphimdroid</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
@@ -10,4 +11,7 @@
     <string name="permission_scanner_title">Permission Scanner</string>
     <string name="app_icon_description">Displays App Icon</string>
     <string name="permission_description_title">Permission Description</string>
-  </resources>
+
+   
+
+</resources>

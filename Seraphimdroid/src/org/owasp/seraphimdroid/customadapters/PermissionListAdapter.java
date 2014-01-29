@@ -56,7 +56,7 @@ public class PermissionListAdapter extends BaseExpandableListAdapter {
 		PermissionData permission = (PermissionData) getChild(groupPosition,
 				childPosition);
 
-		tvChild.setText(permission.getPermission());
+		tvChild.setText(permission.getPermissionName());
 		return convertView;
 	}
 

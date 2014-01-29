@@ -139,7 +139,9 @@ public class PermissionScanner extends Activity {
 					if (permissions != null) {
 						ArrayList<PermissionData> reqPermissions = new ArrayList<PermissionData>();
 						for (String per : permissions) {
-							PermissionData pd = new PermissionData(per);							
+							PermissionData pd = PermissionData
+									.getPermissionData(getApplicationContext(),
+											per);
 							reqPermissions.add(pd);
 						}
 						childDataItems.put(appInfo.packageName, reqPermissions);
