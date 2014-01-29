@@ -2,13 +2,12 @@ package org.owasp.seraphimdroid;
 
 import org.owasp.seraphimdroid.activitylog.ActivityLog;
 import org.owasp.seraphimdroid.data.DatabaseAdapter;
+import org.owasp.seraphimdroid.data.PermissionDatabaseHelper;
 
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,7 +15,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class MainScreen extends Activity {
-
+	
+	public static PermissionDatabaseHelper helper;
 	DatabaseAdapter db;
 	Context context;
 
@@ -25,6 +25,7 @@ public class MainScreen extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_screen);
 		context = this;
+		helper = new PermissionDatabaseHelper(getApplicationContext());
 
 		Toast.makeText(this, "Hello", Toast.LENGTH_LONG).show();
 

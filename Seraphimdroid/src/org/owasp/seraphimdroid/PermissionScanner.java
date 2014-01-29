@@ -3,9 +3,11 @@ package org.owasp.seraphimdroid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.owasp.seraphimdroid.customadapters.PermissionListAdapter;
 import org.owasp.seraphimdroid.customclasses.PermissionData;
+import org.owasp.seraphimdroid.customclasses.PermissionGetter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -116,43 +118,62 @@ public class PermissionScanner extends Activity {
 	}
 
 	public void prepareListData() {
-		PackageManager pm = getApplicationContext().getPackageManager();
+		final PackageManager pm = getApplicationContext().getPackageManager();
 
 		// Clear the already stored data
 		packageHeaders.clear();
 		childDataItems.clear();
 
 		// Populate Containers.
-		for (ApplicationInfo appInfo : installedApplications) {
-			try {
-				PackageInfo packInfo = pm.getPackageInfo(appInfo.packageName,
-						PackageManager.GET_PERMISSIONS);
+		new Runnable() {
 
-				if (!isSystemPackage(packInfo)
-						&& !(packInfo.packageName
-								.equals("org.owasp.seraphimdroid"))) {
-					// Adding header keys
-					packageHeaders.add(appInfo.packageName);
+			@Override
+			public void run() {
+				for (ApplicationInfo appInfo : installedApplications) {
+					try {
+						PackageInfo packInfo = pm.getPackageInfo(
+								appInfo.packageName,
+								PackageManager.GET_PERMISSIONS);
 
-					// Adding permissions
-					String[] permissions = packInfo.requestedPermissions;
-					if (permissions != null) {
-						ArrayList<PermissionData> reqPermissions = new ArrayList<PermissionData>();
-						for (String per : permissions) {
-							PermissionData pd = PermissionData
-									.getPermissionData(getApplicationContext(),
-											per);
-							reqPermissions.add(pd);
+						if (!isSystemPackage(packInfo)
+								&& !(packInfo.packageName
+										.equals("org.owasp.seraphimdroid"))) {
+							// Adding header keys
+							packageHeaders.add(appInfo.packageName);
+
+							// Adding permissions
+							String[] permissions = packInfo.requestedPermissions;
+							if (permissions != null) {
+								ArrayList<PermissionData> reqPermissions = new ArrayList<PermissionData>();
+								for (String per : permissions) {
+									// PermissionData pd = PermissionData
+									// .getPermissionData(getApplicationContext(),
+									// per);
+									PermissionData pd = new PermissionGetter()
+											.execute(per).get();
+									reqPermissions.add(pd);
+								}
+								childDataItems.put(appInfo.packageName,
+										reqPermissions);
+							} else {
+
+							}
 						}
-						childDataItems.put(appInfo.packageName, reqPermissions);
-					} else {
-
+					} catch (NameNotFoundException ne) {
+						ne.printStackTrace();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ExecutionException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
-			} catch (NameNotFoundException ne) {
-				ne.printStackTrace();
+
 			}
-		}
+		}.run();
+
+
 	}
 
 	@Override
