@@ -3,31 +3,21 @@ package org.owasp.seraphimdroid.customclasses;
 import org.owasp.seraphimdroid.MainScreen;
 
 import android.content.pm.PackageManager;
-import android.content.pm.PermissionInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.PermissionInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.util.Log;
 
-public class PermissionGetter {
-	String permission;
-	PermissionData permissionData;
+public class AsyncPermissionGetter extends
+		AsyncTask<String, Integer, PermissionData> {
 
-	public PermissionGetter() {
-	}
+	@Override
+	protected PermissionData doInBackground(String... params) {
+		String permission = params[0];
 
-	public void setPermission(String per) {
-		permission = per;
-	}
-
-	public PermissionData getPermissionData() {
-		generatePermissionData();
-		return permissionData;
-	}
-
-	public void generatePermissionData() {
-
-		Log.d("Getting permission: ", permission);
+		Log.d("PermissionGetter : ", permission);
 
 		SQLiteDatabase db = MainScreen.helper.getReadableDatabase();
 		String sql = "Select * from permissions_data where Permission=\'"
@@ -48,7 +38,7 @@ public class PermissionGetter {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			permissionData = pd;
+			return pd;
 		}
 
 		PackageManager pm = MainScreen.context.getPackageManager();
@@ -63,13 +53,13 @@ public class PermissionGetter {
 		if (perInfo != null) {
 			String label = (String) perInfo.loadLabel(pm);
 			String desc = (String) perInfo.loadDescription(pm);
-			permissionData = new PermissionData(permission, label, desc,
+			return new PermissionData(permission, label, desc,
 					"No malicious use known", 0);
 		}
 
-		permissionData = new PermissionData(permission, permission,
+		return new PermissionData(permission, permission,
 				"No Description Available", "No Description Available", 0);
 
 	}
-}
 
+}

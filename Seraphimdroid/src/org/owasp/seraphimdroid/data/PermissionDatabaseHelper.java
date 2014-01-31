@@ -61,6 +61,7 @@ public class PermissionDatabaseHelper extends SQLiteOpenHelper {
 			cv.put(KEY_PERMISSION_MALICIOUS_USE, "No Malicious Use");
 			cv.put(KEY_PERMISSION_WEIGHT, 0);
 			db.insert(TABLE_NAME_PERMISSIONS, KEY_PERMISSION_MALICIOUS_USE, cv);
+			cv.clear();
 		}
 		
 	}

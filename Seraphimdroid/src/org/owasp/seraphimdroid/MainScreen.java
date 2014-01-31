@@ -18,7 +18,7 @@ public class MainScreen extends Activity {
 	
 	public static PermissionDatabaseHelper helper;
 	DatabaseAdapter db;
-	Context context;
+	public static Context context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

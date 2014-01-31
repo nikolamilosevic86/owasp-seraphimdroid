@@ -1,8 +1,5 @@
 package org.owasp.seraphimdroid.customclasses;
 
-import java.util.concurrent.ExecutionException;
-
-import android.content.Context;
 
 public class PermissionData {
 	private String permission;
@@ -71,36 +68,4 @@ public class PermissionData {
 		this.maliciousUseDescription = maliciousUseDescription;
 	}
 
-	public static PermissionData getPermissionData(Context context,
-			String permission) {
-
-		try {
-			PermissionData pd = new PermissionGetter().execute(permission)
-					.get();
-
-			return pd;
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return new PermissionData(permission, permission,
-				"No Description Available", "No Description Available", 0);
-
-		/*
-		 * PermissionData[] permissionData = {
-		 * 
-		 * }; HashMap<String, PermissionData> permissionDataMap = new
-		 * HashMap<String, PermissionData>();
-		 * 
-		 * // Setting HashMap for (int i = 0; i < permissions.length; i++) {
-		 * permissionDataMap.put(permissions[i], permissionData[i]); }
-		 */
-
-	}
-
 }
-
