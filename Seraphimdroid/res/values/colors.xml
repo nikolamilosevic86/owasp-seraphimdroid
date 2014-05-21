@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="list_bg">#303030</color>
+    <color name="list_pressed">#992342</color>
+    <color name="divider">#101010</color>
+    <color name="drawer_title_color">#c0c0c0</color>
+
+</resources>
