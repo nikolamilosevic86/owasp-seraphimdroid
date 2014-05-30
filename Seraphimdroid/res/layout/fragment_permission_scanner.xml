@@ -2,18 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.owasp.seraphimdroid.MainActivity$PlaceholderFragment" >
+    >
 
     <ExpandableListView
-        android:id="@+id/permissions_list"
+        android:id="@+id/app_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" >
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
     </ExpandableListView>
 
 </RelativeLayout>
