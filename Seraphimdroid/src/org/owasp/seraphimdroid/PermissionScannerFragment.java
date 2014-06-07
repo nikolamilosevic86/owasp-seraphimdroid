@@ -15,14 +15,18 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.Toast;
 
 import com.owasp.seraphimdroid.R;
 
@@ -50,8 +54,9 @@ public class PermissionScannerFragment extends Fragment {
 		lvPermissionList = (ExpandableListView) view
 				.findViewById(R.id.app_list);
 
-		lvPermissionList.setAdapter(new PermissionScannerAdapter(getActivity(),
-				appList, childPermissions));
+		// lvPermissionList.setAdapter(new
+		// PermissionScannerAdapter(getActivity(),
+		// appList, childPermissions));
 
 		lvPermissionList.setClickable(true);
 
@@ -62,7 +67,7 @@ public class PermissionScannerFragment extends Fragment {
 					View clickedView, int groupPos, int childPos, long childId) {
 
 				Log.d(TAG, "Starting Permission Description");
-				
+
 				PermissionData perData = childPermissions.get(
 						appList.get(groupPos)).get(childPos);
 
@@ -77,6 +82,38 @@ public class PermissionScannerFragment extends Fragment {
 				return true;
 			}
 		});
+
+		lvPermissionList
+				.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+					@Override
+					public boolean onItemLongClick(AdapterView<?> parent,
+							View item, int postion, long id) {
+
+						String pkgName = appList.get(postion);
+
+						Uri packageUri = Uri.parse("package:" + pkgName);
+						Intent uninstallIntent = new Intent(
+								Intent.ACTION_DELETE, packageUri);
+
+						startActivity(uninstallIntent);
+						String AppName = pkgName;
+						try {
+							AppName = pkgManager
+									.getApplicationInfo(pkgName,
+											PackageManager.GET_META_DATA)
+									.loadLabel(pkgManager).toString();
+						} catch (NameNotFoundException ne) {
+							ne.printStackTrace();
+						}
+
+						Toast.makeText(PermissionScannerFragment.this.getActivity(),
+								"Uninstalling: " + AppName, Toast.LENGTH_LONG)
+								.show();
+
+						return true;
+					}
+				});
 
 		isDataChanged = true;
 
