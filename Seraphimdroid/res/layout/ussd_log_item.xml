@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tv_number_ussd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Number"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/tv_reason_ussd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_number_ussd"
+        android:layout_below="@+id/tv_number_ussd"
+        android:layout_marginTop="10dp"
+        android:text="Reason"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <Button
+        android:id="@+id/btn_redial_ussd"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:text="Redial" />
+
+    <TextView
+        android:id="@+id/tv_time_ussd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tv_number_ussd"
+        android:layout_alignBottom="@+id/tv_number_ussd"
+        android:layout_marginRight="15dp"
+        android:layout_toLeftOf="@+id/btn_redial_ussd"
+        android:text="Time"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+</RelativeLayout>

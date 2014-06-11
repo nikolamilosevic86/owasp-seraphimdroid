@@ -8,7 +8,6 @@ import org.owasp.seraphimdroid.adapter.PermissionScannerAdapter;
 import org.owasp.seraphimdroid.model.PermissionData;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -18,6 +17,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,12 +73,30 @@ public class PermissionScannerFragment extends Fragment {
 
 				String permission = perData.getPermission();
 
-				Intent startPerDesc = new Intent(getActivity(),
-						PermissionDescription.class);
+				if (!permission.equals("No Permission")) {
 
-				startPerDesc.putExtra("PERMISSION_NAME", permission);
-				startActivity(startPerDesc);
+					Intent startPerDesc = new Intent(getActivity(),
+							PermissionDescription.class);
 
+					startPerDesc.putExtra("PERMISSION_NAME", permission);
+					startActivity(startPerDesc);
+				} else {
+					ApplicationInfo appInfo;
+					try {
+						appInfo = pkgManager.getApplicationInfo(
+								appList.get(groupPos),
+								PackageManager.GET_META_DATA);
+						String appName = (String) appInfo.loadLabel(pkgManager);
+
+						Toast.makeText(getActivity(),
+								appName + " uses no permission",
+								Toast.LENGTH_LONG).show();
+					} catch (NameNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
 				return true;
 			}
 		});
@@ -107,7 +125,8 @@ public class PermissionScannerFragment extends Fragment {
 							ne.printStackTrace();
 						}
 
-						Toast.makeText(PermissionScannerFragment.this.getActivity(),
+						Toast.makeText(
+								PermissionScannerFragment.this.getActivity(),
 								"Uninstalling: " + AppName, Toast.LENGTH_LONG)
 								.show();
 
@@ -191,9 +210,14 @@ public class PermissionScannerFragment extends Fragment {
 
 					List<PermissionData> reqPermissions = new ArrayList<PermissionData>();
 
-					if (!isSystemPackage(pkgInfo)) {
+					if (!isSystemPackage(pkgInfo)
+							&& !(pkgInfo.applicationInfo.loadLabel(pkgManager)
+									.equals(getResources().getString(
+											R.string.app_name)))) {
 
 						appList.add(pkgInfo.packageName);
+
+						Log.d(TAG, pkgInfo.packageName);
 
 						String[] appPermissions = pkgInfo.requestedPermissions;
 

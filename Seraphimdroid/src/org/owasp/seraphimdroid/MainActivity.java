@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import org.owasp.seraphimdroid.adapter.DrawerAdapter;
 import org.owasp.seraphimdroid.model.DrawerItem;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,7 +22,7 @@ import android.widget.ListView;
 import com.owasp.seraphimdroid.R;
 
 
-public class MainActivity extends ActionBarActivity{
+public class MainActivity extends FragmentActivity{
 
 	private CharSequence title, drawerTitle;
 
@@ -95,7 +95,7 @@ public class MainActivity extends ActionBarActivity{
 		drawerLayout.setDrawerListener(drawerToggle);
 
 		if (savedInstanceState == null) {
-			selectFragment(0);
+			selectFragment(1);
 		}
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -134,7 +134,7 @@ public class MainActivity extends ActionBarActivity{
 		}
 
 		if (fragment != null) {
-			FragmentManager fragMan = getFragmentManager();
+			FragmentManager fragMan = getSupportFragmentManager();
 			fragMan.beginTransaction()
 					.replace(R.id.fragment_container, fragment).commit();
 

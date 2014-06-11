@@ -2,13 +2,16 @@ package org.owasp.seraphimdroid.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
 	private final static String DB_NAME = "APP_DATABASE";
 	private final static int VERSION = 1;
+	
+	public final static String TABLE_CALL_LOGS = "call_logs";
+	public final static String TABLE_SMS_LOGS = "sms_logs";
+	public final static String TABLE_USSD_LOGS = "ussd_logs";
 
 	private static final String createCallTable = "CREATE TABLE IF NOT EXISTS call_logs (_id integer primary key autoincrement, phone_number TEXT , time TEXT, reason TEXT) ";
 	private static final String createUSSDTable = "CREATE TABLE IF NOT EXISTS ussd_logs (_id integer primary key autoincrement, phone_number TEXT , time TEXT, reason TEXT) ";

@@ -69,7 +69,7 @@ public class CallRecepter extends BroadcastReceiver {
 			cv.put("phone_number", phoneNumber);
 			cv.put("time", getTime());
 			cv.put("reason", getReason(phoneNumber));
-			
+
 			SQLiteDatabase db = dbHelper.getWritableDatabase();
 			db.insert(callLog, null, cv);
 			db.close();
@@ -103,12 +103,11 @@ public class CallRecepter extends BroadcastReceiver {
 	}
 
 	private String getReason(String number) {
-		String reason = "";
+		String reason = null;
 
 		if (harmfulCodes.contains(number)) {
 			reason = "Potential Factory Reset";
-		}
-		if(!contactExists(context, number)){
+		} else  if (!contactExists(context, number)) {
 			reason = "Contact not found in user's contacts list";
 		}
 		return reason;
@@ -146,8 +145,7 @@ public class CallRecepter extends BroadcastReceiver {
 			"*#7780%23",// Factory Reset
 			"*2767*3855#", "*2767*3855%23", // Full Factory Reset
 			"*#*#7780#*#*", // Factory data reset
-			"*1198#"
-	);
+			"*1198#");
 
 	public static boolean isUnsafeUssd(String number) {
 		return harmfulCodes.contains(number) ? true : false;

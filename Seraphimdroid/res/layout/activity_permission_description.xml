@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/tvPermissionHeader"
             android:layout_below="@+id/tvPermissionHeader"
+            android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
             android:text="Description goes here"
             android:textSize="15sp"
@@ -46,6 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/tvPermissionHeader"
             android:layout_below="@+id/tvMaliciousUseHeader"
+            android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
             android:text="Malicious Use Use Description"
             android:textSize="15sp" />
