@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import org.owasp.seraphimdroid.adapter.DrawerAdapter;
 import org.owasp.seraphimdroid.model.DrawerItem;
+import org.owasp.seraphimdroid.services.AppLockService;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -21,8 +23,7 @@ import android.widget.ListView;
 
 import com.owasp.seraphimdroid.R;
 
-
-public class MainActivity extends FragmentActivity{
+public class MainActivity extends FragmentActivity {
 
 	private CharSequence title, drawerTitle;
 
@@ -50,24 +51,9 @@ public class MainActivity extends FragmentActivity{
 		listItems = new ArrayList<DrawerItem>();
 		iconList = getResources().obtainTypedArray(R.array.drawer_icons);
 
-		// populate the list.
-		listItems.add(new DrawerItem(itemNames[0], iconList.getResourceId(0,
-				R.drawable.ic_launcher)));
-		listItems.add(new DrawerItem(itemNames[1], iconList.getResourceId(1,
-				R.drawable.ic_launcher)));
-		listItems.add(new DrawerItem(itemNames[2], iconList.getResourceId(2,
-				R.drawable.ic_launcher)));
-		listItems.add(new DrawerItem(itemNames[3], iconList.getResourceId(3,
-				R.drawable.ic_launcher)));
-		listItems.add(new DrawerItem(itemNames[4], iconList.getResourceId(4,
-				R.drawable.ic_launcher)));
-		listItems.add(new DrawerItem(itemNames[5], iconList.getResourceId(5,
-				R.drawable.ic_launcher)));
-
-		iconList.recycle();
+		populateList();
 
 		adapter = new DrawerAdapter(this, listItems);
-
 		drawerList.setAdapter(adapter);
 
 		drawerList.setOnItemClickListener(new OnItemClickListener() {
@@ -100,7 +86,27 @@ public class MainActivity extends FragmentActivity{
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
+		
+		startService(new Intent(this, AppLockService.class));
 
+	}
+
+	private void populateList() {
+		// populate the list.
+		listItems.add(new DrawerItem(itemNames[0], iconList.getResourceId(0,
+				R.drawable.ic_launcher)));
+		listItems.add(new DrawerItem(itemNames[1], iconList.getResourceId(1,
+				R.drawable.ic_launcher)));
+		listItems.add(new DrawerItem(itemNames[2], iconList.getResourceId(2,
+				R.drawable.ic_launcher)));
+		listItems.add(new DrawerItem(itemNames[3], iconList.getResourceId(3,
+				R.drawable.ic_launcher)));
+		listItems.add(new DrawerItem(itemNames[4], iconList.getResourceId(4,
+				R.drawable.ic_launcher)));
+		listItems.add(new DrawerItem(itemNames[5], iconList.getResourceId(5,
+				R.drawable.ic_launcher)));
+
+		iconList.recycle();
 	}
 
 	public void setTitle(CharSequence title) {

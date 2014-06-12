@@ -25,5 +25,6 @@
         <item>@android:drawable/ic_menu_preferences</item>
         <item>@android:drawable/ic_menu_preferences</item>
     </integer-array>
+        <string name="password_hint">Enter PIN</string>
 
 </resources>

@@ -48,18 +48,26 @@ public class BlockerFragment extends Fragment implements OnPageChangeListener,
 	}
 
 	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		setHasOptionsMenu(true);
+		super.onCreate(savedInstanceState);
+		
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
-	public void onPrepareOptionsMenu(Menu menu) {
-		MenuInflater menuInflater = (MenuInflater) getActivity()
-				.getMenuInflater();
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
-		menuInflater.inflate(R.menu.main, null);
-		super.onPrepareOptionsMenu(menu);
+		
+		inflater.inflate(R.menu.main, menu);
+
+		super.onCreateOptionsMenu(menu, inflater);
 	}
 
 	private void initTabs() {
