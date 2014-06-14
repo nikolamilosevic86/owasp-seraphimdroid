@@ -15,13 +15,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-
-import com.owasp.seraphimdroid.R;
 
 public class MainActivity extends FragmentActivity {
 
@@ -36,6 +35,19 @@ public class MainActivity extends FragmentActivity {
 	private TypedArray iconList;
 
 	private DrawerAdapter adapter;
+	private boolean isUnlocked = false;
+
+	@Override
+	protected void onResume() {
+		if (!isUnlocked) {
+			Intent pwdIntent = new Intent(this, PasswordActivity.class);
+			pwdIntent.putExtra("PACKAGE_NAME", this.getPackageName());
+			isUnlocked = true;
+			startActivity(pwdIntent);
+		}
+		super.onResume();
+
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,12 +93,12 @@ public class MainActivity extends FragmentActivity {
 		drawerLayout.setDrawerListener(drawerToggle);
 
 		if (savedInstanceState == null) {
-			selectFragment(1);
+			selectFragment(2);
 		}
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
-		
+
 		startService(new Intent(this, AppLockService.class));
 
 	}
@@ -164,6 +176,31 @@ public class MainActivity extends FragmentActivity {
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		drawerToggle.onConfigurationChanged(newConfig);
+	}
+
+	@Override
+	public void onBackPressed() {
+		System.exit(0);
+		super.onBackPressed();
+
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+			System.exit(0);
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+			System.exit(0);
+		}
+		return super.onKeyUp(keyCode, event);
 	}
 
 	@Override

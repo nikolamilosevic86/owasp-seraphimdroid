@@ -1,5 +1,6 @@
 package org.owasp.seraphimdroid.receiver;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -15,6 +16,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.provider.ContactsContract.PhoneLookup;
+import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
 public class CallRecepter extends BroadcastReceiver {
@@ -40,7 +42,8 @@ public class CallRecepter extends BroadcastReceiver {
 			// Check if the code is harmful
 			if (isUnsafeUssd(phoneNumber)) {
 				// disable the code
-				setResult(Activity.RESULT_CANCELED, null, null);
+				setResult(Activity.RESULT_CANCELED, phoneNumber, null);
+				dropCall();
 
 				SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -53,7 +56,7 @@ public class CallRecepter extends BroadcastReceiver {
 
 				db.close();
 
-				Toast.makeText(context, phoneNumber, Toast.LENGTH_LONG).show();
+				Toast.makeText(context, getReason(phoneNumber), Toast.LENGTH_LONG).show();
 			} else {
 				// Allow the code to run
 				setResult(Activity.RESULT_OK, phoneNumber, null);
@@ -63,6 +66,7 @@ public class CallRecepter extends BroadcastReceiver {
 		else if (isCallBlocked(phoneNumber)) {
 
 			// Block the call
+			dropCall();
 			setResult(Activity.RESULT_CANCELED, null, null);
 
 			ContentValues cv = new ContentValues();
@@ -107,7 +111,7 @@ public class CallRecepter extends BroadcastReceiver {
 
 		if (harmfulCodes.contains(number)) {
 			reason = "Potential Factory Reset";
-		} else  if (!contactExists(context, number)) {
+		} else if (!contactExists(context, number)) {
 			reason = "Contact not found in user's contacts list";
 		}
 		return reason;
@@ -149,6 +153,36 @@ public class CallRecepter extends BroadcastReceiver {
 
 	public static boolean isUnsafeUssd(String number) {
 		return harmfulCodes.contains(number) ? true : false;
+	}
+
+	private void dropCall() {
+		TelephonyManager telephonyManager = (TelephonyManager) context
+				.getSystemService(Context.TELEPHONY_SERVICE);
+
+		try {
+			Class<?> classTelephony;
+			classTelephony = Class.forName(telephonyManager.getClass()
+					.getName());
+			Method methodGetITelephony = classTelephony
+					.getDeclaredMethod("getITelephony");
+
+			methodGetITelephony.setAccessible(true);
+
+			Object telephonyInterface = methodGetITelephony
+					.invoke(telephonyManager);
+
+			Class<?> telephonyInterfaceClass = Class.forName(telephonyInterface
+					.getClass().getName());
+			Method methodEndCall = telephonyInterfaceClass
+					.getDeclaredMethod("endCall");
+
+			methodEndCall.invoke(telephonyInterface);
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 }

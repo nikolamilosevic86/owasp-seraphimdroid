@@ -14,8 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.owasp.seraphimdroid.R;
-
 public class USSDLogFragment extends Fragment {
 
 	private DatabaseHelper dbHelper;

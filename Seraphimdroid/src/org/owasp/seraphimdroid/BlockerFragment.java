@@ -17,8 +17,6 @@ import android.view.ViewGroup;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 
-import com.owasp.seraphimdroid.R;
-
 public class BlockerFragment extends Fragment implements OnPageChangeListener,
 		OnTabChangeListener {
 

@@ -28,8 +28,6 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.Toast;
 
-import com.owasp.seraphimdroid.R;
-
 public class PermissionScannerFragment extends Fragment {
 
 	private static final String TAG = "PermissionScannerFragment";

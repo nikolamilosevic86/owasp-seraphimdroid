@@ -12,11 +12,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public final static String TABLE_CALL_LOGS = "call_logs";
 	public final static String TABLE_SMS_LOGS = "sms_logs";
 	public final static String TABLE_USSD_LOGS = "ussd_logs";
+	public static final String TABLE_LOCKS = "locks";
 
 	private static final String createCallTable = "CREATE TABLE IF NOT EXISTS call_logs (_id integer primary key autoincrement, phone_number TEXT , time TEXT, reason TEXT) ";
 	private static final String createUSSDTable = "CREATE TABLE IF NOT EXISTS ussd_logs (_id integer primary key autoincrement, phone_number TEXT , time TEXT, reason TEXT) ";
 	private static final String createSMSTable = "CREATE TABLE IF NOT EXISTS sms_logs (_id integer primary key autoincrement, phone_number TEXT , time TEXT, reason TEXT) ";
 	private static final String createPasswordTable = "CREATE TABLE IF NOT EXISTS password (_id integer primary key autoincrement, password TEXT)";
+	private static final String createLocksTable = "CREATE TABLE IF NOT EXISTS locks (_id INTEGER primary key autoincrement, package_name TEXT)";
 
 	public DatabaseHelper(Context context) {
 		super(context, DB_NAME, null, VERSION);
@@ -29,6 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(createSMSTable);
 		db.execSQL(createUSSDTable);
 		db.execSQL(createPasswordTable);
+		db.execSQL(createLocksTable);
 
 	}
 
@@ -37,6 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS call_logs");
 		db.execSQL("DROP TABLE IF EXISTS ussd_logs");
 		db.execSQL("DROP TABLE IF EXISTS sms_logs");
+		db.execSQL("DROP TABLE IF EXISTS locks");
 
 		this.onCreate(db);
 

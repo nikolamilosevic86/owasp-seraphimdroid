@@ -2,8 +2,6 @@ package org.owasp.seraphimdroid;
 
 import org.owasp.seraphimdroid.database.DatabaseHelper;
 
-import com.owasp.seraphimdroid.R;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -39,6 +37,9 @@ public class CallLogFragment extends Fragment {
 
 		return view;
 	}
+	
+	
+
 }
 
 class CallLogAdapter extends CursorAdapter {

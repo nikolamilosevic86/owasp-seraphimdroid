@@ -6,8 +6,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.owasp.seraphimdroid.R;
-
 public class PermissionDescription extends Activity {
 
 	private TextView tvPermissionHeader;

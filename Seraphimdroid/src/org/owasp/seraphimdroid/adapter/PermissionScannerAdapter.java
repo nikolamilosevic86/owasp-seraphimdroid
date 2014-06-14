@@ -3,6 +3,7 @@ package org.owasp.seraphimdroid.adapter;
 import java.util.HashMap;
 import java.util.List;
 
+import org.owasp.seraphimdroid.R;
 import org.owasp.seraphimdroid.model.PermissionData;
 
 import android.app.Activity;
@@ -17,8 +18,6 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.owasp.seraphimdroid.R;
 
 public class PermissionScannerAdapter extends BaseExpandableListAdapter {
 

@@ -3,12 +3,14 @@ package org.owasp.seraphimdroid;
 import org.owasp.seraphimdroid.database.DatabaseHelper;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -16,11 +18,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.owasp.seraphimdroid.R;
-
 public class PasswordActivity extends Activity implements OnClickListener {
 
 	public static final String TAG = "Password Activity";
+	public static String lastUnlocked = null;
 
 	private Button[] btnPass;
 	private Button btnClear;
@@ -32,16 +33,21 @@ public class PasswordActivity extends Activity implements OnClickListener {
 	private boolean isSecondAttempt;
 	private DatabaseHelper dbHelper;
 	private String passwordTrail, passwordConfirm;
+	private String pkgName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_password);
 
+		// Retrieve the intent.
+		Intent rootIntent = getIntent();
+		pkgName = rootIntent.getStringExtra("PACKAGE_NAME");
+
 		// Initializing buttons.
 		initButtons();
 
-		// Initalizing View.
+		// Initializing View.
 		etPassword = (EditText) findViewById(R.id.et_password);
 		tvAlert = (TextView) findViewById(R.id.tv_alert);
 
@@ -61,8 +67,41 @@ public class PasswordActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
+
 		super.onResume();
+	}
+
+	@Override
+	public void onBackPressed() {
+
+		ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+		am.killBackgroundProcesses(pkgName);
+
+		finish();
+		super.onBackPressed();
+
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+			am.killBackgroundProcesses(pkgName);
+
+			finish();
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+			am.killBackgroundProcesses(pkgName);
+
+			finish();
+		}
+		return super.onKeyUp(keyCode, event);
 	}
 
 	private void initButtons() {
@@ -91,9 +130,9 @@ public class PasswordActivity extends Activity implements OnClickListener {
 			} else if (i == 10) {
 				btnPass[i].setTag("exit");
 				btnPass[i].setText("Exit");
-				if(isFirstAttempt){
+				if (isFirstAttempt) {
 					btnPass[i].setTag("reset");
-					btnPass[i].setText("Reset");	
+					btnPass[i].setText("Reset");
 				}
 
 			} else {
@@ -141,7 +180,7 @@ public class PasswordActivity extends Activity implements OnClickListener {
 				btnPass[10].setClickable(true);
 				isFirstAttempt = false;
 				isSecondAttempt = true;
-				etPassword.setText("");
+				etPassword.setText("Enter the PIN again.");
 			} else if (isSecondAttempt) {
 				String message = "";
 				if (etPassword.getText().toString().length() != passwordTrail
@@ -163,8 +202,10 @@ public class PasswordActivity extends Activity implements OnClickListener {
 				startActivity(new Intent(PasswordActivity.this,
 						MainActivity.class));
 			} else if (isPasswordCorrect(etPassword.getText().toString())) {
-				startActivity(new Intent(PasswordActivity.this,
-						MainActivity.class));
+				// startActivity(new Intent(PasswordActivity.this,
+				// MainActivity.class));
+				lastUnlocked = pkgName;
+				this.finish();
 			} else {
 				tvAlert.setText("Incorrect Pin");
 				tvAlert.setVisibility(View.VISIBLE);
@@ -175,6 +216,8 @@ public class PasswordActivity extends Activity implements OnClickListener {
 			Toast.makeText(getApplicationContext(), "Try Again",
 					Toast.LENGTH_LONG).show();
 		} else if (tag.equals("exit")) {
+			ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+			am.killBackgroundProcesses(pkgName);
 			finish();
 		} else {
 			int number = Integer.parseInt(tag);
