@@ -1,11 +1,15 @@
 package org.owasp.seraphimdroid;
 
 import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.model.NoImeEditText;
+import org.owasp.seraphimdroid.services.KillBackgroundService;
 
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -15,6 +19,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +32,9 @@ public class PasswordActivity extends Activity implements OnClickListener {
 	private Button[] btnPass;
 	private Button btnClear;
 	private EditText etPassword;
-	private TextView tvAlert;
+	private TextView tvAlert, tvAppLabel;
+	private ImageView imgAppIcon;
+	private LinearLayout layoutOk;
 
 	// Variables used to implement password mechanism
 	private boolean isFirstAttempt;
@@ -34,6 +42,7 @@ public class PasswordActivity extends Activity implements OnClickListener {
 	private DatabaseHelper dbHelper;
 	private String passwordTrail, passwordConfirm;
 	private String pkgName;
+	private boolean tryUnlocking;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +57,21 @@ public class PasswordActivity extends Activity implements OnClickListener {
 		initButtons();
 
 		// Initializing View.
-		etPassword = (EditText) findViewById(R.id.et_password);
+		layoutOk = (LinearLayout) findViewById(R.id.layout_ok);
+		etPassword = (NoImeEditText) findViewById(R.id.et_password);
 		tvAlert = (TextView) findViewById(R.id.tv_alert);
+		tvAppLabel = (TextView) findViewById(R.id.tv_app_label);
+		imgAppIcon = (ImageView) findViewById(R.id.img_app_icon);
+
+		try {
+			PackageManager pm = getPackageManager();
+			ApplicationInfo appInfo = pm.getApplicationInfo(pkgName,
+					PackageManager.GET_META_DATA);
+			tvAppLabel.setText(appInfo.loadLabel(pm));
+			imgAppIcon.setImageDrawable(appInfo.loadIcon(pm));
+		} catch (Exception e) {
+
+		}
 
 		// Initializing other required variables.
 
@@ -58,8 +80,12 @@ public class PasswordActivity extends Activity implements OnClickListener {
 		passwordTrail = null;
 
 		if (isPasswordCreated()) {
-			// Check for password and proceed if correct
+			layoutOk.setVisibility(View.GONE);
+			tryUnlocking = true;
 		} else {
+			layoutOk.setVisibility(View.VISIBLE);
+			btnPass[10].setText("Retry");
+			btnPass[10].setTag("reset");
 			etPassword.setHint("Enter 4 digit PIN");
 		}
 
@@ -74,9 +100,10 @@ public class PasswordActivity extends Activity implements OnClickListener {
 	@Override
 	public void onBackPressed() {
 
-		ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-		am.killBackgroundProcesses(pkgName);
-
+		Intent killIntent = new Intent(PasswordActivity.this,
+				KillBackgroundService.class);
+		killIntent.putExtra("PACKAGE_NAME", pkgName);
+		startService(killIntent);
 		finish();
 		super.onBackPressed();
 
@@ -84,10 +111,12 @@ public class PasswordActivity extends Activity implements OnClickListener {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-			am.killBackgroundProcesses(pkgName);
-
+		if (keyCode == KeyEvent.KEYCODE_BACK
+				|| keyCode == KeyEvent.KEYCODE_HOME) {
+			Intent killIntent = new Intent(PasswordActivity.this,
+					KillBackgroundService.class);
+			killIntent.putExtra("PACKAGE_NAME", pkgName);
+			startService(killIntent);
 			finish();
 		}
 		return super.onKeyDown(keyCode, event);
@@ -95,10 +124,12 @@ public class PasswordActivity extends Activity implements OnClickListener {
 
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-			am.killBackgroundProcesses(pkgName);
-
+		if (keyCode == KeyEvent.KEYCODE_BACK
+				|| keyCode == KeyEvent.KEYCODE_HOME) {
+			Intent killIntent = new Intent(PasswordActivity.this,
+					KillBackgroundService.class);
+			killIntent.putExtra("PACKAGE_NAME", pkgName);
+			startService(killIntent);
 			finish();
 		}
 		return super.onKeyUp(keyCode, event);
@@ -180,7 +211,7 @@ public class PasswordActivity extends Activity implements OnClickListener {
 				btnPass[10].setClickable(true);
 				isFirstAttempt = false;
 				isSecondAttempt = true;
-				etPassword.setText("Enter the PIN again.");
+				etPassword.setText("");
 			} else if (isSecondAttempt) {
 				String message = "";
 				if (etPassword.getText().toString().length() != passwordTrail
@@ -193,14 +224,21 @@ public class PasswordActivity extends Activity implements OnClickListener {
 					message = "PIN should be same as before";
 					tvAlert.setText(message);
 					tvAlert.setVisibility(View.VISIBLE);
+				} else {
+					tvAlert.setText("");
+					tvAlert.setVisibility(View.GONE);
+					isSecondAttempt = false;
+					passwordConfirm = etPassword.getText().toString();
+					savePassword();
+					layoutOk.setVisibility(View.GONE);
+					tryUnlocking = true;
+					Toast.makeText(getApplicationContext(),
+							"Password created successfully", Toast.LENGTH_SHORT)
+							.show();
+					finish();
+					// startActivity(new Intent(PasswordActivity.this,
+					// MainActivity.class));
 				}
-				tvAlert.setText("");
-				tvAlert.setVisibility(View.GONE);
-				isSecondAttempt = false;
-				passwordConfirm = etPassword.getText().toString();
-				savePassword();
-				startActivity(new Intent(PasswordActivity.this,
-						MainActivity.class));
 			} else if (isPasswordCorrect(etPassword.getText().toString())) {
 				// startActivity(new Intent(PasswordActivity.this,
 				// MainActivity.class));
@@ -213,18 +251,31 @@ public class PasswordActivity extends Activity implements OnClickListener {
 
 		} else if (tag.equals("reset")) {
 			isFirstAttempt = true;
+			//layoutOk.setVisibility(View.VISIBLE);
 			Toast.makeText(getApplicationContext(), "Try Again",
 					Toast.LENGTH_LONG).show();
 		} else if (tag.equals("exit")) {
-			ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-			am.killBackgroundProcesses(pkgName);
+			// if (!pkgName.equals(PasswordActivity.this.getPackageName())) {
+			Intent killIntent = new Intent(PasswordActivity.this,
+					KillBackgroundService.class);
+			killIntent.putExtra("PACKAGE_NAME", pkgName);
+			startService(killIntent);
+			// }
 			finish();
 		} else {
+
 			int number = Integer.parseInt(tag);
 			if (number < 10) {
 				etPassword.setText(etPassword.getText().toString() + number);
 				Log.d(TAG, etPassword.getText().toString());
 			}
+			if (tryUnlocking) {
+				if (isPasswordCorrect(etPassword.getText().toString())) {
+					lastUnlocked = pkgName;
+					this.finish();
+				}
+			}
+
 		}
 	}
 
@@ -241,6 +292,7 @@ public class PasswordActivity extends Activity implements OnClickListener {
 		} else {
 			isFirstAttempt = true;
 			isSecondAttempt = false;
+
 			btnPass[10].setClickable(false);
 
 			cursor.close();

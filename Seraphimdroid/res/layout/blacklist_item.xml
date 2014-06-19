@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="10dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="10dp" >
+
+    <ImageView
+        android:id="@+id/img_blacklist_contact_icon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:contentDescription="@string/contact_icon" />
+
+    <TextView
+        android:id="@+id/tv_blacklist_contact_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/img_blacklist_contact_icon"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/img_blacklist_contact_icon"
+        android:text="Name"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_blacklist_contact_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/img_blacklist_contact_icon"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/img_blacklist_contact_icon"
+        android:text="Number"
+        android:textColor="#888888"
+        android:textSize="16sp" />
+
+</RelativeLayout>

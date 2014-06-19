@@ -70,67 +70,68 @@ public class AppLockerAdapter extends BaseAdapter {
 		ToggleButton tb = (ToggleButton) view.findViewById(R.id.tb_is_locked);
 
 		// Setting properties
-		if (lockedApps.contains(pkgName)) {
-			tb.setChecked(true);
-		} else {
-			tb.setChecked(false);
-		}
-		tb.setTag(pkgName);
-		tb.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View view) {
-				ToggleButton tb = (ToggleButton) view;
-				String tag = (String) tb.getTag();
-
-				DatabaseHelper dbHelper = new DatabaseHelper(context);
-				SQLiteDatabase db = dbHelper.getWritableDatabase();
-				Cursor cursor = db.rawQuery(
-						"SELECT * FROM locks WHERE package_name=\'" + tag
-								+ "\'", null);
-
-				if (tag.equals(pkgName)) {
-					if (tb.isChecked()) {
-
-						if (!cursor.moveToNext()) {
-							ContentValues cv = new ContentValues();
-							cv.put("package_name", tag);
-							db.insert(DatabaseHelper.TABLE_LOCKS, null, cv);
-
-							Toast.makeText(context, "Locked: " + pkgName,
-									Toast.LENGTH_SHORT).show();
-						}
-					} else {
-
-						if (cursor.moveToNext()) {
-							String[] whereArgs = { tag };
-							db.delete(DatabaseHelper.TABLE_LOCKS,
-									"package_name=?", whereArgs);
-							Toast.makeText(context, "Unlocked: " + pkgName,
-									Toast.LENGTH_SHORT).show();
-						}
-
-					}
-				}
-				generateLockedApps();
-				cursor.close();
-				db.close();
-				dbHelper.close();
-			}
-		});
 
 		try {
 			PackageManager pm = context.getPackageManager();
 			ApplicationInfo appInfo = pm.getApplicationInfo(pkgName,
 					PackageManager.GET_META_DATA);
+			final String appName = appInfo.loadLabel(pm).toString();
 
 			tvLabel.setText(appInfo.loadLabel(pm));
 			imgIcon.setImageDrawable(appInfo.loadIcon(pm));
 
+			if (lockedApps.contains(pkgName)) {
+				tb.setChecked(true);
+			} else {
+				tb.setChecked(false);
+			}
+			tb.setTag(pkgName);
+			tb.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View view) {
+					ToggleButton tb = (ToggleButton) view;
+					String tag = (String) tb.getTag();
+
+					DatabaseHelper dbHelper = new DatabaseHelper(context);
+					SQLiteDatabase db = dbHelper.getWritableDatabase();
+					Cursor cursor = db.rawQuery(
+							"SELECT * FROM locks WHERE package_name=\'" + tag
+									+ "\'", null);
+
+					if (tag.equals(pkgName)) {
+						if (tb.isChecked()) {
+
+							if (!cursor.moveToNext()) {
+								ContentValues cv = new ContentValues();
+								cv.put("package_name", tag);
+								db.insert(DatabaseHelper.TABLE_LOCKS, null, cv);
+
+								Toast.makeText(context, "Locked: " + appName,
+										Toast.LENGTH_SHORT).show();
+							}
+						} else {
+
+							if (cursor.moveToNext()) {
+								String[] whereArgs = { tag };
+								db.delete(DatabaseHelper.TABLE_LOCKS,
+										"package_name=?", whereArgs);
+								Toast.makeText(context, "Unlocked: " + appName,
+										Toast.LENGTH_SHORT).show();
+							}
+
+						}
+					}
+					generateLockedApps();
+					cursor.close();
+					db.close();
+					dbHelper.close();
+				}
+			});
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return view;
 	}
 

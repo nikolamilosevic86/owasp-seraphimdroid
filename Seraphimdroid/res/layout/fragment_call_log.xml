@@ -5,6 +5,7 @@
     android:background="@android:color/background_light" >
 
     <ListView
+        
         android:id="@+id/lv_call_logs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >

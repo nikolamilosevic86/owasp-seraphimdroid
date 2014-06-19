@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import org.owasp.seraphimdroid.adapter.DrawerAdapter;
 import org.owasp.seraphimdroid.model.DrawerItem;
 import org.owasp.seraphimdroid.services.AppLockService;
+import org.owasp.seraphimdroid.services.CheckAppLaunchThread;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -37,15 +39,36 @@ public class MainActivity extends FragmentActivity {
 	private DrawerAdapter adapter;
 	private boolean isUnlocked = false;
 
+	private android.app.Fragment prevFrag = null;
+	private Fragment prevSupportFlag = null;
+
 	@Override
 	protected void onResume() {
-		if (!isUnlocked) {
-			Intent pwdIntent = new Intent(this, PasswordActivity.class);
-			pwdIntent.putExtra("PACKAGE_NAME", this.getPackageName());
-			isUnlocked = true;
-			startActivity(pwdIntent);
-		}
+		 if (!isUnlocked) {
+		 Intent pwdIntent = new Intent(this, PasswordActivity.class);
+		 pwdIntent.putExtra("PACKAGE_NAME", this.getPackageName());
+		 isUnlocked = true;
+		 startActivity(pwdIntent);
+		 }
 		super.onResume();
+
+	}
+
+	@Override
+	protected void onDestroy() {
+		// Handler handler = new Handler(this.getMainLooper());
+		// CheckAppLaunchThread launchChecker = new
+		// CheckAppLaunchThread(handler, getApplicationContext());
+		// if(launchChecker.isAlive() == false){
+		// launchChecker.start();
+		// }
+		super.onDestroy();
+		Handler handler = new Handler(this.getMainLooper());
+		CheckAppLaunchThread launchChecker = new CheckAppLaunchThread(handler,
+				getApplicationContext());
+		if (launchChecker.isAlive() == false) {
+			launchChecker.start();
+		}
 
 	}
 
@@ -53,6 +76,13 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		// if (!isUnlocked) {
+		// Intent pwdIntent = new Intent(this, PasswordActivity.class);
+		// pwdIntent.putExtra("PACKAGE_NAME", this.getPackageName());
+		// isUnlocked = true;
+		// startActivity(pwdIntent);
+		// }
 
 		// initializing variables.
 		title = drawerTitle = getTitle();
@@ -128,6 +158,7 @@ public class MainActivity extends FragmentActivity {
 
 	public void selectFragment(int position) {
 		Fragment fragment = null;
+		// android.app.Fragment prevFrag = null;
 		switch (position) {
 		case 0:
 			fragment = new PermissionScannerFragment();
@@ -141,8 +172,23 @@ public class MainActivity extends FragmentActivity {
 		case 3:
 			fragment = new GeoFencingFragment();
 			break;
-		case 4:
-			fragment = new SettingsFragment();
+		case 4: {
+
+			if (prevSupportFlag != null) {
+				FragmentManager fragMan = getSupportFragmentManager();
+				fragMan.beginTransaction().remove(prevSupportFlag).commit();
+			}
+			android.app.Fragment frag = new SettingsFragment();
+			android.app.FragmentManager fm = getFragmentManager();
+			fm.beginTransaction().replace(R.id.fragment_container, frag)
+					.commit();
+
+			drawerList.setItemChecked(position, true);
+			drawerList.setSelection(position);
+			setTitle(itemNames[position]);
+			drawerLayout.closeDrawer(drawerList);
+			prevFrag = frag;
+		}
 			break;
 		case 5:
 			fragment = new AboutFragment();
@@ -152,6 +198,10 @@ public class MainActivity extends FragmentActivity {
 		}
 
 		if (fragment != null) {
+			if (prevFrag != null) {
+				android.app.FragmentManager fm = getFragmentManager();
+				fm.beginTransaction().remove(prevFrag).commit();
+			}
 			FragmentManager fragMan = getSupportFragmentManager();
 			fragMan.beginTransaction()
 					.replace(R.id.fragment_container, fragment).commit();
@@ -160,6 +210,7 @@ public class MainActivity extends FragmentActivity {
 			drawerList.setSelection(position);
 			setTitle(itemNames[position]);
 			drawerLayout.closeDrawer(drawerList);
+			prevSupportFlag = fragment;
 		}
 
 	}
@@ -180,25 +231,32 @@ public class MainActivity extends FragmentActivity {
 
 	@Override
 	public void onBackPressed() {
-		System.exit(0);
+		// onPause();
+		// onDestroy();
+		finish();
 		super.onBackPressed();
 
 	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-			System.exit(0);
+		if (keyCode == KeyEvent.KEYCODE_BACK
+				|| keyCode == KeyEvent.KEYCODE_HOME) {
+			// onPause();
+			// onDestroy();
+			finish();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
+		if (keyCode == KeyEvent.KEYCODE_BACK
+				|| keyCode == KeyEvent.KEYCODE_HOME) {
 
-			System.exit(0);
+			// onPause();
+			// onDestroy();
+			finish();
 		}
 		return super.onKeyUp(keyCode, event);
 	}

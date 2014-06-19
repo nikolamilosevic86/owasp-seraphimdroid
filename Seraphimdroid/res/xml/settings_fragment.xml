@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/app_lock_settings_title" >
+        <PreferenceScreen
+            android:summary="@string/app_lock_change_password_summary"
+            android:title="@string/app_lock_change_password" >
+            <intent android:action="seraphimdroid.intent.change_password" />
+        </PreferenceScreen>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/call_blocker_settings_title" >
+        <ListPreference
+            android:key="blocked_calls"
+            android:summary="@string/call_blocker_blocked_calls_summary"
+            android:title="@string/call_blocker_blocked_calls_title" android:entryValues="@array/blocked_calls_values" android:entries="@array/blocked_calls_keys"/>
+
+        <PreferenceScreen
+            android:summary="@string/call_blocker_block_list_summary"
+            android:title="@string/call_blocker_black_list_title" >
+            <intent android:action="seraphimdroid.intent.blacklist" />
+        </PreferenceScreen>
+
+        <CheckBoxPreference
+            android:key="call_blocked_notification"
+            android:summary="@string/call_blocker_notification_summary"
+            android:title="@string/call_blocker_notification_title" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

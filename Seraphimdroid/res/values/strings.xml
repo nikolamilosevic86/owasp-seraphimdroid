@@ -4,10 +4,8 @@
     <string name="app_name">SeraphimDroid</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
- 
-    
     <string name="icon_desc">Drawer Icon</string>
-    
+
     <string-array name="item_names">
         <item>Permission Scanner</item>
         <item>Blocker</item>
@@ -16,7 +14,7 @@
         <item>Settings</item>
         <item>About</item>
     </string-array>
-    
+
     <integer-array name="drawer_icons">
         <item>@android:drawable/ic_menu_preferences</item>
         <item>@android:drawable/ic_menu_preferences</item>
@@ -25,6 +23,29 @@
         <item>@android:drawable/ic_menu_preferences</item>
         <item>@android:drawable/ic_menu_preferences</item>
     </integer-array>
-        <string name="password_hint">Enter PIN</string>
+
+    <string name="password_hint">Enter PIN</string>
+
+    <!-- Strings for possible PreferenceActivity Back/Next buttons -->
+    <string name="back_button_label">Back</string>
+    <string name="next_button_label">Next</string>
+
+    <!-- Optional button to Skip a PreferenceActivity [CHAR LIMIT=20] -->
+    <string name="skip_button_label">Skip</string>
+    <string name="app_lock_settings_title">App Locker</string>
+    <string name="app_lock_change_password">Change password</string>
+    <string name="app_lock_change_password_summary">Change the current password for the Application Locker</string>
+    <string name="call_blocker_settings_title">Call Blocker</string>
+    <string name="call_blocker_blocked_calls_title">Blocked calls</string>
+    <string name="call_blocker_blocked_calls_summary">Select what calls to block</string>
+    <string name="call_blocker_black_list_title">Black List</string>
+    <string name="call_blocker_block_list_summary">Numbers which you want to block</string>
+    <string name="call_blocker_notification_title">Show Notification</string>
+    <string name="call_blocker_notification_summary">Show notification for blocked calls</string>
+    <string name="change_password">Change Password</string>
+    <string name="contact_icon">Contact Image</string>
+    <string name="add_contact_icon">Add number from contacts</string>
+    <string name="add_text">Add</string>
+    <string name="add_contact">Add new contact</string>
 
 </resources>
