@@ -3,9 +3,9 @@ package org.owasp.seraphimdroid;
 import org.owasp.seraphimdroid.database.DatabaseHelper;
 import org.owasp.seraphimdroid.model.NoImeEditText;
 import org.owasp.seraphimdroid.services.KillBackgroundService;
+import org.owasp.seraphimdroid.services.MakeACallService;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -44,6 +44,9 @@ public class PasswordActivity extends Activity implements OnClickListener {
 	private String pkgName;
 	private boolean tryUnlocking;
 
+	private boolean makeCall = false;
+	private String phoneNumber = "";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -69,6 +72,9 @@ public class PasswordActivity extends Activity implements OnClickListener {
 					PackageManager.GET_META_DATA);
 			tvAppLabel.setText(appInfo.loadLabel(pm));
 			imgAppIcon.setImageDrawable(appInfo.loadIcon(pm));
+
+			makeCall = rootIntent.getBooleanExtra("MAKE_CALL", false);
+			phoneNumber = rootIntent.getStringExtra("PHONE_NUMBER");
 		} catch (Exception e) {
 
 		}
@@ -251,7 +257,7 @@ public class PasswordActivity extends Activity implements OnClickListener {
 
 		} else if (tag.equals("reset")) {
 			isFirstAttempt = true;
-			//layoutOk.setVisibility(View.VISIBLE);
+			// layoutOk.setVisibility(View.VISIBLE);
 			Toast.makeText(getApplicationContext(), "Try Again",
 					Toast.LENGTH_LONG).show();
 		} else if (tag.equals("exit")) {
@@ -271,7 +277,13 @@ public class PasswordActivity extends Activity implements OnClickListener {
 			}
 			if (tryUnlocking) {
 				if (isPasswordCorrect(etPassword.getText().toString())) {
-					lastUnlocked = pkgName;
+					if (makeCall) {
+						Intent callServiceIntent = new Intent(
+								PasswordActivity.this, MakeACallService.class);
+						callServiceIntent.putExtra("PHONE_NUMBER", phoneNumber);
+						startService(callServiceIntent);
+					} else
+						lastUnlocked = pkgName;
 					this.finish();
 				}
 			}

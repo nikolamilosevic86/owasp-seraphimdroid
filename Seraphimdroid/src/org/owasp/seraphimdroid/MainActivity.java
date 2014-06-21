@@ -42,14 +42,19 @@ public class MainActivity extends FragmentActivity {
 	private android.app.Fragment prevFrag = null;
 	private Fragment prevSupportFlag = null;
 
+	public static boolean shouldReceive = true;
+
+	private static int fragmentNo = 2;
+
 	@Override
 	protected void onResume() {
-		 if (!isUnlocked) {
-		 Intent pwdIntent = new Intent(this, PasswordActivity.class);
-		 pwdIntent.putExtra("PACKAGE_NAME", this.getPackageName());
-		 isUnlocked = true;
-		 startActivity(pwdIntent);
-		 }
+		if (!isUnlocked) {
+			Intent pwdIntent = new Intent(this, PasswordActivity.class);
+			pwdIntent.putExtra("PACKAGE_NAME", this.getPackageName());
+			isUnlocked = true;
+			startActivity(pwdIntent);
+		}
+		selectFragment(fragmentNo);
 		super.onResume();
 
 	}
@@ -83,6 +88,12 @@ public class MainActivity extends FragmentActivity {
 		// isUnlocked = true;
 		// startActivity(pwdIntent);
 		// }
+
+		try {
+			fragmentNo = getIntent().getIntExtra("FRAGMENT_NO", fragmentNo);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		// initializing variables.
 		title = drawerTitle = getTitle();
@@ -122,9 +133,9 @@ public class MainActivity extends FragmentActivity {
 		};
 		drawerLayout.setDrawerListener(drawerToggle);
 
-		if (savedInstanceState == null) {
-			selectFragment(2);
-		}
+		// if (savedInstanceState == null) {
+		// selectFragment(fragmentNo);
+		// }
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
@@ -212,7 +223,7 @@ public class MainActivity extends FragmentActivity {
 			drawerLayout.closeDrawer(drawerList);
 			prevSupportFlag = fragment;
 		}
-
+		fragmentNo = position;
 	}
 
 	@Override

@@ -25,7 +25,7 @@
         android:layout_alignLeft="@+id/tv_number"
         android:layout_below="@+id/tv_number"
         android:layout_marginTop="5dp"
-        android:textColor="@android:color/darker_gray"
+        android:textColor="#666666"
         android:text="Reason"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -37,7 +37,7 @@
         android:layout_below="@+id/tv_reason"
         android:layout_marginTop="5dp"
         android:text="Time"
-        android:textColor="@android:color/primary_text_dark_nodisable"
+        android:textColor="@android:color/holo_blue_dark"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <Button
@@ -49,6 +49,6 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
         android:gravity="center_horizontal"
-        android:text="Button" />
+        android:text="Redial" />
 
 </RelativeLayout>

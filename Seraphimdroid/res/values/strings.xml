@@ -47,5 +47,6 @@
     <string name="add_contact_icon">Add number from contacts</string>
     <string name="add_text">Add</string>
     <string name="add_contact">Add new contact</string>
+    <string name="delete_record">Delete recoed</string>
 
 </resources>

@@ -3,6 +3,7 @@ package org.owasp.seraphimdroid.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.owasp.seraphimdroid.AppLockFragment;
 import org.owasp.seraphimdroid.R;
 import org.owasp.seraphimdroid.database.DatabaseHelper;
 
@@ -66,6 +67,8 @@ public class AppLockerAdapter extends BaseAdapter {
 		// Initializing Views.
 		TextView tvLabel = (TextView) view
 				.findViewById(R.id.tv_app_locker_label);
+		TextView tvAppType = (TextView) view
+				.findViewById(R.id.tv_app_locker_app_type);
 		ImageView imgIcon = (ImageView) view.findViewById(R.id.app_locker_icon);
 		ToggleButton tb = (ToggleButton) view.findViewById(R.id.tb_is_locked);
 
@@ -79,12 +82,19 @@ public class AppLockerAdapter extends BaseAdapter {
 
 			tvLabel.setText(appInfo.loadLabel(pm));
 			imgIcon.setImageDrawable(appInfo.loadIcon(pm));
+			if (AppLockFragment.isSystemPackage(pm.getPackageInfo(
+					appInfo.packageName, PackageManager.GET_META_DATA)))
+				tvAppType.setText("System application");
+			else
+				tvAppType.setText("Third party application");
 
-			if (lockedApps.contains(pkgName)) {
-				tb.setChecked(true);
-			} else {
-				tb.setChecked(false);
-			}
+				if (lockedApps.contains(pkgName)) {
+					tb.setChecked(true);
+					tb.setText("Locked");
+				} else {
+					tb.setChecked(false);
+					tb.setText("Unlocked");
+				}
 			tb.setTag(pkgName);
 			tb.setOnClickListener(new OnClickListener() {
 

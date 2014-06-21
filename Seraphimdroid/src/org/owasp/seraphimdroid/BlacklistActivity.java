@@ -19,12 +19,15 @@ public class BlacklistActivity extends Activity {
 	private ListView lvBlacklist;
 	private BlacklistAdapter adapter;
 
+	// private static final int CURSOR_LOADER_ID = 111;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_call_log);
 
 		lvBlacklist = (ListView) findViewById(R.id.lv_call_logs);
+		lvBlacklist.setPadding(15, 0, 10, 10);
 
 		getActionBar().setTitle("Blacklist Contacts");
 		getActionBar().setNavigationMode(ActionBar.DISPLAY_HOME_AS_UP);
@@ -36,7 +39,6 @@ public class BlacklistActivity extends Activity {
 
 		adapter = new BlacklistAdapter(this, cursor, false);
 		lvBlacklist.setAdapter(adapter);
-
 
 	}
 

@@ -5,18 +5,29 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import org.owasp.seraphimdroid.MainActivity;
+import org.owasp.seraphimdroid.PasswordActivity;
+import org.owasp.seraphimdroid.R;
 import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.services.MakeACallService;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract.PhoneLookup;
+import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.widget.Toast;
 
 public class CallRecepter extends BroadcastReceiver {
@@ -26,15 +37,49 @@ public class CallRecepter extends BroadcastReceiver {
 	private final String callLog = "call_logs";
 
 	private Context context;
+	private boolean isIncoming, isOutgoing;
+
+	private final String TAG = "CallRecepter";
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+
+		isIncoming = false;
+		isOutgoing = false;
+
+		isOutgoing = intent.getAction().equals(Intent.ACTION_NEW_OUTGOING_CALL);
+
+		if (intent.getBooleanExtra("CALL_ALLOWED", false)) {
+			Log.d(TAG, "true");
+		} else
+			Log.d(TAG, "false");
+
+		if (isOutgoing) {
+			if (MainActivity.shouldReceive)
+				Log.d(TAG, "true");
+			else {
+				Log.d(TAG, "false");
+				MainActivity.shouldReceive = true;
+				return;
+			}
+		}
+
+		final Bundle extras = intent.getExtras();
+		if (extras != null && !isOutgoing) {
+			isIncoming = extras.getString(TelephonyManager.EXTRA_STATE).equals(
+					TelephonyManager.EXTRA_STATE_RINGING);
+		}
 
 		// Initializing required objects.
 		dbHelper = new DatabaseHelper(context);
 		this.context = context;
 
-		String phoneNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
+		String phoneNumber = "";
+		if (isOutgoing)
+			phoneNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
+		else if (isIncoming)
+			phoneNumber = extras
+					.getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
 
 		// Check if the call is made to USSD
 		if (phoneNumber.startsWith("*") || phoneNumber.endsWith("#")) {
@@ -56,17 +101,19 @@ public class CallRecepter extends BroadcastReceiver {
 
 				db.close();
 
-				Toast.makeText(context, getReason(phoneNumber), Toast.LENGTH_LONG).show();
+				Toast.makeText(context, getReason(phoneNumber),
+						Toast.LENGTH_LONG).show();
 			} else {
 				// Allow the code to run
 				setResult(Activity.RESULT_OK, phoneNumber, null);
 			}
 		}
 		// Check if the call is blocked.
-		else if (isCallBlocked(phoneNumber)) {
+		else if (!phoneNumber.equals("") && isCallBlocked(phoneNumber)) {
 
 			// Block the call
 			dropCall();
+			showNotification(phoneNumber);
 			setResult(Activity.RESULT_CANCELED, null, null);
 
 			ContentValues cv = new ContentValues();
@@ -111,6 +158,12 @@ public class CallRecepter extends BroadcastReceiver {
 
 		if (harmfulCodes.contains(number)) {
 			reason = "Potential Factory Reset";
+		} else if (isNumberBlacklisted(number)) {
+			reason = "Number is blacklisted by user";
+			if (isIncoming)
+				reason = reason + ", Incoming";
+			if (isOutgoing)
+				reason = reason + ", Outgoing";
 		} else if (!contactExists(context, number)) {
 			reason = "Contact not found in user's contacts list";
 		}
@@ -119,10 +172,69 @@ public class CallRecepter extends BroadcastReceiver {
 
 	private boolean isCallBlocked(String phoneNumber) {
 
-		if (contactExists(context, phoneNumber)) {
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		String blockedCalls = sharedPreferences.getString("blocked_calls", "0");
+
+		int blockedCallsValue = Integer.valueOf(blockedCalls);
+		switch (blockedCallsValue) {
+		case 0:
 			return false;
+		case 1:
+			if (!contactExists(context, phoneNumber) && isOutgoing) {
+				return true;
+			}
+			return false;
+		case 2:
+			// Outgoing
+			if (isNumberBlacklisted(phoneNumber) && isOutgoing)
+				return true;
+			return false;
+		case 3:
+			// Incoming
+			if (isNumberBlacklisted(phoneNumber) && isIncoming)
+				return true;
+			return false;
+		case 4:
+			// Outgoing
+			if (!contactExists(context, phoneNumber)
+					|| (isNumberBlacklisted(phoneNumber) && isOutgoing)) {
+				return true;
+			}
+			return false;
+		case 5:
+			// Incoming
+			if (!contactExists(context, phoneNumber)
+					|| (isNumberBlacklisted(phoneNumber) && isIncoming)) {
+				return true;
+			}
+			return false;
+		case 6:
+			// Incoming and Outgoing Blacklist
+			if (isNumberBlacklisted(phoneNumber))
+				return true;
+			return false;
+		case 7:
+			// Block unsaved and Both blacklist numbers
+			if (!contactExists(context, phoneNumber)
+					|| isNumberBlacklisted(phoneNumber)) {
+				return true;
+			}
+			return false;
+		case 8:
+			// Block all outgoing calls
+			return isOutgoing;
+		case 9:
+			// Block all Incoming calls
+			return isIncoming;
+		case 10:
+			// Block all calls
+			return true;
+		default:
+			break;
 		}
-		return true;
+
+		return false;
 	}
 
 	// Check if the phoneNumber exists in contact
@@ -141,6 +253,24 @@ public class CallRecepter extends BroadcastReceiver {
 		} finally {
 			if (cur != null)
 				cur.close();
+		}
+		return false;
+	}
+
+	public boolean isNumberBlacklisted(String number) {
+		if (number.charAt(0) == '0') {
+			number = number.substring(1, number.length());
+		}
+		DatabaseHelper dbHelper = new DatabaseHelper(context);
+		SQLiteDatabase db = dbHelper.getReadableDatabase();
+		Cursor cursor = db.rawQuery("SELECT * FROM "
+				+ DatabaseHelper.TABLE_BLACKLIST, null);
+		while (cursor.moveToNext()) {
+			String blackNumber = cursor.getString(1);
+			if (number.contains(blackNumber))
+				return true;
+			if (blackNumber.contains(number))
+				return true;
 		}
 		return false;
 	}
@@ -185,4 +315,36 @@ public class CallRecepter extends BroadcastReceiver {
 
 	}
 
+	private void showNotification(String number) {
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		boolean notify = sharedPreferences.getBoolean(
+				"call_blocked_notification", false);
+		if (notify) {
+			Intent logIntent = new Intent(context, MainActivity.class);
+			logIntent.putExtra("FRAGMENT_NO", 1);
+
+			Intent callIntent = new Intent(context, PasswordActivity.class);
+			callIntent.putExtra("PACKAGE_NAME", context.getPackageName());
+			callIntent.putExtra("PHONE_NUMBER", number);
+			callIntent.putExtra("MAKE_CALL", true);
+
+			PendingIntent pLogIntent = PendingIntent.getActivity(context, 0,
+					logIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+			PendingIntent pCallIntent = PendingIntent.getActivity(context, 0,
+					callIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+			NotificationCompat.Builder builder = new NotificationCompat.Builder(
+					context).setContentTitle("Call blocked")
+					.setContentText(getReason(number)).setAutoCancel(true)
+					.setContentIntent(pLogIntent)
+					.setSmallIcon(R.drawable.ic_launcher)
+					.addAction(R.drawable.ic_launcher, "redial", pCallIntent);
+
+			NotificationManager nm = (NotificationManager) context
+					.getSystemService(Context.NOTIFICATION_SERVICE);
+			nm.notify(0, builder.build());
+		}
+
+	}
 }

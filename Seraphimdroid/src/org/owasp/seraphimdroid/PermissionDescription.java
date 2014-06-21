@@ -18,6 +18,8 @@ public class PermissionDescription extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_permission_description);
+		this.setFinishOnTouchOutside(false);
+		this.setTitle("Description");
 
 		// Initializing views.
 		tvPermissionHeader = (TextView) this

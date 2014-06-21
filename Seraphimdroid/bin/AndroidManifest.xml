@@ -46,7 +46,8 @@
         <activity
             android:name="org.owasp.seraphimdroid.PermissionDescription"
             android:excludeFromRecents="true"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" >
         </activity>
         <activity
             android:name="org.owasp.seraphimdroid.ChangePasswordActivity"
@@ -79,12 +80,15 @@
         </service>
         <service android:name="org.owasp.seraphimdroid.services.KillBackgroundService" >
         </service>
+        <service android:name="org.owasp.seraphimdroid.services.MakeACallService" >
+        </service>
 
         <!-- Receiver Declaration -->
 
         <receiver android:name="org.owasp.seraphimdroid.receiver.CallRecepter" >
-            <intent-filter android:priority="999" >
+            <intent-filter android:priority="1" >
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+                <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
         <receiver android:name="org.owasp.seraphimdroid.receiver.LockLauncher" >

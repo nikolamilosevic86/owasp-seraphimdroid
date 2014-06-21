@@ -72,8 +72,9 @@ public class AddBlacklistContactActivity extends Activity {
 			if (dbHelper != null)
 				dbHelper.close();
 
-		}else{
-			Toast.makeText(this, "Number can't be empty", Toast.LENGTH_SHORT).show();
+		} else {
+			Toast.makeText(this, "Number can't be empty", Toast.LENGTH_SHORT)
+					.show();
 		}
 	}
 
@@ -174,7 +175,11 @@ public class AddBlacklistContactActivity extends Activity {
 			String tag = (String) view.getTag();
 			if (tag.equals("add")) {
 				addToBlacklist();
-				finish();
+				if (etContactNumber.getText().toString().equals("")
+						|| etContactNumber.getText().toString() == null){
+					return;
+				}
+					finish();
 			} else if (tag.equals("cancel")) {
 				finish();
 			} else if (tag.equals("add_from_contacts")) {

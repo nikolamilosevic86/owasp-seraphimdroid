@@ -1,15 +1,18 @@
 package org.owasp.seraphimdroid;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.owasp.seraphimdroid.adapter.AppLockerAdapter;
 import org.owasp.seraphimdroid.database.DatabaseHelper;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -47,28 +50,46 @@ public class AppLockFragment extends Fragment {
 		return view;
 	}
 
-	private boolean isSystemPackage(PackageInfo packageInfo) {
+	public static boolean isSystemPackage(PackageInfo packageInfo) {
 		return ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) ? true
 				: false;
 	}
 
 	private void prepareList() {
+
 		PackageManager pm = getActivity().getPackageManager();
-		List<ApplicationInfo> appInfoList = pm
-				.getInstalledApplications(PackageManager.GET_META_DATA);
+		Intent localIntent = new Intent(Intent.ACTION_MAIN);
+		localIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+		List<ResolveInfo> installedAppList = pm.queryIntentActivities(
+				localIntent, 0);
+		Collections.sort(installedAppList,
+				new ResolveInfo.DisplayNameComparator(pm));
 
-		for (ApplicationInfo appInfo : appInfoList) {
-			try {
-				if (!isSystemPackage(pm.getPackageInfo(appInfo.packageName,
-						PackageManager.GET_META_DATA)) && !appInfo.packageName.equals("org.owasp.seraphimdroid")) {
-					appList.add(appInfo.packageName);
-				}
-				// addToDatabase(appInfo.packageName);
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		for (ResolveInfo ri : installedAppList) {
+			if (ri.activityInfo.applicationInfo.packageName
+					.equals("org.owasp.seraphimdroid"))
+				continue;
+			appList.add(ri.activityInfo.applicationInfo.packageName);
 		}
+
+		//
+		// List<ApplicationInfo> appInfoList = pm
+		// .getInstalledApplications(PackageManager.GET_META_DATA);
+		//
+		// for (ApplicationInfo appInfo : appInfoList) {
+		// try {
+		// if (!isSystemPackage(pm.getPackageInfo(appInfo.packageName,
+		// PackageManager.GET_META_DATA))
+		// && !appInfo.packageName
+		// .equals("org.owasp.seraphimdroid")) {
+		// appList.add(appInfo.packageName);
+		// }
+		// // addToDatabase(appInfo.packageName);
+		//
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
+		// }
 	}
 
 	@Override
