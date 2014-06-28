@@ -1,5 +1,10 @@
 package org.owasp.seraphimdroid;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+
 import org.owasp.seraphimdroid.database.DatabaseHelper;
 import org.owasp.seraphimdroid.model.NoImeEditText;
 import org.owasp.seraphimdroid.services.KillBackgroundService;
@@ -315,8 +320,22 @@ public class PasswordActivity extends Activity implements OnClickListener {
 
 	private void savePassword() {
 
+		byte[] hash = null;
+		try {
+			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			hash = digest.digest(passwordConfirm.getBytes("UTF-8"));
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		ContentValues cv = new ContentValues();
-		cv.put("password", passwordConfirm);
+		if (hash != null) {
+			cv.put("password", hash);
+		}
 		if (!isPasswordCreated()) {
 			SQLiteDatabase db = dbHelper.getWritableDatabase();
 			db.insert("password", null, cv);
@@ -331,17 +350,28 @@ public class PasswordActivity extends Activity implements OnClickListener {
 	}
 
 	private boolean isPasswordCorrect(String password) {
-		SQLiteDatabase db = dbHelper.getReadableDatabase();
-		Cursor cursor = db.rawQuery("SELECT * FROM password", null);
+		boolean isCorrect = false;
+		try {
+			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			byte[] hash = digest.digest(password.getBytes("UTF-8"));
 
-		cursor.moveToNext();
-		if (cursor.getString(1).equals(password)) {
-			etPassword.setText("");
+			SQLiteDatabase db = dbHelper.getReadableDatabase();
+			Cursor cursor = db.rawQuery("SELECT * FROM password", null);
+
+			cursor.moveToNext();
+			if (Arrays.equals(hash, cursor.getBlob(1))) {
+				etPassword.setText("");
+				isCorrect = true;
+			}
 			cursor.close();
 			db.close();
-			return true;
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
-		return false;
+		return isCorrect;
 	}
 }

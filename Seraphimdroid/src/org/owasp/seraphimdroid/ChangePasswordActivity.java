@@ -1,5 +1,9 @@
 package org.owasp.seraphimdroid;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import org.owasp.seraphimdroid.database.DatabaseHelper;
 
 import android.app.Activity;
@@ -26,7 +30,7 @@ public class ChangePasswordActivity extends Activity {
 
 		// Initializing Views.
 		initViews();
-		
+
 		getActionBar().setTitle("Change Password");
 
 	}
@@ -83,16 +87,32 @@ public class ChangePasswordActivity extends Activity {
 	private void changePassword(String password) {
 		DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		ContentValues cv = new ContentValues();
-		cv.put("password", password);
-		String sql = "DROP TABLE IF EXISTS " + DatabaseHelper.TABLE_PASS;
 
-		db.execSQL(sql);
-		db.execSQL(DatabaseHelper.createPasswordTable);
-		db.insert(DatabaseHelper.TABLE_PASS, null, cv);
+		byte[] hash = null;
+		try {
+			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			hash = digest.digest(password.getBytes("UTF-8"));
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
+		if (hash != null) {
+
+			ContentValues cv = new ContentValues();
+			cv.put("password", hash);
+			String sql = "DROP TABLE IF EXISTS " + DatabaseHelper.TABLE_PASS;
+
+			db.execSQL(sql);
+			db.execSQL(DatabaseHelper.createPasswordTable);
+			db.insert(DatabaseHelper.TABLE_PASS, null, cv);
+		}
 		db.close();
 		dbHelper.close();
+
 		// String [] whereArgs = {"1"};
 		// db.update(DatabaseHelper.TABLE_PASS, cv, "_id=?", whereArgs);
 	}
