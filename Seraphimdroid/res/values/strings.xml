@@ -48,5 +48,17 @@
     <string name="add_text">Add</string>
     <string name="add_contact">Add new contact</string>
     <string name="delete_record">Delete recoed</string>
+    <string name="your_location_text">Your Current Location</string>
+    <string name="radius_label">Radius</string>
+    <string name="geo_start_fencing">Start Fencing</string>
+    <string name="geo_stop_fencing">Stop Fencing</string>
+    <string name="remote_lock_text">Remote Lock</string>
+    <string name="remote_wipe_text">Remote Wipe</string>
+    <string name="siren_text">Siren?</string>
+    <string name="meters_text">meters</string>
+    <string name="geo_fencing_settings_title">Geo Fencing</string>
+    <string name="geo_failed_attempts">Failed Attempts</string>
+    <string name="geo_failed_attempts_summary">No. of tries before wiping the data</string>
+    <string name="send_location_text">Send Location</string>
 
 </resources>

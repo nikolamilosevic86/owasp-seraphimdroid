@@ -124,34 +124,4 @@ class CallLogAdapter extends CursorAdapter {
 		return inflater.inflate(R.layout.log_item, parent, false);
 	}
 
-	private void placeCall(String number) {
-		TelephonyManager telephonyManager = (TelephonyManager) mContext
-				.getSystemService(Context.TELEPHONY_SERVICE);
-
-		try {
-			Class<?> classTelephony;
-			classTelephony = Class.forName(telephonyManager.getClass()
-					.getName());
-			Method methodGetITelephony = classTelephony
-					.getDeclaredMethod("getITelephony");
-
-			methodGetITelephony.setAccessible(true);
-
-			Object telephonyInterface = methodGetITelephony
-					.invoke(telephonyManager);
-
-			Class<?> telephonyInterfaceClass = Class.forName(telephonyInterface
-					.getClass().getName());
-			Method methodPlaceCall = telephonyInterfaceClass.getDeclaredMethod(
-					"call", String.class);
-			methodPlaceCall.invoke(telephonyInterface, number);
-
-			// methodEndCall.invoke(telephonyInterface);
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
 }

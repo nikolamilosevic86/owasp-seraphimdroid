@@ -96,7 +96,10 @@
         </service>
         <service android:name="org.owasp.seraphimdroid.services.MakeACallService" >
         </service>
-
+        <service android:name="org.owasp.seraphimdroid.services.GeoFencingService" >
+        </service>
+        <service android:name="org.owasp.seraphimdroid.services.GPSTracker" >
+        </service>
         <!-- Receiver Declaration -->
 
         <receiver android:name="org.owasp.seraphimdroid.receiver.CallRecepter" >
@@ -112,10 +115,26 @@
                 <action android:name="android.intent.action.SCREEN_OFF" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name="org.owasp.seraphimdroid.receiver.GeoFencingAdminReceiver"
+            android:permission="android.permission.BIND_DEVICE_ADMIN" >
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+                <action android:name="android.app.action.DEVICE_ADMIN_DISABLE_REQUESTED" />
+                <action android:name="android.app.action.DEVICE_ADMIN_DISABLED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin_policies" />
+        </receiver>
         <!-- Goolge Maps API Key -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyBMstdb-hF1qkb_mO9gvcxzrHMjwFz7DY8" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

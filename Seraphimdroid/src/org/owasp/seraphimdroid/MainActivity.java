@@ -53,8 +53,9 @@ public class MainActivity extends FragmentActivity {
 			pwdIntent.putExtra("PACKAGE_NAME", this.getPackageName());
 			isUnlocked = true;
 			startActivity(pwdIntent);
+			selectFragment(fragmentNo);
 		}
-		selectFragment(fragmentNo);
+		
 		super.onResume();
 
 	}
@@ -140,7 +141,7 @@ public class MainActivity extends FragmentActivity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
-		startService(new Intent(this, AppLockService.class));
+//		startService(new Intent(this, AppLockService.class));
 
 	}
 

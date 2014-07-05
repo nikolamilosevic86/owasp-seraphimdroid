@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import org.owasp.seraphimdroid.database.DatabaseHelper;
 import org.owasp.seraphimdroid.model.NoImeEditText;
+import org.owasp.seraphimdroid.services.AppLockService;
 import org.owasp.seraphimdroid.services.KillBackgroundService;
 import org.owasp.seraphimdroid.services.MakeACallService;
 
@@ -104,7 +105,7 @@ public class PasswordActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onResume() {
-
+		startService(new Intent(this, AppLockService.class));
 		super.onResume();
 	}
 
@@ -209,7 +210,7 @@ public class PasswordActivity extends Activity implements OnClickListener {
 
 			if (isFirstAttempt) {
 				if (etPassword.getText().toString().length() < 4) {
-					String message = "PIN should not be less than 4 digits";
+					String message = "PIN should be atleast 4 digits long.";
 					Toast.makeText(getApplicationContext(), message,
 							Toast.LENGTH_SHORT).show();
 					tvAlert.setText(message);

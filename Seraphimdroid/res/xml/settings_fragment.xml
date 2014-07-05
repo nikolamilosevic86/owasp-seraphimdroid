@@ -25,5 +25,10 @@
             android:summary="@string/call_blocker_notification_summary"
             android:title="@string/call_blocker_notification_title" />
     </PreferenceCategory>
+    <PreferenceCategory
+         android:title="@string/geo_fencing_settings_title">
+        <ListPreference android:key="geo_password_tries"
+            android:summary="@string/geo_failed_attempts_summary" android:entries="@array/geo_failed_attempts_keys" android:entryValues="@array/geo_failed_attempts_values" android:title="@string/geo_failed_attempts"/>
+    </PreferenceCategory>
 
 </PreferenceScreen>
