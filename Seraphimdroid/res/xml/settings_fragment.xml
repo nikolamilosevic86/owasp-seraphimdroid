@@ -10,9 +10,11 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/call_blocker_settings_title" >
         <ListPreference
+            android:entries="@array/blocked_calls_keys"
+            android:entryValues="@array/blocked_calls_values"
             android:key="blocked_calls"
             android:summary="@string/call_blocker_blocked_calls_summary"
-            android:title="@string/call_blocker_blocked_calls_title" android:entryValues="@array/blocked_calls_values" android:entries="@array/blocked_calls_keys"/>
+            android:title="@string/call_blocker_blocked_calls_title" />
 
         <PreferenceScreen
             android:summary="@string/call_blocker_block_list_summary"
@@ -25,10 +27,48 @@
             android:summary="@string/call_blocker_notification_summary"
             android:title="@string/call_blocker_notification_title" />
     </PreferenceCategory>
-    <PreferenceCategory
-         android:title="@string/geo_fencing_settings_title">
-        <ListPreference android:key="geo_password_tries"
-            android:summary="@string/geo_failed_attempts_summary" android:entries="@array/geo_failed_attempts_keys" android:entryValues="@array/geo_failed_attempts_values" android:title="@string/geo_failed_attempts"/>
+    <PreferenceCategory android:title="@string/geo_fencing_settings_title" >
+        <ListPreference
+            android:entries="@array/geo_failed_attempts_keys"
+            android:entryValues="@array/geo_failed_attempts_values"
+            android:key="geo_password_tries"
+            android:summary="@string/geo_failed_attempts_summary"
+            android:title="@string/geo_failed_attempts" />
+
+        <EditTextPreference
+            android:dialogMessage="@string/geo_number_dialog_message"
+            android:dialogTitle="@string/geo_dialog_title"
+            android:key="geo_location_number_primary"
+            android:summary="@string/geo_settings_number_summary"
+            android:title="@string/geo_settings_number_title" />
+
+        <ListPreference
+            android:entries="@array/send_location_interval_key"
+            android:entryValues="@array/send_location_interval_values"
+            android:key="geo_send_location_interval"
+            android:summary="@string/geo_send_location_interval_summary"
+            android:title="@string/geo_send_location_interval_title" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/remote_services_title" >
+        <CheckBoxPreference
+            android:key="remote_lock"
+            android:summary="@string/remote_lock_summary"
+            android:title="@string/remote_lock_title" />
+        <CheckBoxPreference
+            android:key="remote_wipe"
+            android:summary="@string/remote_wipe_summary"
+            android:title="@string/remote_wipe_text" />
+        <CheckBoxPreference
+            android:key="remote_location"
+            android:summary="@string/remote_location_summary"
+            android:title="@string/remote_location_title" />
+
+        <EditTextPreference
+            android:dialogMessage="@string/remote_secret_code_dialog_message"
+            android:dialogTitle="@string/remote_secret_code_dialog_title"
+            android:key="remote_secret_code"
+            android:summary="@string/remote_secret_code_summary"
+            android:title="@string/remote_secret_code" />
     </PreferenceCategory>
 
 </PreferenceScreen>

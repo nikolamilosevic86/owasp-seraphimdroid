@@ -60,5 +60,25 @@
     <string name="geo_failed_attempts">Failed Attempts</string>
     <string name="geo_failed_attempts_summary">No. of tries before wiping the data</string>
     <string name="send_location_text">Send Location</string>
+    <string name="geo_number_dialog_message">This number will be used to send the location cordinates. You need to enable this in order to get current location of your device</string>
+    <string name="geo_dialog_title">Enter number</string>
+    <string name="geo_settings_number_title">Enter primary secure number</string>
+    <string name="geo_settings_number_summary">Enter a number that should be used to send location data, in case phone gets lost</string>
+    <string name="geo_lock_info">Opting for this service you will be able to lock your phone in case your phone gets out of the perimeter range set by you. This will protect you privacy protect access to your phone without password</string>
+    <string name="geo_wipe_info">This will wipe your phone data in case a certain number of password attempts go wrong. Be careful to opt for this service. You could loose your data. This will also be activated only when you go out of the perimeter range</string>
+    <string name="geo_siren_info">Your phone will start making sound as soon as it goes out of the perimeter range so to let you know someone is stealing it.</string>
+    <string name="geo_location_info">This will let you receive your device\'s current location on a secure number set by you in the settings. Be sure to set the number before opting for this service.</string>
+    <string name="geo_send_location_interval_title">Send Location Interval</string>
+    <string name="geo_send_location_interval_summary">Select the interval with which the device\'s current location should be sent.</string>
+    <string name="remote_services_title">Remote Services</string>
+    <string name="remote_lock_title">Remote Lock</string>
+    <string name="remote_lock_summary">Enable remote lock, this will allow you to lock your device by sending a secret code message.</string>
+    <string name="remote_wipe_summary">Enable/disable remote wipe, this will let you wipe your data by sending a secret code message.</string>
+    <string name="remote_location_title">Remote Location</string>
+    <string name="remote_location_summary">Enable/disable remote location, this will send your devices current location if secret code message is received.</string>
+    <string name="remote_secret_code_dialog_title">Secret Code</string>
+    <string name="remote_secret_code_dialog_message">Enter a secret code which will be used to enable the remote lock, remote wipe and remote location services. Careful the code should not be a usual word cause it could trigger the remote services and could wipe your data unexpectedly.</string>
+    <string name="remote_secret_code">Remote Secret Code</string>
+    <string name="remote_secret_code_summary">Secret code to lock enable remote services</string>
 
 </resources>

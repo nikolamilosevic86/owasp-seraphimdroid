@@ -17,6 +17,7 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -46,7 +47,7 @@ public class GeoFencingFragment extends Fragment {
 	private Button btnFence;
 	private EditText etRadius;
 	private ImageButton imgBtnLocation;
-	private static final int ADMIN_ACTIVATION_REQ = 1001;
+	public static final int ADMIN_ACTIVATION_REQ = 1001;
 
 	private SharedPreferences prefs;
 	public static final String lockKey = "org.owasp.seraphimdroid.geofencing.lock";
@@ -57,8 +58,9 @@ public class GeoFencingFragment extends Fragment {
 	private Location center = null;
 	private DevicePolicyManager dpm;
 	private ComponentName deviceAdminComponent;
-	
+
 	private GPSTracker gpsTracker;
+	private AlertDialog gpsAlert = null;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,7 +75,7 @@ public class GeoFencingFragment extends Fragment {
 				Context.DEVICE_POLICY_SERVICE);
 		deviceAdminComponent = new ComponentName(this.getActivity(),
 				GeoFencingAdminReceiver.class);
-		
+
 		gpsTracker = new GPSTracker(getActivity());
 		initViews(view, savedInstanceState);
 
@@ -261,10 +263,13 @@ public class GeoFencingFragment extends Fragment {
 					Toast.LENGTH_LONG).show();
 			try {
 				center = gpsTracker.getLocation();
+				if (center != null)
+					tvCenter.setText(center.getLatitude() + ","
+							+ center.getLongitude());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			// return;
+			return;
 		}
 		if (etRadius.getText().toString().equals("")
 				|| etRadius.getText().toString().equals(null)) {
@@ -286,6 +291,9 @@ public class GeoFencingFragment extends Fragment {
 			// dpm.setPasswordMinimumUpperCase(deviceAdminComponent, 0);
 
 			if (!dpm.isActivePasswordSufficient()) {
+				Toast.makeText(getActivity(),
+						"Create a password to lock device with",
+						Toast.LENGTH_SHORT).show();
 				startActivity(new Intent(
 						DevicePolicyManager.ACTION_SET_NEW_PASSWORD));
 				return;
@@ -343,16 +351,30 @@ public class GeoFencingFragment extends Fragment {
 
 		@Override
 		public void onClick(View view) {
+			AlertDialog.Builder info = new AlertDialog.Builder(getActivity());
+			info.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			});
+
 			String tag = (String) view.getTag();
 			if (tag.equals("lock")) {
 				// cbRemoteLock.performClick();
+				info.setMessage(R.string.geo_lock_info);
 			} else if (tag.equals("wipe")) {
 				// cbRemoteWipe.performClick();
+				info.setMessage(R.string.geo_wipe_info);
 			} else if (tag.equals("siren")) {
 				// cbSiren.performClick();
+				info.setMessage(R.string.geo_siren_info);
 			} else if (tag.equals("location")) {
-
+				info.setMessage(R.string.geo_location_info);
 			}
+			AlertDialog infoDialog = info.create();
+			infoDialog.show();
 		}
 	}
 
@@ -365,7 +387,14 @@ public class GeoFencingFragment extends Fragment {
 
 			String tag = (String) checkBox.getTag();
 			if (tag.equals("lock")) {
-				prefs.edit().putBoolean(lockKey, checkBox.isChecked()).commit();
+				if (cbRemoteWipe.isChecked() && !checkBox.isChecked()) {
+					Toast.makeText(getActivity(),
+							"Lock is required if you need to wipe",
+							Toast.LENGTH_SHORT).show();
+					checkBox.setChecked(true);
+				} else
+					prefs.edit().putBoolean(lockKey, checkBox.isChecked())
+							.commit();
 			} else if (tag.equals("wipe")) {
 				if (checkBox.isChecked())
 					cbRemoteLock.setChecked(true);
@@ -374,12 +403,33 @@ public class GeoFencingFragment extends Fragment {
 				prefs.edit().putBoolean(sirenKey, checkBox.isChecked())
 						.commit();
 			} else if (tag.equals("location")) {
-				prefs.edit().putBoolean(locationKey, checkBox.isChecked())
-						.commit();
+				SharedPreferences dPrefs = PreferenceManager
+						.getDefaultSharedPreferences(getActivity());
+				String number = dPrefs.getString("geo_location_number_primary",
+						null);
+				if (number == null || number.equals("")) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(
+							getActivity());
+					builder.setMessage("You need to set a number to which you could receive location cordinates in case phone gets lost. Please go to settings and set the number before opting for this service");
+					builder.setNeutralButton("OK",
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface dialog,
+										int arg1) {
+									dialog.dismiss();
+								}
+							});
+					AlertDialog alert = builder.create();
+					alert.show();
+
+				} else
+					prefs.edit().putBoolean(locationKey, checkBox.isChecked())
+							.commit();
+
 			}
 
 		}
-
 	}
 
 	@Override
@@ -431,7 +481,7 @@ public class GeoFencingFragment extends Fragment {
 								dialog.dismiss();
 							}
 						});
-				AlertDialog gpsAlert = builder.create();
+				gpsAlert = builder.create();
 				gpsAlert.show();
 
 			} else {
@@ -450,7 +500,8 @@ public class GeoFencingFragment extends Fragment {
 
 	@Override
 	public void onPause() {
-
+		if (gpsAlert != null)
+			gpsAlert.dismiss();
 		super.onPause();
 		// mapView.onPause();
 	}
@@ -463,7 +514,7 @@ public class GeoFencingFragment extends Fragment {
 			getActivity().getFragmentManager().beginTransaction()
 					.remove(mapFragment).commit();
 		}
-
+		gpsTracker.stopUsingGPS();
 		super.onDestroy();
 		// mapView.onDestroy();
 	}

@@ -139,7 +139,7 @@ public class CallRecepter extends BroadcastReceiver {
 	//
 	// }
 
-	private String getTime() {
+	public static String getTime() {
 		String time = "";
 
 		Calendar current = Calendar.getInstance();
@@ -238,7 +238,7 @@ public class CallRecepter extends BroadcastReceiver {
 	}
 
 	// Check if the phoneNumber exists in contact
-	public boolean contactExists(Context context, String number) {
+	public static boolean contactExists(Context context, String number) {
 		// / number is the phone number
 		Uri lookupUri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI,
 				Uri.encode(number));
