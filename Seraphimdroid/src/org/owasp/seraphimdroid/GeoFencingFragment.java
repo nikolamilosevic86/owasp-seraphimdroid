@@ -82,19 +82,6 @@ public class GeoFencingFragment extends Fragment {
 		return view;
 	}
 
-	private void setGoogleMapIfNeeded() {
-		// Initializing Map
-		if (googleMap == null) {
-			// googleMap = ((MapFragment) getActivity().getFragmentManager()
-			// .findFragmentById(R.id.maps)).getMap();
-			googleMap = ((MapFragment) getActivity().getFragmentManager()
-					.findFragmentById(R.id.maps)).getMap();
-			googleMap.getUiSettings().setZoomControlsEnabled(false);
-			googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-			googleMap.setMyLocationEnabled(true);
-		}
-	}
-
 	private void initViews(View view, Bundle savedInstanceState) {
 
 		// try {
@@ -108,6 +95,17 @@ public class GeoFencingFragment extends Fragment {
 		// mapView = (MapView) view.findViewById(R.id.maps);
 		// mapView.onCreate(savedInstanceState);
 		// }
+		// Initializing Map
+		if (googleMap == null) {
+			// googleMap = ((MapFragment) getActivity().getFragmentManager()
+			// .findFragmentById(R.id.maps)).getMap();
+			googleMap = ((MapFragment) getActivity().getFragmentManager()
+					.findFragmentById(R.id.maps)).getMap();
+			googleMap.getUiSettings().setZoomControlsEnabled(false);
+			googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+			googleMap.setMyLocationEnabled(true);
+		}
+
 		// Initializing CheckBoxes
 		cbRemoteLock = (CheckBox) view.findViewById(R.id.cb_remote_lock);
 		cbRemoteLock.setTag("lock");
@@ -438,8 +436,7 @@ public class GeoFencingFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		// mapView.onResume();
-		setGoogleMapIfNeeded();
-		
+
 		LocationManager lm = (LocationManager) getActivity().getSystemService(
 				Context.LOCATION_SERVICE);
 
