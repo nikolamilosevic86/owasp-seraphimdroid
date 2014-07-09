@@ -13,8 +13,14 @@
             android:id="@+id/maps"
             android:name="com.google.android.gms.maps.MapFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" /> 
+       <!--       <fragment
+    android:name="com.google.android.gms.maps.SupportMapFragment"
+    android:id="@+id/maps"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" /> -->
     </LinearLayout>
+    
 
     <ScrollView
         android:layout_width="match_parent"

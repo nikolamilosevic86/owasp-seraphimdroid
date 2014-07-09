@@ -68,16 +68,16 @@ public class GeoFencingFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_geofencing, container,
 				false);
 
-		prefs = getActivity().getSharedPreferences("org.owasp.seraphimdroid",
-				Context.MODE_PRIVATE);
-
-		dpm = (DevicePolicyManager) getActivity().getSystemService(
-				Context.DEVICE_POLICY_SERVICE);
-		deviceAdminComponent = new ComponentName(this.getActivity(),
-				GeoFencingAdminReceiver.class);
-
-		gpsTracker = new GPSTracker(getActivity());
-		initViews(view, savedInstanceState);
+//		prefs = getActivity().getSharedPreferences("org.owasp.seraphimdroid",
+//				Context.MODE_PRIVATE);
+//
+//		dpm = (DevicePolicyManager) getActivity().getSystemService(
+//				Context.DEVICE_POLICY_SERVICE);
+//		deviceAdminComponent = new ComponentName(this.getActivity(),
+//				GeoFencingAdminReceiver.class);
+//
+//		gpsTracker = new GPSTracker(getActivity());
+//		//initViews(view, savedInstanceState);
 
 		return view;
 	}
@@ -99,8 +99,8 @@ public class GeoFencingFragment extends Fragment {
 		if (googleMap == null) {
 			// googleMap = ((MapFragment) getActivity().getFragmentManager()
 			// .findFragmentById(R.id.maps)).getMap();
-			googleMap = ((MapFragment) getActivity().getFragmentManager()
-					.findFragmentById(R.id.maps)).getMap();
+			/*googleMap = ((MapFragment) getActivity().getFragmentManager()
+					.findFragmentById(R.id.maps)).getMap();*/
 			googleMap.getUiSettings().setZoomControlsEnabled(false);
 			googleMap.getUiSettings().setMyLocationButtonEnabled(true);
 			googleMap.setMyLocationEnabled(true);
@@ -508,13 +508,13 @@ public class GeoFencingFragment extends Fragment {
 
 	@Override
 	public void onDestroy() {
-		android.app.Fragment mapFragment = getActivity().getFragmentManager()
+	/*	android.app.Fragment mapFragment = getActivity().getFragmentManager()
 				.findFragmentById(R.id.maps);
 		if (mapFragment != null) {
 			getActivity().getFragmentManager().beginTransaction()
 					.remove(mapFragment).commit();
 		}
-		gpsTracker.stopUsingGPS();
+		gpsTracker.stopUsingGPS();*/
 		super.onDestroy();
 		// mapView.onDestroy();
 	}
