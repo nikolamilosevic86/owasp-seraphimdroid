@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.CursorAdapter;
@@ -70,7 +71,8 @@ class USSDLogAdapter extends CursorAdapter {
 		} else {
 			reason = "Not defined";
 		}
-		final String number = cursor.getString(1);
+		String number = cursor.getString(1);
+		final String ussd = number.replaceAll("#", Uri.encode("#"));
 		tvNumber.setText(number);
 		tvTime.setText(cursor.getString(2));
 		tvReason.setText(reason);
@@ -80,7 +82,7 @@ class USSDLogAdapter extends CursorAdapter {
 			public void onClick(View view) {
 				Intent callServiceIntent = new Intent(mContext,
 						MakeACallService.class);
-				callServiceIntent.putExtra("PHONE_NUMBER", number);
+				callServiceIntent.putExtra("PHONE_NUMBER", ussd);
 				callServiceIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				mContext.startService(callServiceIntent);
 

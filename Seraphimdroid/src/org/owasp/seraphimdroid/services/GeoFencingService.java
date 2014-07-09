@@ -1,21 +1,30 @@
 package org.owasp.seraphimdroid.services;
 
+import java.io.IOException;
+import java.util.Calendar;
+
 import org.owasp.seraphimdroid.GeoFencingFragment;
 import org.owasp.seraphimdroid.MainActivity;
 import org.owasp.seraphimdroid.R;
 import org.owasp.seraphimdroid.receiver.GeoFencingAdminReceiver;
-import org.owasp.seraphimdroid.receiver.SMSRecepter;
 
+import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.app.admin.DevicePolicyManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -38,6 +47,12 @@ public class GeoFencingService extends Service {
 
 	private static final int ForeGroundId = 1002;
 	private boolean isLocked = false;
+
+	private AlarmManager am = null;
+	private BroadcastReceiver alarmReceiver = null;
+	private PendingIntent operation = null;
+	private MediaPlayer mPlayer = null;
+	private AudioManager audioMan = null;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -90,6 +105,49 @@ public class GeoFencingService extends Service {
 
 		startForeground(ForeGroundId, builder.build());
 
+		alarmReceiver = new BroadcastReceiver() {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if (mPlayer != null) {
+					mPlayer.stop();
+					mPlayer.reset();
+				}
+				Uri soundUri = RingtoneManager
+						.getDefaultUri(RingtoneManager.TYPE_ALARM);
+				if (soundUri == null)
+					soundUri = RingtoneManager
+							.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+				if (soundUri == null)
+					soundUri = RingtoneManager
+							.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+				if (mPlayer == null)
+					mPlayer = MediaPlayer.create(GeoFencingService.this,
+							soundUri);
+				if (audioMan == null)
+					audioMan = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+				audioMan.setStreamVolume(AudioManager.STREAM_ALARM,
+						audioMan.getStreamMaxVolume(AudioManager.STREAM_ALARM),
+						AudioManager.FLAG_PLAY_SOUND);
+				mPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+				try {
+					mPlayer.prepare();
+				} catch (IllegalStateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				mPlayer.start();
+			}
+
+		};
+
+		IntentFilter filter = new IntentFilter(
+				"org.owasp.seraphimdroid.geo_fencing_alarm");
+		registerReceiver(alarmReceiver, filter);
+
 		return START_STICKY;
 	}
 
@@ -101,8 +159,18 @@ public class GeoFencingService extends Service {
 		// DevicePolicyManager.RESET_PASSWORD_REQUIRE_ENTRY);
 		deviceMan.setPasswordQuality(deviceAdminComponent,
 				DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED);
-		SMSRecepter.isRunning = false;
-		stopService(new Intent(this, SMSRecepter.class));
+		// SMSRecepter.isRunning = false;
+		// stopService(new Intent(this, SMSRecepter.class));
+
+		// Stopping Alarm.
+		if (mPlayer != null) {
+			mPlayer.stop();
+			mPlayer.reset();
+		}
+		if (alarmReceiver != null)
+			unregisterReceiver(alarmReceiver);
+		if (am != null && operation != null)
+			am.cancel(operation);
 
 		Log.d("GeoService", "Fencing removed");
 		Toast.makeText(getApplicationContext(), "Fencing removed.",
@@ -145,6 +213,18 @@ public class GeoFencingService extends Service {
 					}
 					if (prefs.getBoolean(GeoFencingFragment.sirenKey, false)) {
 						// Start Siren.
+						if (am == null)
+							am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+						Intent intent = new Intent(
+								"org.owasp.seraphimdroid.geo_fencing_alarm");
+						if (operation == null)
+							operation = PendingIntent.getBroadcast(
+									GeoFencingService.this, 0, intent, 0);
+						am.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+								Calendar.getInstance().getTimeInMillis() + 5,
+								1000 * 10, operation);
+
 					}
 				}
 				if (prefs.getBoolean(GeoFencingFragment.locationKey, false)) {

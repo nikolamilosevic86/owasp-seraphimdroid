@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.owasp.seraphimdroid.adapter.DrawerAdapter;
 import org.owasp.seraphimdroid.model.DrawerItem;
-import org.owasp.seraphimdroid.services.AppLockService;
 import org.owasp.seraphimdroid.services.CheckAppLaunchThread;
 
 import android.content.Intent;

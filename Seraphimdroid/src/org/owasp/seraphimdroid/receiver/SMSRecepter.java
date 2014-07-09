@@ -1,13 +1,11 @@
 package org.owasp.seraphimdroid.receiver;
 
-import org.owasp.seraphimdroid.MainActivity;
 import org.owasp.seraphimdroid.database.DatabaseHelper;
 import org.owasp.seraphimdroid.services.GPSTracker;
 
 import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +23,7 @@ public class SMSRecepter extends BroadcastReceiver {
 	public static boolean isRunning = false;
 	private SharedPreferences defaultPrefs;
 	private DevicePolicyManager dpm;
-	private ComponentName component;
+//	private ComponentName component;
 
 	private Location currentLocation = null;
 
@@ -44,7 +42,7 @@ public class SMSRecepter extends BroadcastReceiver {
 
 		dpm = (DevicePolicyManager) context
 				.getSystemService(Context.DEVICE_POLICY_SERVICE);
-		component = new ComponentName(context, GeoFencingAdminReceiver.class);
+//		component = new ComponentName(context, GeoFencingAdminReceiver.class);
 
 		// Get the message received.
 		Bundle bundle = intent.getExtras();
