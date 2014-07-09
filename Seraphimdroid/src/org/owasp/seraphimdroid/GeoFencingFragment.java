@@ -34,7 +34,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 
 public class GeoFencingFragment extends Fragment {
 
