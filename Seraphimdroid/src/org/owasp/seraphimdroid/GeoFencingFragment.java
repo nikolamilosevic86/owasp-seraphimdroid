@@ -79,16 +79,16 @@ public class GeoFencingFragment extends Fragment {
 				GeoFencingAdminReceiver.class);
 
 		gpsTracker = new GPSTracker(getActivity());
-		initViews(view, savedInstanceState);
-//		prefs = getActivity().getSharedPreferences("org.owasp.seraphimdroid",
-//				Context.MODE_PRIVATE);
-//
-//		dpm = (DevicePolicyManager) getActivity().getSystemService(
-//				Context.DEVICE_POLICY_SERVICE);
-//		deviceAdminComponent = new ComponentName(this.getActivity(),
-//				GeoFencingAdminReceiver.class);
-//
-//		gpsTracker = new GPSTracker(getActivity());
+		// initViews(view, savedInstanceState);
+		// prefs = getActivity().getSharedPreferences("org.owasp.seraphimdroid",
+		// Context.MODE_PRIVATE);
+		//
+		// dpm = (DevicePolicyManager) getActivity().getSystemService(
+		// Context.DEVICE_POLICY_SERVICE);
+		// deviceAdminComponent = new ComponentName(this.getActivity(),
+		// GeoFencingAdminReceiver.class);
+		//
+		// gpsTracker = new GPSTracker(getActivity());
 		initViews(view, savedInstanceState);
 
 		return view;
