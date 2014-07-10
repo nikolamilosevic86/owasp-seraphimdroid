@@ -70,7 +70,6 @@ public class GeoFencingFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_geofencing, container,
 				false);
 
-<<<<<<< HEAD
 		prefs = getActivity().getSharedPreferences("org.owasp.seraphimdroid",
 				Context.MODE_PRIVATE);
 
@@ -81,7 +80,6 @@ public class GeoFencingFragment extends Fragment {
 
 		gpsTracker = new GPSTracker(getActivity());
 		initViews(view, savedInstanceState);
-=======
 //		prefs = getActivity().getSharedPreferences("org.owasp.seraphimdroid",
 //				Context.MODE_PRIVATE);
 //
@@ -91,9 +89,7 @@ public class GeoFencingFragment extends Fragment {
 //				GeoFencingAdminReceiver.class);
 //
 //		gpsTracker = new GPSTracker(getActivity());
-		//initViews(view, savedInstanceState);
-		
->>>>>>> 869653f6adf1c9f5eb9efb252dcf4d6400fd0e70
+		initViews(view, savedInstanceState);
 
 		return view;
 	}
