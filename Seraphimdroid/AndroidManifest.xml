@@ -42,7 +42,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.Light" >
-
+<uses-library android:name="com.google.android.maps" />
         <!-- Activity Declarations -->
         <activity
             android:name="org.owasp.seraphimdroid.MainActivity"

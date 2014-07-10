@@ -76,7 +76,8 @@ public class GeoFencingFragment extends Fragment {
 //				GeoFencingAdminReceiver.class);
 //
 //		gpsTracker = new GPSTracker(getActivity());
-//		//initViews(view, savedInstanceState);
+		//initViews(view, savedInstanceState);
+		
 
 		return view;
 	}
