@@ -9,7 +9,6 @@ import org.owasp.seraphimdroid.MainActivity;
 import org.owasp.seraphimdroid.PasswordActivity;
 import org.owasp.seraphimdroid.R;
 import org.owasp.seraphimdroid.database.DatabaseHelper;
-import org.owasp.seraphimdroid.services.MakeACallService;
 
 import android.app.Activity;
 import android.app.NotificationManager;

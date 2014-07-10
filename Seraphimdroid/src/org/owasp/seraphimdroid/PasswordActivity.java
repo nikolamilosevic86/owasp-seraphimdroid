@@ -290,6 +290,9 @@ public class PasswordActivity extends Activity implements OnClickListener {
 						startService(callServiceIntent);
 					} else
 						lastUnlocked = pkgName;
+					if(pkgName.equals(this.getPackageName())){
+						MainActivity.isUnlocked = true;
+					}
 					this.finish();
 				}
 			}

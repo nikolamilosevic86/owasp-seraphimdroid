@@ -36,9 +36,9 @@ public class MainActivity extends FragmentActivity {
 	private TypedArray iconList;
 
 	private DrawerAdapter adapter;
-	private boolean isUnlocked = false;
+	
+	public static boolean isUnlocked = false;
 
-	private android.app.Fragment prevFrag = null;
 	private Fragment prevSupportFlag = null;
 
 	public static boolean shouldReceive = true;
@@ -54,7 +54,7 @@ public class MainActivity extends FragmentActivity {
 			startActivity(pwdIntent);
 			selectFragment(fragmentNo);
 		}
-		
+
 		super.onResume();
 
 	}
@@ -76,6 +76,8 @@ public class MainActivity extends FragmentActivity {
 		}
 
 	}
+
+	private android.app.Fragment prevFrag = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -137,11 +139,22 @@ public class MainActivity extends FragmentActivity {
 		// selectFragment(fragmentNo);
 		// }
 
+		// if (savedInstanceState != null) {
+		// isUnlocked = savedInstanceState.getBoolean("ISUNLOCKED", false);
+		// }
+
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
-//		startService(new Intent(this, AppLockService.class));
+		// startService(new Intent(this, AppLockService.class));
 
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+		// outState.putBoolean("ISUNLOCKED", isUnlocked);
 	}
 
 	private void populateList() {
@@ -238,6 +251,22 @@ public class MainActivity extends FragmentActivity {
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		drawerToggle.onConfigurationChanged(newConfig);
+		// isUnlocked = true;
+		// Display display = ((WindowManager) getSystemService(WINDOW_SERVICE))
+		// .getDefaultDisplay();
+		// int orientation = display.getRotation();
+		// if(orientation == Surface.ROTATION_270 || orientation ==
+		// Surface.ROTATION_270){
+		//
+		// }
+
+	}
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		isUnlocked = false;
+		super.onStop();
 	}
 
 	@Override

@@ -1,21 +1,15 @@
 package org.owasp.seraphimdroid;
 
-import java.lang.reflect.Method;
-
 import org.owasp.seraphimdroid.database.DatabaseHelper;
-import org.owasp.seraphimdroid.receiver.CallRecepter;
 import org.owasp.seraphimdroid.services.MakeACallService;
 
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Bundle;
-import android.sax.StartElementListener;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.CursorAdapter;
-import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;

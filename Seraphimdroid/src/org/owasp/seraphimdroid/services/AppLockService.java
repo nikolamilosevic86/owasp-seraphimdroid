@@ -1,23 +1,10 @@
 package org.owasp.seraphimdroid.services;
 
-import java.util.List;
-
-import org.owasp.seraphimdroid.PasswordActivity;
-import org.owasp.seraphimdroid.database.DatabaseHelper;
-
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningTaskInfo;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
-import android.util.Log;
-import android.widget.Toast;
 
 public class AppLockService extends Service {
 

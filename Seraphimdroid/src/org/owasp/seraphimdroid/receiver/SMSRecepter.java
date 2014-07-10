@@ -1,5 +1,6 @@
 package org.owasp.seraphimdroid.receiver;
 
+import org.owasp.seraphimdroid.MainActivity;
 import org.owasp.seraphimdroid.database.DatabaseHelper;
 import org.owasp.seraphimdroid.services.GPSTracker;
 
@@ -98,13 +99,14 @@ public class SMSRecepter extends BroadcastReceiver {
 								+ currentLocation.getLatitude()
 								+ "\nLongitude = "
 								+ currentLocation.getLongitude();
-						// Intent intnt = new Intent(context,
-						// MainActivity.class);
+						Intent intnt = new Intent(context,
+						MainActivity.class);
 						PendingIntent sentIntent = PendingIntent.getActivity(
-								context, 0, null, 0);
+								context, 0, intnt, 0);
 						SmsManager sms = SmsManager.getDefault();
 						sms.sendTextMessage(phoneNumber, null, locationMessage,
 								sentIntent, null);
+						gpsTracker.stopUsingGPS();
 					}
 				}
 
