@@ -80,5 +80,8 @@
     <string name="remote_secret_code_dialog_message">Enter a secret code which will be used to enable the remote lock, remote wipe and remote location services. Careful the code should not be a usual word cause it could trigger the remote services and could wipe your data unexpectedly.</string>
     <string name="remote_secret_code">Remote Secret Code</string>
     <string name="remote_secret_code_summary">Secret code to lock enable remote services</string>
+    <string name="name_label_text">Name</string>
+    <string name="number_label_text">Number</string>
+    <string name="reason_label_text">Reason</string>
 
 </resources>

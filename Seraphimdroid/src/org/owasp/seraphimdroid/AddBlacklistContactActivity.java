@@ -25,7 +25,7 @@ import android.widget.Toast;
 public class AddBlacklistContactActivity extends Activity {
 
 	private Button btnAdd, btnCancel;
-	private EditText etContactName, etContactNumber;
+	private EditText etContactNumber;
 	private ImageView imgAddFromContacts;
 
 	private final int PICK_CONTACT = 3;
@@ -176,10 +176,10 @@ public class AddBlacklistContactActivity extends Activity {
 			if (tag.equals("add")) {
 				addToBlacklist();
 				if (etContactNumber.getText().toString().equals("")
-						|| etContactNumber.getText().toString() == null){
+						|| etContactNumber.getText().toString() == null) {
 					return;
 				}
-					finish();
+				finish();
 			} else if (tag.equals("cancel")) {
 				finish();
 			} else if (tag.equals("add_from_contacts")) {

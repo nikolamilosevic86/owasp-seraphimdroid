@@ -15,19 +15,21 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:text="Number"
-        android:textAppearance="?android:attr/textAppearanceMedium" 
-        android:textColor="@android:color/holo_red_dark"/>
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/holo_red_dark" />
 
     <TextView
         android:id="@+id/tv_reason"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tv_number"
         android:layout_below="@+id/tv_number"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
-        android:textColor="#666666"
+        android:layout_toLeftOf="@+id/btn_redial"
         android:text="Reason"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#666666" />
 
     <TextView
         android:id="@+id/tv_time"
@@ -37,8 +39,8 @@
         android:layout_below="@+id/tv_reason"
         android:layout_marginTop="5dp"
         android:text="Time"
-        android:textColor="@android:color/holo_blue_dark"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/holo_blue_dark" />
 
     <Button
         android:id="@+id/btn_redial"
@@ -48,6 +50,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
+        android:focusable="false"
         android:gravity="center_horizontal"
         android:text="Redial" />
 

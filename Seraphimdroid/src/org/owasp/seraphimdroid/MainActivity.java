@@ -37,7 +37,7 @@ public class MainActivity extends FragmentActivity {
 
 	private DrawerAdapter adapter;
 	
-	public static boolean isUnlocked = false;
+	private boolean isUnlocked = false;
 
 	private Fragment prevSupportFlag = null;
 
@@ -54,7 +54,6 @@ public class MainActivity extends FragmentActivity {
 			startActivity(pwdIntent);
 			selectFragment(fragmentNo);
 		}
-
 		super.onResume();
 
 	}
@@ -265,7 +264,7 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	protected void onStop() {
 		// TODO Auto-generated method stub
-		isUnlocked = false;
+//		isUnlocked = false;
 		super.onStop();
 	}
 

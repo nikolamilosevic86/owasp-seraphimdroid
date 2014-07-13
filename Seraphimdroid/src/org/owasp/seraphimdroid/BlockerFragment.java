@@ -22,10 +22,17 @@ public class BlockerFragment extends Fragment implements OnPageChangeListener,
 
 	private TabHost tabHost;
 	private ViewPager viewPager;
+	private int tabNo = 5;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+
+		try {
+			tabNo = getActivity().getIntent().getIntExtra("TAB_NO", 5);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		View view = inflater.inflate(R.layout.fragment_blocker, container,
 				false);
@@ -42,6 +49,10 @@ public class BlockerFragment extends Fragment implements OnPageChangeListener,
 		tabHost.getTabWidget().setGravity(Gravity.BOTTOM);
 		tabHost.getTabWidget().getChildAt(0);
 
+		if (tabNo < 3) {
+			viewPager.setCurrentItem(tabNo);
+			tabHost.setCurrentTab(tabNo);
+		}
 		return view;
 	}
 
@@ -50,7 +61,7 @@ public class BlockerFragment extends Fragment implements OnPageChangeListener,
 		// TODO Auto-generated method stub
 		setHasOptionsMenu(true);
 		super.onCreate(savedInstanceState);
-		
+
 	}
 
 	@Override
@@ -62,7 +73,6 @@ public class BlockerFragment extends Fragment implements OnPageChangeListener,
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
-		
 		inflater.inflate(R.menu.main, menu);
 
 		super.onCreateOptionsMenu(menu, inflater);

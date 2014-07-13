@@ -11,13 +11,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.CursorAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class USSDLogFragment extends Fragment {
 
@@ -42,6 +45,27 @@ public class USSDLogFragment extends Fragment {
 
 		lvUSSDLogs.setAdapter(new USSDLogAdapter(getActivity(), cursor, true));
 
+		lvUSSDLogs.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				Bundle extras = (Bundle) view.getTag();
+
+				Intent detailIntent = new Intent(getActivity(),
+						LogDetailActivity.class);
+				if (extras != null) {
+					detailIntent.putExtras(extras);
+					startActivity(detailIntent);
+				} else {
+					Log.d("CallLogFragment", "OnItemClick");
+					return;
+				}
+
+			}
+		});
+
 		return view;
 	}
 }
@@ -63,18 +87,39 @@ class USSDLogAdapter extends CursorAdapter {
 		TextView tvTime = (TextView) convertView.findViewById(R.id.tv_time);
 		Button btnRedial = (Button) convertView.findViewById(R.id.btn_redial);
 
+		String number = cursor.getString(1);
 		String reason = cursor.getString(3);
-		if (reason != null) {
+		String time = cursor.getString(2);
+
+		Bundle extras = new Bundle();
+		extras.putString("NUMBER", number);
+		extras.putString("REASON", reason);
+		extras.putString("TIME", time);
+		convertView.setTag(extras);
+
+		int width = tvReason.getWidth();
+		if (width != 0) {
+			if (reason.length() > width)
+				reason = reason.substring(0, width - 5) + "...";
+		} else if (reason != null) {
 			if (reason.length() > 30) {
 				reason = reason.substring(0, 29) + "...";
 			}
 		} else {
 			reason = "Not defined";
 		}
-		String number = cursor.getString(1);
+
+		// if (reason != null) {
+		// if (reason.length() > 30) {
+		// reason = reason.substring(0, 29) + "...";
+		// }
+		// } else {
+		// reason = "Not defined";
+		// }
+
 		final String ussd = number.replaceAll("#", Uri.encode("#"));
 		tvNumber.setText(number);
-		tvTime.setText(cursor.getString(2));
+		tvTime.setText(time);
 		tvReason.setText(reason);
 		btnRedial.setOnClickListener(new OnClickListener() {
 

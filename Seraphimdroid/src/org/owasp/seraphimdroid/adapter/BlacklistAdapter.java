@@ -1,11 +1,19 @@
 package org.owasp.seraphimdroid.adapter;
 
+import java.io.InputStream;
+
 import org.owasp.seraphimdroid.R;
 import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.receiver.CallRecepter;
 
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,7 +46,53 @@ public class BlacklistAdapter extends CursorAdapter {
 		final String number = cursor.getString(1);
 		imgDelete.setTag(number);
 
-		tvName.setText("<no name>");
+		if (CallRecepter.contactExists(context, number)) {
+			String name = null;
+			String contactId = null;
+			InputStream input = null;
+
+			// Columns for the query.
+			String[] projection = new String[] {
+					ContactsContract.PhoneLookup.DISPLAY_NAME,
+					ContactsContract.PhoneLookup._ID };
+
+			// Encode phone number to build the uri
+			Uri contactUri = Uri.withAppendedPath(
+					ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
+					Uri.encode(number));
+
+			// Placing query
+			Cursor c = context.getContentResolver().query(contactUri,
+					projection, null, null, null);
+			if (c.moveToFirst()) {
+				// Get values from the contacts database
+				contactId = c.getString(c
+						.getColumnIndex(ContactsContract.PhoneLookup._ID));
+				name = c.getString(c
+						.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
+
+				// Get phone stream for the contact photo.
+				Uri photoUri = ContentUris.withAppendedId(
+						ContactsContract.Contacts.CONTENT_URI,
+						Long.parseLong(contactId));
+				input = ContactsContract.Contacts.openContactPhotoInputStream(
+						context.getContentResolver(), photoUri);
+			}
+			
+			c.close();
+			if (name != null && !name.equals("")) {
+				tvName.setText(name);
+			} else
+				tvName.setText("<no name>");
+			if (input != null) {
+				imgContactIcon
+						.setImageBitmap(BitmapFactory.decodeStream(input));
+			}else {
+				imgContactIcon.setImageResource(R.drawable.contact);
+			}
+
+		}
+
 		tvNumber.setText(number);
 		imgDelete.setOnClickListener(new OnClickListener() {
 

@@ -51,8 +51,9 @@ public class GeoFencingService extends Service {
 
 	private AlarmManager am = null;
 	private BroadcastReceiver alarmReceiver = null;
-	// private BroadcastReceiver sendLocationReceiver = null;
-	private PendingIntent operation = null;
+	private BroadcastReceiver sendLocationReceiver = null;
+	private PendingIntent operationSiren = null;
+	private PendingIntent operationSendLocation = null;
 	private MediaPlayer mPlayer = null;
 	private AudioManager audioMan = null;
 
@@ -105,7 +106,6 @@ public class GeoFencingService extends Service {
 		startForeground(ForeGroundId, builder.build());
 
 		alarmReceiver = new BroadcastReceiver() {
-
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				if (mPlayer != null && mPlayer.isPlaying()) {
@@ -118,7 +118,6 @@ public class GeoFencingService extends Service {
 				}
 				mPlayer = MediaPlayer.create(GeoFencingService.this,
 						R.raw.alarm_sound);
-
 				// if (mPlayer == null) {
 				// Uri soundUri = RingtoneManager
 				// .getDefaultUri(RingtoneManager.TYPE_ALARM);
@@ -128,11 +127,9 @@ public class GeoFencingService extends Service {
 				// if (soundUri == null)
 				// soundUri = RingtoneManager
 				// .getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-				//
 				// }
 				if (audioMan == null)
 					audioMan = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-
 				Resources res = getResources();
 				AssetFileDescriptor afd = res
 						.openRawResourceFd(R.raw.alarm_sound);
@@ -143,16 +140,12 @@ public class GeoFencingService extends Service {
 					mPlayer.setDataSource(afd.getFileDescriptor(),
 							afd.getStartOffset(), afd.getLength());
 				} catch (IllegalArgumentException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (IllegalStateException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-
 				audioMan.setStreamVolume(AudioManager.STREAM_ALARM,
 						audioMan.getStreamMaxVolume(AudioManager.STREAM_ALARM),
 						AudioManager.FLAG_PLAY_SOUND);
@@ -160,16 +153,12 @@ public class GeoFencingService extends Service {
 				try {
 					mPlayer.prepareAsync();
 				} catch (IllegalStateException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				mPlayer.setOnPreparedListener(new OnPreparedListener() {
-
 					@Override
 					public void onPrepared(MediaPlayer player) {
-						// TODO Auto-generated method stub
 						player.start();
-
 					}
 				});
 
@@ -177,11 +166,49 @@ public class GeoFencingService extends Service {
 
 		};
 
+		sendLocationReceiver = new BroadcastReceiver() {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				// Setting up variable to create message.
+				GPSTracker gps = new GPSTracker(getApplicationContext());
+				Location current = null;
+				gps.location = null;
+
+				if (gps.canGetLocation()) {
+					while (current == null) {
+						current = gps.getLocation();
+					}
+				}
+				String message = "";
+				if (current != null) {
+					message = "Latitude = " + current.getLatitude()
+							+ "\nLongitude = " + current.getLongitude();
+				}
+
+				SmsManager sms = SmsManager.getDefault();
+
+				PendingIntent pi = PendingIntent.getActivity(
+						getApplicationContext(), 0, new Intent(
+								GeoFencingService.this, MainActivity.class), 0);
+
+				// Getting phoneNumber
+				SharedPreferences defaultPrefs = PreferenceManager
+						.getDefaultSharedPreferences(getApplicationContext());
+				String phoneNumber = defaultPrefs.getString(
+						"geo_location_number_primary", "0");
+
+				if (!phoneNumber.equals("0") && phoneNumber != null)
+					sms.sendTextMessage(phoneNumber, null, message, pi, null);
+				gps.stopUsingGPS();
+			}
+		};
+
 		IntentFilter filter = new IntentFilter(
 				"org.owasp.seraphimdroid.geo_fencing_alarm");
 		registerReceiver(alarmReceiver, filter);
-		// filter = new IntentFilter("org.owasp.seraphimdroid.send_location");
-		// registerReceiver(sendLocationReceiver, filter);
+		filter = new IntentFilter("org.owasp.seraphimdroid.send_location");
+		registerReceiver(sendLocationReceiver, filter);
 
 		return START_STICKY;
 	}
@@ -205,8 +232,10 @@ public class GeoFencingService extends Service {
 		}
 		if (alarmReceiver != null)
 			unregisterReceiver(alarmReceiver);
-		if (am != null && operation != null)
-			am.cancel(operation);
+		if (am != null && operationSiren != null)
+			am.cancel(operationSiren);
+		if(operationSendLocation != null)
+			am.cancel(operationSendLocation);
 
 		Log.d("GeoService", "Fencing removed");
 		Toast.makeText(getApplicationContext(), "Fencing removed.",
@@ -256,32 +285,23 @@ public class GeoFencingService extends Service {
 
 						Intent intent = new Intent(
 								"org.owasp.seraphimdroid.geo_fencing_alarm");
-						if (operation == null)
-							operation = PendingIntent.getBroadcast(
+						if (operationSiren == null)
+							operationSiren = PendingIntent.getBroadcast(
 									GeoFencingService.this, 0, intent, 0);
 						am.set(AlarmManager.RTC_WAKEUP, Calendar.getInstance()
-								.getTimeInMillis() + 1, operation);
+								.getTimeInMillis() + 1, operationSiren);
 					}
 					if (prefs.getBoolean(GeoFencingFragment.locationKey, false)) {
 
-						String message = "Latitude = " + location.getLatitude()
-								+ "\nLongitude = " + location.getLongitude();
-						SmsManager sms = SmsManager.getDefault();
-
-						PendingIntent pi = PendingIntent.getActivity(
-								getApplicationContext(), 0, new Intent(
-										GeoFencingService.this,
-										MainActivity.class), 0);
-
-						// Getting phoneNumber
-						SharedPreferences defaultPrefs = PreferenceManager
-								.getDefaultSharedPreferences(getApplicationContext());
-						String phoneNumber = defaultPrefs.getString(
-								"geo_location_number_primary", "0");
-
-						if (!phoneNumber.equals("0") && phoneNumber != null)
-							sms.sendTextMessage(phoneNumber, null, message, pi,
-									null);
+						Intent intent = new Intent(
+								"org.owasp.seraphimdroid.send_location");
+						if (operationSendLocation == null)
+							operationSendLocation = PendingIntent.getBroadcast(
+									GeoFencingService.this, 0, intent, 0);
+						long intervalMillis = interval * 1000 * 60;
+						am.setInexactRepeating(AlarmManager.RTC, Calendar
+								.getInstance().getTimeInMillis(),
+								intervalMillis, operationSendLocation);
 						// Intent sendLocationIntent = new Intent(
 						// GeoFencingService.this,
 						// SendLocationService.class);
@@ -289,7 +309,7 @@ public class GeoFencingService extends Service {
 						// startService(sendLocationIntent);
 					}
 					isLocked = true;
-					counter = 0;
+					// counter = 0;
 				}
 
 			}

@@ -35,8 +35,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
 
 public class GeoFencingFragment extends Fragment {
 
@@ -111,10 +114,11 @@ public class GeoFencingFragment extends Fragment {
 		if (googleMap == null) {
 			// googleMap = ((MapFragment) getActivity().getFragmentManager()
 			// .findFragmentById(R.id.maps)).getMap();
-			googleMap = ((MapFragment) getActivity().getFragmentManager()
-					.findFragmentById(R.id.maps)).getMap();
+			googleMap = ((SupportMapFragment) getActivity()
+					.getSupportFragmentManager().findFragmentById(R.id.maps))
+					.getMap();
 			googleMap.getUiSettings().setZoomControlsEnabled(false);
-			googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+			googleMap.getUiSettings().setMyLocationButtonEnabled(false);
 			googleMap.setMyLocationEnabled(true);
 		}
 
@@ -286,7 +290,8 @@ public class GeoFencingFragment extends Fragment {
 				|| etRadius.getText().toString().equals(null)
 				|| Double.valueOf(etRadius.getText().toString()) < 100) {
 			String message = "Radius not set";
-			if (Double.valueOf(etRadius.getText().toString()) < 100)
+			if (!etRadius.getText().toString().equals("")
+					&& Double.valueOf(etRadius.getText().toString()) < 100)
 				message = "Radius should be more that or equal to 100 meters";
 			Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
 			etRadius.requestFocus();
@@ -509,19 +514,18 @@ public class GeoFencingFragment extends Fragment {
 		if (gpsAlert != null)
 			gpsAlert.dismiss();
 
-		android.app.Fragment mapFragment = getActivity().getFragmentManager()
-				.findFragmentById(R.id.maps);
-		if (mapFragment != null) {
-			getActivity().getFragmentManager().beginTransaction()
-					.remove(mapFragment).commit();
-		}
 		super.onPause();
 		// mapView.onPause();
 	}
 
 	@Override
 	public void onDestroy() {
-
+		android.app.Fragment mapFragment = getActivity().getFragmentManager()
+				.findFragmentById(R.id.maps);
+		if (mapFragment != null) {
+			getActivity().getFragmentManager().beginTransaction()
+					.remove(mapFragment).commit();
+		}
 		gpsTracker.stopUsingGPS();
 		super.onDestroy();
 		// mapView.onDestroy();
@@ -556,7 +560,17 @@ public class GeoFencingFragment extends Fragment {
 		@Override
 		protected void onPostExecute(Void result) {
 			tvCenter.setText(center.getLatitude() + "," + center.getLongitude());
+			LatLng current = new LatLng(center.getLatitude(),
+					center.getLongitude());
+			CameraPosition cameraPosition = new CameraPosition.Builder()
+					.target(current).zoom(17).build();
+			// googleMap.addMarker(new MarkerOptions().position(current)
+			// .title("You are here!").draggable(false));
 			pd.dismiss();
+
+			googleMap.animateCamera(
+					CameraUpdateFactory.newCameraPosition(cameraPosition),
+					2000, null);
 			super.onPostExecute(result);
 		}
 
@@ -566,6 +580,8 @@ public class GeoFencingFragment extends Fragment {
 			pd.setMessage("Please wait...");
 			pd.setCancelable(true);
 			pd.show();
+			googleMap.stopAnimation();
+			googleMap.clear();
 			super.onPreExecute();
 		}
 

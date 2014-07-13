@@ -155,6 +155,26 @@ public class CallRecepter extends BroadcastReceiver {
 	private String getReason(String number) {
 		String reason = null;
 
+		SharedPreferences defaultPref = PreferenceManager
+				.getDefaultSharedPreferences(context);
+
+		int blockedCall = Integer.valueOf(defaultPref.getString(
+				"blocked_calls", "0"));
+
+		switch (blockedCall) {
+		case 8:
+			reason = "User Blocked all outgoing calls";
+			return reason;
+		case 9:
+			reason = "User Blocked all incoming calls";
+			return reason;
+		case 10:
+			reason = "User Blocked the number";
+			return reason;
+		default:
+			break;
+		}
+		
 		if (harmfulCodes.contains(number)) {
 			reason = "Potential Factory Reset";
 		} else if (isNumberBlacklisted(number)) {
@@ -322,6 +342,7 @@ public class CallRecepter extends BroadcastReceiver {
 		if (notify) {
 			Intent logIntent = new Intent(context, MainActivity.class);
 			logIntent.putExtra("FRAGMENT_NO", 1);
+			logIntent.putExtra("TAB_NO", 0);
 
 			Intent callIntent = new Intent(context, PasswordActivity.class);
 			callIntent.putExtra("PACKAGE_NAME", context.getPackageName());

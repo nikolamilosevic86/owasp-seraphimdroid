@@ -5,16 +5,12 @@ import java.util.Collections;
 import java.util.List;
 
 import org.owasp.seraphimdroid.adapter.AppLockerAdapter;
-import org.owasp.seraphimdroid.database.DatabaseHelper;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -106,31 +102,31 @@ public class AppLockFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 	}
 
-	private boolean addToDatabase(String pkgName) {
-		DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
-		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		String sql = "SELECT * FROM locks where package_name=\'" + pkgName
-				+ "\'";
-
-		Cursor cursor = db.rawQuery(sql, null);
-
-		if (cursor.moveToNext()) {
-			cursor.close();
-			db.close();
-			dbHelper.close();
-			return false;
-
-		} else {
-
-			ContentValues cv = new ContentValues();
-			cv.put("package_name", pkgName);
-			cv.put("locked", 0);
-			db.insert(DatabaseHelper.TABLE_LOCKS, null, cv);
-			cursor.close();
-			db.close();
-			dbHelper.close();
-			return true;
-		}
-
-	}
+//	private boolean addToDatabase(String pkgName) {
+//		DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
+//		SQLiteDatabase db = dbHelper.getWritableDatabase();
+//		String sql = "SELECT * FROM locks where package_name=\'" + pkgName
+//				+ "\'";
+//
+//		Cursor cursor = db.rawQuery(sql, null);
+//
+//		if (cursor.moveToNext()) {
+//			cursor.close();
+//			db.close();
+//			dbHelper.close();
+//			return false;
+//
+//		} else {
+//
+//			ContentValues cv = new ContentValues();
+//			cv.put("package_name", pkgName);
+//			cv.put("locked", 0);
+//			db.insert(DatabaseHelper.TABLE_LOCKS, null, cv);
+//			cursor.close();
+//			db.close();
+//			dbHelper.close();
+//			return true;
+//		}
+//
+//	}
 }
