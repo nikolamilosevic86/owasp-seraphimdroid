@@ -170,7 +170,7 @@ public class PermissionScannerAdapter extends BaseExpandableListAdapter {
 		} else if (totalWeight >= 5 && totalWeight < 10) {
 			return Color.YELLOW;
 		} else if (totalWeight >= 10 && totalWeight < 15) {
-			return Color.parseColor("#54f3f3");
+			return Color.parseColor("#FFA500");
 		} else {
 			return Color.RED;
 		}
