@@ -197,7 +197,7 @@ public class PermissionScannerFragment extends Fragment {
 			List<ApplicationInfo> installedApps = pkgManager
 					.getInstalledApplications(PackageManager.GET_META_DATA);
 
-			PermissionGetter permissionGetter = new PermissionGetter(pkgManager);
+			PermissionGetter permissionGetter = new PermissionGetter(pkgManager, PermissionScannerFragment.this.getActivity());
 
 			for (ApplicationInfo appInfo : installedApps) {
 
@@ -224,6 +224,7 @@ public class PermissionScannerFragment extends Fragment {
 						if (appPermissions != null) {
 
 							for (String permission : appPermissions) {
+								Log.d(TAG, permission);
 								if (permissionGetter
 										.generatePermissionData(permission) != null) {
 									reqPermissions

@@ -15,6 +15,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -36,7 +37,7 @@ public class MainActivity extends FragmentActivity {
 	private TypedArray iconList;
 
 	private DrawerAdapter adapter;
-	
+
 	private boolean isUnlocked = false;
 
 	private Fragment prevSupportFlag = null;
@@ -226,8 +227,10 @@ public class MainActivity extends FragmentActivity {
 				fm.beginTransaction().remove(prevFrag).commit();
 			}
 			FragmentManager fragMan = getSupportFragmentManager();
-			fragMan.beginTransaction()
-					.replace(R.id.fragment_container, fragment).commit();
+			FragmentTransaction trans = fragMan.beginTransaction();
+			trans.replace(R.id.fragment_container, fragment);
+			trans.addToBackStack(null);
+			trans.commit();
 
 			drawerList.setItemChecked(position, true);
 			drawerList.setSelection(position);
@@ -264,7 +267,7 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	protected void onStop() {
 		// TODO Auto-generated method stub
-//		isUnlocked = false;
+		// isUnlocked = false;
 		super.onStop();
 	}
 

@@ -29,7 +29,7 @@ public class PermissionDescription extends Activity {
 		tvMaliciousUseDescription = (TextView) this
 				.findViewById(R.id.tvMaliciousUseDescription);
 		
-		permissionGetter = new PermissionGetter(getPackageManager());
+		permissionGetter = new PermissionGetter(getPackageManager(), this);
 
 		// Getting required Data
 		String permission = getIntent().getStringExtra("PERMISSION_NAME");
