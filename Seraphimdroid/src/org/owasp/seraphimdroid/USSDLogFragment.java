@@ -26,6 +26,7 @@ public class USSDLogFragment extends Fragment {
 
 	private DatabaseHelper dbHelper;
 	private ListView lvUSSDLogs;
+	private CursorAdapter adapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,7 +44,8 @@ public class USSDLogFragment extends Fragment {
 				+ " ORDER BY _id DESC";
 		Cursor cursor = db.rawQuery(sql, null);
 
-		lvUSSDLogs.setAdapter(new USSDLogAdapter(getActivity(), cursor, true));
+		adapter = new USSDLogAdapter(getActivity(), cursor, true);
+		lvUSSDLogs.setAdapter(adapter);
 
 		lvUSSDLogs.setOnItemClickListener(new OnItemClickListener() {
 
@@ -68,6 +70,16 @@ public class USSDLogFragment extends Fragment {
 
 		return view;
 	}
+
+	@Override
+	public void onResume() {
+		adapter.notifyDataSetInvalidated();
+		adapter.notifyDataSetChanged();
+		super.onResume();
+	}
+	
+	
+	
 }
 
 class USSDLogAdapter extends CursorAdapter {

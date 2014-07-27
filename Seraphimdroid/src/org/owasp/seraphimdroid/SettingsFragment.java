@@ -15,12 +15,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 public class SettingsFragment extends PreferenceFragment {
@@ -76,6 +80,8 @@ public class SettingsFragment extends PreferenceFragment {
 		remoteLockPref.setOnPreferenceClickListener(listener);
 		remoteWipePref.setOnPreferenceClickListener(listener);
 		remoteLocationPref.setOnPreferenceClickListener(listener);
+		
+
 	}
 
 	private class CheckBoxPreferenceClickListener implements
@@ -83,10 +89,10 @@ public class SettingsFragment extends PreferenceFragment {
 
 		@Override
 		public boolean onPreferenceClick(Preference preference) {
-			CheckBoxPreference pref = (CheckBoxPreference) preference;
+			final CheckBoxPreference pref = (CheckBoxPreference) preference;
 			String secretCode = defaultPrefs
 					.getString("remote_secret_code", "");
-			
+
 			String phoneNumber = defaultPrefs.getString(
 					"geo_location_number_primary", "");
 			String key = pref.getKey();
@@ -184,18 +190,174 @@ public class SettingsFragment extends PreferenceFragment {
 					Toast.makeText(getActivity(),
 							"You need to set a secure phone number first",
 							Toast.LENGTH_SHORT).show();
-					pref.setChecked(false);
+					// pref.setChecked(false);
+
+					showSecureNumberDialog(pref);
 				}
 			} else {
 				Toast.makeText(getActivity(),
 						"You need to set a secret code first",
 						Toast.LENGTH_SHORT).show();
-				pref.setChecked(false);
+				// pref.setChecked(false);
+
+				showSecretCodeDialog(pref);
+
 			}
 			return false;
 		}
 	}
 
+	private void showSecureNumberDialog(final CheckBoxPreference pref) {
+		// Dialog to enter secure phone number.
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setMessage("You need to set a number to which you could receive location cordinates in case phone gets lost. Please enter a phone number now");
+
+		LayoutInflater inflater = (LayoutInflater) getActivity()
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View editTextPref = inflater.inflate(R.layout.edit_text_dialog_view,
+				null, false);
+		final EditText etNumber = (EditText) editTextPref
+				.findViewById(R.id.et_pref);
+		etNumber.setHint("Enter secure phone number");
+		etNumber.setInputType(InputType.TYPE_CLASS_PHONE);
+		builder.setView(editTextPref);
+
+		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				// TODO Auto-generated method stub
+				if (etNumber.getText().length() < 5) {
+					Toast.makeText(getActivity(), "Enter a valid number",
+							Toast.LENGTH_SHORT).show();
+
+				} else {
+					SharedPreferences dPrefs = PreferenceManager
+							.getDefaultSharedPreferences(getActivity());
+					dPrefs.edit()
+							.putString("geo_location_number_primary",
+									etNumber.getText().toString()).commit();
+
+					requestDeviceAdminPermission(pref);
+					Toast.makeText(
+							getActivity(),
+							"You need to activate Device Administration Access",
+							Toast.LENGTH_SHORT).show();
+					arg0.dismiss();
+				}
+				pref.setChecked(false);
+			}
+		});
+		builder.setNegativeButton("Cancel",
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						// TODO Auto-generated method stub
+
+						arg0.dismiss();
+						pref.setChecked(false);
+					}
+				});
+		builder.setCancelable(false);
+		AlertDialog alert = builder.create();
+		alert.show();
+		// checkBox.setChecked(false);
+
+	}
+
+	private void showSecretCodeDialog(final CheckBoxPreference pref) {
+		// Dialog to create Secret Code.
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setMessage("To access the remote services, you need to have a secret code which will trigger the actions. You haven't had created one yet, please create one now.");
+
+		LayoutInflater inflater = (LayoutInflater) getActivity()
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View editTextPref = inflater.inflate(R.layout.edit_text_dialog_view,
+				null, false);
+		final EditText etNumber = (EditText) editTextPref
+				.findViewById(R.id.et_pref);
+		etNumber.setHint("Enter secret code ");
+		etNumber.setInputType(InputType.TYPE_CLASS_TEXT);
+		builder.setView(editTextPref);
+
+		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				// TODO Auto-generated method stub
+
+				SharedPreferences dPrefs = PreferenceManager
+						.getDefaultSharedPreferences(getActivity());
+				if (etNumber.getText().toString().equals(" "))
+					etNumber.setText("");
+
+				if (etNumber.getText().toString().length() < 5) {
+					Toast.makeText(getActivity(),
+							"Length should be greater than 5 characters",
+							Toast.LENGTH_SHORT).show();
+
+				} else {
+					dPrefs.edit()
+							.putString("remote_secret_code",
+									etNumber.getText().toString()).commit();
+					arg0.dismiss();
+					if (dPrefs.getString("geo_location_number_primary", "")
+							.equals("")) {
+						showSecureNumberDialog(pref);
+					} else {
+						Toast.makeText(
+								getActivity(),
+								"You need to activate Device Administration Access",
+								Toast.LENGTH_SHORT).show();
+						requestDeviceAdminPermission(pref);
+					}
+
+				}
+				pref.setChecked(false);
+			}
+		});
+		builder.setNegativeButton("Cancel",
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						// TODO Auto-generated method stub
+
+						arg0.dismiss();
+						pref.setChecked(false);
+					}
+				});
+		builder.setCancelable(false);
+		AlertDialog alert = builder.create();
+		alert.show();
+		// checkBox.setChecked(false);
+	}
+
+	private void requestDeviceAdminPermission(Preference pref){
+		if (!dpm.isAdminActive(component)) {
+			String key = pref.getKey();
+			Intent deviceAdminIntent = new Intent(
+					DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+			deviceAdminIntent.putExtra(
+					DevicePolicyManager.EXTRA_DEVICE_ADMIN,
+					component);
+			deviceAdminIntent.putExtra(
+					DevicePolicyManager.EXTRA_ADD_EXPLANATION,
+					"Required for GeoFencing");
+
+			if (key.equals("remote_lock"))
+				startActivityForResult(deviceAdminIntent,
+						REMOTE_LOCK_ID);
+			else if (key.equals("remote_wipe"))
+				startActivityForResult(deviceAdminIntent,
+						REMOTE_WIPE_ID);
+			else if (key.equals("remote_location"))
+				startActivityForResult(deviceAdminIntent,
+						REMOTE_LOCATION_ID);
+		}
+	}
+	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {

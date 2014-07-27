@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.owasp.seraphimdroid.adapter.DrawerAdapter;
 import org.owasp.seraphimdroid.model.DrawerItem;
 import org.owasp.seraphimdroid.services.CheckAppLaunchThread;
+import org.owasp.seraphimdroid.services.OutGoingSmsRecepter;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -53,7 +54,7 @@ public class MainActivity extends FragmentActivity {
 			pwdIntent.putExtra("PACKAGE_NAME", this.getPackageName());
 			isUnlocked = true;
 			startActivity(pwdIntent);
-			selectFragment(fragmentNo);
+				selectFragment(fragmentNo);
 		}
 		super.onResume();
 
@@ -83,6 +84,7 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		startService(new Intent(this, OutGoingSmsRecepter.class));
 
 		// if (!isUnlocked) {
 		// Intent pwdIntent = new Intent(this, PasswordActivity.class);

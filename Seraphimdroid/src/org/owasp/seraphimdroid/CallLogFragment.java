@@ -28,6 +28,7 @@ public class CallLogFragment extends Fragment {
 
 	private ListView lvCallLogs;
 	private DatabaseHelper dbHelper;
+	private CursorAdapter adapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,8 +54,8 @@ public class CallLogFragment extends Fragment {
 		String sql = "SELECT * from " + DatabaseHelper.TABLE_CALL_LOGS
 				+ " ORDER BY _id DESC";
 		Cursor cursor = db.rawQuery(sql, null);
-
-		lvCallLogs.setAdapter(new CallLogAdapter(getActivity(), cursor, true));
+		adapter = new CallLogAdapter(getActivity(), cursor, true);
+		lvCallLogs.setAdapter(adapter);
 
 		lvCallLogs.setOnItemClickListener(new OnItemClickListener() {
 
@@ -78,6 +79,13 @@ public class CallLogFragment extends Fragment {
 		});
 
 		return view;
+	}
+
+	@Override
+	public void onResume() {
+adapter.notifyDataSetInvalidated();
+		adapter.notifyDataSetChanged();
+		super.onResume();
 	}
 
 }

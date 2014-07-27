@@ -127,7 +127,7 @@ public class GeoFencingFragment extends Fragment {
 		cbRemoteLock.setTag("lock");
 		cbRemoteLock.setChecked(prefs.getBoolean(lockKey, true));
 		cbRemoteWipe = (CheckBox) view.findViewById(R.id.cb_remote_wipe);
-		cbRemoteWipe.setChecked(prefs.getBoolean(wipeKey, true));
+		cbRemoteWipe.setChecked(prefs.getBoolean(wipeKey, false));
 		cbRemoteWipe.setTag("wipe");
 		cbSiren = (CheckBox) view.findViewById(R.id.cb_siren);
 		cbSiren.setChecked(prefs.getBoolean(sirenKey, true));
@@ -395,7 +395,7 @@ public class GeoFencingFragment extends Fragment {
 	private class CheckBoxListener implements
 			android.widget.CompoundButton.OnCheckedChangeListener {
 		@Override
-		public void onCheckedChanged(CompoundButton checkBox,
+		public void onCheckedChanged(final CompoundButton checkBox,
 				boolean paramBoolean) {
 			String tag = (String) checkBox.getTag();
 			if (tag.equals("lock")) {
@@ -419,21 +419,71 @@ public class GeoFencingFragment extends Fragment {
 						.getDefaultSharedPreferences(getActivity());
 				String number = dPrefs.getString("geo_location_number_primary",
 						null);
-				if (number == null || number.equals("")) {
-					AlertDialog.Builder builder = new AlertDialog.Builder(
-							getActivity());
-					builder.setMessage("You need to set a number to which you could receive location cordinates in case phone gets lost. Please go to settings and set the number before opting for this service");
-					builder.setNeutralButton("OK",
-							new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog,
-										int arg1) {
-									dialog.dismiss();
-								}
-							});
-					AlertDialog alert = builder.create();
-					alert.show();
-					checkBox.setChecked(false);
+				if (checkBox.isChecked()) {
+					if (number == null || number.equals("")) {
+						AlertDialog.Builder builder = new AlertDialog.Builder(
+								getActivity());
+						builder.setMessage("You need to set a number to which you could receive location cordinates in case phone gets lost. Please enter a phone number now");
+						// builder.setNeutralButton("OK",
+						// new DialogInterface.OnClickListener() {
+						// @Override
+						// public void onClick(DialogInterface dialog,
+						// int arg1) {
+						// dialog.dismiss();
+						// }
+						// });
+						LayoutInflater inflater = (LayoutInflater) getActivity()
+								.getSystemService(
+										Context.LAYOUT_INFLATER_SERVICE);
+						View editTextPref = inflater.inflate(
+								R.layout.edit_text_dialog_view, null, false);
+						final EditText etNumber = (EditText) editTextPref
+								.findViewById(R.id.et_pref);
+						etNumber.setHint("Enter secure phone number");
+						builder.setView(editTextPref);
+
+						builder.setPositiveButton("OK",
+								new DialogInterface.OnClickListener() {
+
+									@Override
+									public void onClick(DialogInterface arg0,
+											int arg1) {
+										// TODO Auto-generated method stub
+										if (etNumber.getText().length() < 5) {
+											Toast.makeText(getActivity(),
+													"Enter a valid number",
+													Toast.LENGTH_SHORT).show();
+											checkBox.setChecked(false);
+										} else {
+											SharedPreferences dPrefs = PreferenceManager
+													.getDefaultSharedPreferences(getActivity());
+											dPrefs.edit()
+													.putString(
+															"geo_location_number_primary",
+															etNumber.getText()
+																	.toString())
+													.commit();
+											arg0.dismiss();
+										}
+									}
+								});
+						builder.setNegativeButton("Cancel",
+								new DialogInterface.OnClickListener() {
+
+									@Override
+									public void onClick(DialogInterface arg0,
+											int arg1) {
+										// TODO Auto-generated method stub
+
+										arg0.dismiss();
+										checkBox.setChecked(false);
+									}
+								});
+						builder.setCancelable(false);
+						AlertDialog alert = builder.create();
+						alert.show();
+						// checkBox.setChecked(false);
+					}
 				} else
 					prefs.edit().putBoolean(locationKey, checkBox.isChecked())
 							.commit();

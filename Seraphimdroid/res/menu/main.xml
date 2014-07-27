@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools" >
 
     <item
-        android:id="@+id/settigns"
+        android:id="@+id/clear_record"
         android:orderInCategory="1"
-        android:title="@string/action_settings"
-        android:icon="@android:drawable/ic_menu_preferences"
+        android:title="@string/delete_record"
+        android:icon="@android:drawable/ic_menu_delete"
         app:showAsAction="always|withText"/>
 
 </menu>

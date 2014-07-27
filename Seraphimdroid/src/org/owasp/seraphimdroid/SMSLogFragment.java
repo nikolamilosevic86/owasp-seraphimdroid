@@ -1,11 +1,8 @@
 package org.owasp.seraphimdroid;
 
-import java.io.InputStream;
-
 import org.owasp.seraphimdroid.database.DatabaseHelper;
 import org.owasp.seraphimdroid.receiver.CallRecepter;
 
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,18 +14,22 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.CursorAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class SMSLogFragment extends Fragment {
 
 	private ListView lvSMSLogs;
 	private DatabaseHelper dbHelper;
+	private CursorAdapter adapter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,8 +46,9 @@ public class SMSLogFragment extends Fragment {
 				+ " ORDER BY _id DESC";
 		Cursor cursor = db.rawQuery(sql, null);
 
-		lvSMSLogs.setAdapter(new SMSLogAdapter(getActivity(), cursor, true));
-		
+		adapter = new SMSLogAdapter(getActivity(), cursor, true);
+		lvSMSLogs.setAdapter(adapter);
+
 		lvSMSLogs.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -70,6 +72,38 @@ public class SMSLogFragment extends Fragment {
 
 		return view;
 	}
+	
+	
+
+	@Override
+	public void onResume() {
+		adapter.notifyDataSetInvalidated();
+		adapter.notifyDataSetChanged();
+		super.onResume();
+	}
+
+
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.main, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+//		switch (item.getItemId()) {
+//		case R.id.clear_record:
+//			DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
+//			SQLiteDatabase db = dbHelper.getWritableDatabase();
+//			db.execSQL("DROP TABLE IF EXISTS " + DatabaseHelper.TABLE_SMS_LOGS);
+//			db.execSQL(DatabaseHelper.createSMSTable);
+//			db.close();
+//			dbHelper.close();
+//		}
+		return super.onOptionsItemSelected(item);
+	}
+
 }
 
 class SMSLogAdapter extends CursorAdapter {
@@ -91,7 +125,7 @@ class SMSLogAdapter extends CursorAdapter {
 		final String number = cursor.getString(1);
 		String reason = cursor.getString(3);
 		String time = cursor.getString(2);
-		
+
 		Bundle extras = new Bundle();
 		extras.putString("NUMBER", number);
 		extras.putString("REASON", reason);
@@ -109,8 +143,6 @@ class SMSLogAdapter extends CursorAdapter {
 		} else {
 			reason = "Not defined";
 		}
-
-		
 
 		String name = null;
 		if (CallRecepter.contactExists(context, number)) {

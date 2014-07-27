@@ -1,8 +1,10 @@
 package org.owasp.seraphimdroid;
 
 import org.owasp.seraphimdroid.adapter.TabsPagerAdapter;
+import org.owasp.seraphimdroid.database.DatabaseHelper;
 
 import android.app.Activity;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -64,19 +66,52 @@ public class BlockerFragment extends Fragment implements OnPageChangeListener,
 
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-
-		return super.onOptionsItemSelected(item);
-	}
-
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
-		inflater.inflate(R.menu.main, menu);
-
-		super.onCreateOptionsMenu(menu, inflater);
-	}
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		switch (item.getItemId()) {
+//		case R.id.clear_record:
+//			DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
+//			SQLiteDatabase db = dbHelper.getWritableDatabase();
+//
+//			int currentTab = tabHost.getCurrentTab();
+//			if (currentTab == 0) {
+//				db.execSQL("DROP TABLE IF EXISTS "
+//						+ DatabaseHelper.TABLE_CALL_LOGS);
+//				db.execSQL(DatabaseHelper.createCallTable);
+//				viewPager.setCurrentItem(1);
+//				tabHost.setCurrentTab(1);
+//				viewPager.setCurrentItem(0);
+//				tabHost.setCurrentTab(0);
+//			} else if (currentTab == 1) {
+//				db.execSQL("DROP TABLE IF EXISTS "
+//						+ DatabaseHelper.TABLE_SMS_LOGS);
+//				db.execSQL(DatabaseHelper.createSMSTable);
+//				viewPager.setCurrentItem(0);
+//				tabHost.setCurrentTab(0);
+//				viewPager.setCurrentItem(1);
+//				tabHost.setCurrentTab(1);
+//			} else if (currentTab == 2) {
+//				db.execSQL("DROP TABLE IF EXISTS "
+//						+ DatabaseHelper.TABLE_USSD_LOGS);
+//				db.execSQL(DatabaseHelper.createUSSDTable);
+//				viewPager.setCurrentItem(1);
+//				tabHost.setCurrentTab(1);
+//				viewPager.setCurrentItem(2);
+//				tabHost.setCurrentTab(2);
+//			}
+//			db.close();
+//			dbHelper.close();
+//		}
+//		return super.onOptionsItemSelected(item);
+//	}
+//
+//	@Override
+//	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//
+//		inflater.inflate(R.menu.main, menu);
+//
+//		super.onCreateOptionsMenu(menu, inflater);
+//	}
 
 	private void initTabs() {
 		AddTab(getActivity(), tabHost, tabHost.newTabSpec("call_log")

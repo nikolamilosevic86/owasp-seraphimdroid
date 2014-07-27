@@ -36,7 +36,7 @@ public class PermissionScannerFragment extends Fragment {
 
 	private PackageManager pkgManager;
 
-	private boolean isDataChanged;
+	private static boolean isDataChanged;
 
 	// Declaring Containers.
 	private ArrayList<String> appList;
@@ -48,6 +48,8 @@ public class PermissionScannerFragment extends Fragment {
 
 		View view = inflater.inflate(R.layout.fragment_permission_scanner,
 				container, false);
+
+		isDataChanged = true;
 
 		lvPermissionList = (ExpandableListView) view
 				.findViewById(R.id.app_list);
@@ -142,7 +144,7 @@ public class PermissionScannerFragment extends Fragment {
 		super.onAttach(activity);
 
 		pkgManager = getActivity().getPackageManager();
-		isDataChanged = true;
+		// isDataChanged = true;
 
 		// Initializing Containers.
 		appList = new ArrayList<String>();
@@ -194,10 +196,12 @@ public class PermissionScannerFragment extends Fragment {
 
 		@Override
 		protected Void doInBackground(Void... arg0) {
+			isDataChanged = false;
 			List<ApplicationInfo> installedApps = pkgManager
 					.getInstalledApplications(PackageManager.GET_META_DATA);
 
-			PermissionGetter permissionGetter = new PermissionGetter(pkgManager, PermissionScannerFragment.this.getActivity());
+			PermissionGetter permissionGetter = new PermissionGetter(
+					pkgManager, PermissionScannerFragment.this.getActivity());
 
 			for (ApplicationInfo appInfo : installedApps) {
 
@@ -215,7 +219,7 @@ public class PermissionScannerFragment extends Fragment {
 
 						appList.add(pkgInfo.packageName);
 
-						Log.d(TAG, pkgInfo.packageName);
+						// Log.d(TAG, pkgInfo.packageName);
 
 						String[] appPermissions = pkgInfo.requestedPermissions;
 
@@ -224,15 +228,15 @@ public class PermissionScannerFragment extends Fragment {
 						if (appPermissions != null) {
 
 							for (String permission : appPermissions) {
-								Log.d(TAG, permission);
+								// Log.d(TAG, permission);
 								if (permissionGetter
 										.generatePermissionData(permission) != null) {
 									reqPermissions
 											.add(permissionGetter
 													.generatePermissionData(permission));
 
-									Log.d(TAG,
-											"Adding permissions to reqPermissions");
+									// Log.d(TAG,
+									// "Adding permissions to reqPermissions");
 
 								}
 							}
@@ -245,8 +249,7 @@ public class PermissionScannerFragment extends Fragment {
 
 						childPermissions.put(pkgInfo.packageName,
 								reqPermissions);
-						Log.d(TAG, "Adding childItem");
-
+						// Log.d(TAG, "Adding childItem");
 					}
 
 				} catch (NameNotFoundException e) {
@@ -256,7 +259,7 @@ public class PermissionScannerFragment extends Fragment {
 
 			}
 			Log.d(TAG, "returning");
-			isDataChanged = false;
+			
 			return null;
 		}
 

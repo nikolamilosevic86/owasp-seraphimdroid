@@ -47,7 +47,7 @@
     <string name="add_contact_icon">Add number from contacts</string>
     <string name="add_text">Add</string>
     <string name="add_contact">Add new contact</string>
-    <string name="delete_record">Delete recoed</string>
+    <string name="delete_record">Delete record</string>
     <string name="your_location_text">Your Current Location</string>
     <string name="radius_label">Radius</string>
     <string name="geo_start_fencing">Start Fencing</string>

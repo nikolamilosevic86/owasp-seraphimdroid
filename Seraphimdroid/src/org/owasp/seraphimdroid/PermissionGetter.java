@@ -9,7 +9,6 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.PermissionInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 public class PermissionGetter {
 
@@ -47,7 +46,8 @@ public class PermissionGetter {
 			}
 			if (pd != null) {
 				weight = pd.weight;
-				maliciousDesc = pd.maliciousUse;
+				if (!pd.maliciousUse.equals(""))
+					maliciousDesc = pd.maliciousUse;
 			}
 
 			PermissionData perData = new PermissionData(permission, perName,
@@ -59,7 +59,7 @@ public class PermissionGetter {
 	}
 
 	private PerData retrieveData(String permission) {
-		Log.d("PERMISSION GETTER", "Retriving permisison:" + permission);
+		// Log.d("PERMISSION GETTER", "Retriving permisison:" + permission);
 		DatabaseHelper dbHelper = new DatabaseHelper(context);
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
 		Cursor cursor = db.rawQuery("SELECT * FROM "
@@ -70,7 +70,7 @@ public class PermissionGetter {
 		if (cursor.moveToFirst()) {
 			pd.permission = cursor.getString(1);
 			pd.weight = cursor.getInt(2);
-			
+
 			pd.maliciousUse = cursor.getString(3);
 		} else {
 			pd = null;
