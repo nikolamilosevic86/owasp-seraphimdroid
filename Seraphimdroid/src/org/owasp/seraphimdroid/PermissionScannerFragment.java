@@ -26,6 +26,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class PermissionScannerFragment extends Fragment {
@@ -108,6 +110,10 @@ public class PermissionScannerFragment extends Fragment {
 					public boolean onItemLongClick(AdapterView<?> parent,
 							View item, int postion, long id) {
 
+						if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+							return true;
+						}
+
 						String pkgName = appList.get(postion);
 
 						Uri packageUri = Uri.parse("package:" + pkgName);
@@ -135,6 +141,17 @@ public class PermissionScannerFragment extends Fragment {
 				});
 
 		isDataChanged = true;
+
+		ImageView imgBtnHide = (ImageView) view.findViewById(R.id.img_hide_info);
+		final RelativeLayout rlInfo = (RelativeLayout) view
+				.findViewById(R.id.rl_info);
+		imgBtnHide.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				rlInfo.setVisibility(View.GONE);
+			}
+		});
 
 		return view;
 	}
@@ -259,7 +276,7 @@ public class PermissionScannerFragment extends Fragment {
 
 			}
 			Log.d(TAG, "returning");
-			
+
 			return null;
 		}
 

@@ -4,6 +4,9 @@ import org.owasp.seraphimdroid.model.PermissionData;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class PermissionDescription extends Activity {
@@ -28,6 +31,16 @@ public class PermissionDescription extends Activity {
 				.findViewById(R.id.tvPermissionDescription);
 		tvMaliciousUseDescription = (TextView) this
 				.findViewById(R.id.tvMaliciousUseDescription);
+		
+		Button btnFinish = (Button) findViewById(R.id.btn_finish);
+		btnFinish.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				PermissionDescription.this.finish();
+			}
+		});
 		
 		permissionGetter = new PermissionGetter(getPackageManager(), this);
 

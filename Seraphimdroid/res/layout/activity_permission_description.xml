@@ -53,6 +53,18 @@
             android:layout_marginTop="5dp"
             android:text="Malicious Use Use Description"
             android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/btn_finish"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@+id/tvMaliciousUseDescription"
+            android:layout_marginTop="5dp"
+            android:textSize="12sp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="Close" />
+
     </RelativeLayout>
 
 </ScrollView>

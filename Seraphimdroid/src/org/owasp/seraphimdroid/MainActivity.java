@@ -8,10 +8,12 @@ import org.owasp.seraphimdroid.services.CheckAppLaunchThread;
 import org.owasp.seraphimdroid.services.OutGoingSmsRecepter;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -85,6 +87,11 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		startService(new Intent(this, OutGoingSmsRecepter.class));
+		
+		SharedPreferences defaults = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		boolean callsBlocked = defaults.getBoolean("call_blocked_notification", true);
+		defaults.edit().putBoolean("call_blocked_notification", callsBlocked).commit();
+		
 
 		// if (!isUnlocked) {
 		// Intent pwdIntent = new Intent(this, PasswordActivity.class);

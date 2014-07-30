@@ -1,8 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent" >
 
     <ExpandableListView
         android:id="@+id/app_list"
@@ -11,5 +10,35 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" >
     </ExpandableListView>
+
+    <RelativeLayout
+        android:id="@+id/rl_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#fe999999"
+        android:padding="15dp" >
+
+        <ImageView
+            android:id="@+id/img_hide_info"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:contentDescription="@string/icon_desc"
+            android:src="@android:drawable/ic_delete" />
+
+        <TextView
+            android:id="@+id/tv_info_uninstall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/uninstall_info"
+            android:layout_toLeftOf="@+id/img_hide_info"
+            android:focusable="false"
+            android:clickable="false"
+            android:textSize="16sp"
+            android:textStyle="italic" />
+    </RelativeLayout>
 
 </RelativeLayout>

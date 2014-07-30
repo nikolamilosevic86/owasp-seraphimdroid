@@ -1,5 +1,7 @@
 package org.owasp.seraphimdroid;
 
+import java.lang.reflect.Field;
+
 import org.owasp.seraphimdroid.receiver.GeoFencingAdminReceiver;
 import org.owasp.seraphimdroid.services.GPSTracker;
 import org.owasp.seraphimdroid.services.GeoFencingService;
@@ -97,6 +99,22 @@ public class GeoFencingFragment extends Fragment {
 		return view;
 	}
 
+	private SupportMapFragment mapFragment;
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		FragmentManager childFragmentManager = getChildFragmentManager();
+		mapFragment = (SupportMapFragment) childFragmentManager
+				.findFragmentById(R.id.maps);
+		if (mapFragment == null) {
+			mapFragment = SupportMapFragment.newInstance();
+			childFragmentManager.beginTransaction().replace(R.id.maps, mapFragment)
+					.commit();
+		}
+
+	}
+
 	private void initViews(View view, Bundle savedInstanceState) {
 
 		// try {
@@ -110,17 +128,6 @@ public class GeoFencingFragment extends Fragment {
 		// mapView = (MapView) view.findViewById(R.id.maps);
 		// mapView.onCreate(savedInstanceState);
 		// }
-		// Initializing Map
-		if (googleMap == null) {
-			// googleMap = ((MapFragment) getActivity().getFragmentManager()
-			// .findFragmentById(R.id.maps)).getMap();
-			googleMap = ((SupportMapFragment) getActivity()
-					.getSupportFragmentManager().findFragmentById(R.id.maps))
-					.getMap();
-			googleMap.getUiSettings().setZoomControlsEnabled(false);
-			googleMap.getUiSettings().setMyLocationButtonEnabled(false);
-			googleMap.setMyLocationEnabled(true);
-		}
 
 		// Initializing CheckBoxes
 		cbRemoteLock = (CheckBox) view.findViewById(R.id.cb_remote_lock);
@@ -180,6 +187,13 @@ public class GeoFencingFragment extends Fragment {
 
 			@Override
 			public void onClick(View paramView) {
+				Button btn = (Button) paramView;
+				String btnText = btn.getText().toString();
+				if (btnText.equals(getString(R.string.turn_gps_on))) {
+					showGPSAlert();
+					return;
+				}
+
 				if (!cbRemoteLock.isChecked() && !cbRemoteWipe.isChecked()
 						&& !cbSiren.isChecked() && !cbLocation.isChecked()) {
 					Toast.makeText(getActivity(),
@@ -195,44 +209,46 @@ public class GeoFencingFragment extends Fragment {
 
 			@Override
 			public void onClick(View view) {
-				LocationManager lm = (LocationManager) getActivity()
-						.getSystemService(Context.LOCATION_SERVICE);
-				if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-					new CurrentLocationTask().execute();
-				} else {
-					AlertDialog.Builder builder = new AlertDialog.Builder(
-							getActivity());
-					builder.setMessage("Enable GPS for better location accuracy");
-					builder.setTitle("Enable GPS");
-					builder.setPositiveButton(getString(android.R.string.ok),
-							new DialogInterface.OnClickListener() {
-
-								@Override
-								public void onClick(DialogInterface dialog,
-										int arg1) {
-									Intent intent = new Intent(
-											Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-									startActivity(intent);
-								}
-							}).setNegativeButton(
-							getString(android.R.string.cancel),
-							new DialogInterface.OnClickListener() {
-
-								@Override
-								public void onClick(DialogInterface dialog,
-										int arg1) {
-									dialog.dismiss();
-								}
-							});
-					AlertDialog gpsAlert = builder.create();
-					gpsAlert.show();
-				}
+				getCurrentLocation();
 				if (center != null) {
 					tvCenter.setText(center.getLatitude() + ","
 							+ center.getLongitude());
 				}
 			}
 		});
+
+	}
+
+	private void getCurrentLocation() {
+		LocationManager lm = (LocationManager) getActivity().getSystemService(
+				Context.LOCATION_SERVICE);
+		if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+			if (!gettingLocation)
+				new CurrentLocationTask().execute();
+		} else {
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			builder.setMessage("Enable GPS for better location accuracy");
+			builder.setTitle("Enable GPS");
+			builder.setPositiveButton(getString(android.R.string.ok),
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int arg1) {
+							Intent intent = new Intent(
+									Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+							startActivity(intent);
+						}
+					}).setNegativeButton(getString(android.R.string.cancel),
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int arg1) {
+							dialog.dismiss();
+						}
+					});
+			AlertDialog gpsAlert = builder.create();
+			gpsAlert.show();
+		}
 
 	}
 
@@ -284,6 +300,7 @@ public class GeoFencingFragment extends Fragment {
 			// } catch (Exception e) {
 			// e.printStackTrace();
 			// }
+			getCurrentLocation();
 			return;
 		}
 		if (etRadius.getText().toString().equals("")
@@ -496,6 +513,16 @@ public class GeoFencingFragment extends Fragment {
 		super.onResume();
 		// mapView.onResume();
 
+		// Initializing Map
+		if (googleMap == null) {
+			// googleMap = ((MapFragment) getActivity().getFragmentManager()
+			// .findFragmentById(R.id.maps)).getMap();
+			googleMap = mapFragment.getMap();
+			googleMap.getUiSettings().setZoomControlsEnabled(false);
+			googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+			googleMap.setMyLocationEnabled(true);
+		}
+
 		LocationManager lm = (LocationManager) getActivity().getSystemService(
 				Context.LOCATION_SERVICE);
 
@@ -508,44 +535,11 @@ public class GeoFencingFragment extends Fragment {
 			btnFence.setText(getString(R.string.geo_stop_fencing));
 		} else {
 			if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(
-						getActivity());
-				builder.setMessage("GPS is needed to access this service. Please turn ON the GPS to use this feature.");
-				builder.setTitle("Enable GPS");
-				builder.setPositiveButton("GPS settings",
-						new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog, int arg1) {
-								Intent intent = new Intent(
-										Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-								startActivity(intent);
-							}
-						}).setNegativeButton(
-						getString(android.R.string.cancel),
-						new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog, int arg1) {
-								FragmentManager fm = getActivity()
-										.getSupportFragmentManager();
-								fm.beginTransaction()
-										.replace(R.id.fragment_container,
-												new AppLockFragment()).commit();
-								Toast.makeText(
-										getActivity(),
-										"Cannot access the service without GPS",
-										Toast.LENGTH_SHORT).show();
-
-								dialog.dismiss();
-							}
-						});
-				gpsAlert = builder.create();
-				gpsAlert.show();
-
+				showGPSAlert();
 			} else {
 				try {
-					new CurrentLocationTask().execute();
+					if (!gettingLocation)
+						new CurrentLocationTask().execute();
 					// center = gpsTracker.getLocation();
 
 					// tvCenter.setText(center.getLatitude() + ","
@@ -559,23 +553,82 @@ public class GeoFencingFragment extends Fragment {
 
 	}
 
+	private void showGPSAlert() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setMessage("GPS is needed to access this service. Please turn ON the GPS to use this feature.");
+		builder.setTitle("Enable GPS");
+		builder.setPositiveButton("GPS settings",
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int arg1) {
+						Intent intent = new Intent(
+								Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+						startActivity(intent);
+					}
+				}).setNegativeButton(getString(android.R.string.cancel),
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int arg1) {
+						// FragmentManager fm = getActivity()
+						// .getSupportFragmentManager();
+						// fm.beginTransaction()
+						// .replace(R.id.fragment_container,
+						// new AppLockFragment()).commit();
+						// Toast.makeText(
+						// getActivity(),
+						// "Cannot access the service without GPS",
+						// Toast.LENGTH_SHORT).show();
+
+						btnFence.setText(getString(R.string.turn_gps_on));
+
+						dialog.dismiss();
+					}
+				});
+		gpsAlert = builder.create();
+		gpsAlert.show();
+
+	}
+
 	@Override
 	public void onPause() {
 		if (gpsAlert != null)
 			gpsAlert.dismiss();
-
-		super.onPause();
-		// mapView.onPause();
-	}
-
-	@Override
-	public void onDestroy() {
 		android.app.Fragment mapFragment = getActivity().getFragmentManager()
 				.findFragmentById(R.id.maps);
 		if (mapFragment != null) {
 			getActivity().getFragmentManager().beginTransaction()
 					.remove(mapFragment).commit();
 		}
+
+		super.onPause();
+		// mapView.onPause();
+	}
+	
+	
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		try{
+			Field childFM = Fragment.class.getDeclaredField("childFragmentManager");
+			childFM.setAccessible(true);
+			childFM.set(this, null);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Override
+	public void onDestroy() {
+		// android.app.Fragment mapFragment = getActivity().getFragmentManager()
+		// .findFragmentById(R.id.maps);
+		// if (mapFragment != null) {
+		// getActivity().getFragmentManager().beginTransaction()
+		// .remove(mapFragment).commit();
+		// }
 		gpsTracker.stopUsingGPS();
 		super.onDestroy();
 		// mapView.onDestroy();
@@ -601,6 +654,7 @@ public class GeoFencingFragment extends Fragment {
 	private class CurrentLocationTask extends AsyncTask<Void, Void, Void> {
 
 		ProgressDialog pd;
+		private int timer = 0;
 
 		public CurrentLocationTask() {
 			pd = new ProgressDialog(getActivity());
@@ -608,27 +662,10 @@ public class GeoFencingFragment extends Fragment {
 		}
 
 		@Override
-		protected void onPostExecute(Void result) {
-			tvCenter.setText(center.getLatitude() + "," + center.getLongitude());
-			LatLng current = new LatLng(center.getLatitude(),
-					center.getLongitude());
-			CameraPosition cameraPosition = new CameraPosition.Builder()
-					.target(current).zoom(17).build();
-			// googleMap.addMarker(new MarkerOptions().position(current)
-			// .title("You are here!").draggable(false));
-			pd.dismiss();
-
-			googleMap.animateCamera(
-					CameraUpdateFactory.newCameraPosition(cameraPosition),
-					2000, null);
-			super.onPostExecute(result);
-		}
-
-		@Override
 		protected void onPreExecute() {
 			pd.setTitle("Getting Location");
 			pd.setMessage("Please wait...");
-			pd.setCancelable(true);
+			pd.setCancelable(false);
 			pd.show();
 			googleMap.stopAnimation();
 			googleMap.clear();
@@ -637,14 +674,63 @@ public class GeoFencingFragment extends Fragment {
 
 		@Override
 		protected Void doInBackground(Void... arg0) {
-			while (center == null)
+			gettingLocation = true;
+			while (center == null) {
+				if (timer > 3 && timer < 5)
+					pd.setCancelable(true);
+				if (timer > 10)
+					return null;
+				timer++;
 				center = gpsTracker.getLocation();
-			try {
-				Thread.sleep(1000);
-			} catch (Exception e) {
-				e.printStackTrace();
+				try {
+					Thread.sleep(1000);
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
+			gettingLocation = false;
 			return null;
 		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			pd.dismiss();
+			if (center == null) {
+				AlertDialog.Builder alert = new AlertDialog.Builder(
+						getActivity());
+				alert.setNeutralButton("OK",
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog, int arg1) {
+								// TODO Auto-generated method stub
+								dialog.dismiss();
+							}
+						});
+
+				alert.setTitle("Network problem")
+						.setMessage(
+								"Please make sure you are either under the open sky or you are connected to internet. If you are connected to internet please check you connection.");
+				alert.create().show();
+			} else {
+				tvCenter.setText(center.getLatitude() + ","
+						+ center.getLongitude());
+				LatLng current = new LatLng(center.getLatitude(),
+						center.getLongitude());
+				CameraPosition cameraPosition = new CameraPosition.Builder()
+						.target(current).zoom(17).build();
+				// googleMap.addMarker(new MarkerOptions().position(current)
+				// .title("You are here!").draggable(false));
+
+				googleMap.animateCamera(
+						CameraUpdateFactory.newCameraPosition(cameraPosition),
+						2000, null);
+			}
+			super.onPostExecute(result);
+		}
+
 	}
+
+	private static boolean gettingLocation = false;
 }

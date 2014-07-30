@@ -1,19 +1,14 @@
 package org.owasp.seraphimdroid;
 
 import org.owasp.seraphimdroid.adapter.TabsPagerAdapter;
-import org.owasp.seraphimdroid.database.DatabaseHelper;
 
 import android.app.Activity;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabHost;
