@@ -7,6 +7,8 @@ import org.owasp.seraphimdroid.model.DrawerItem;
 import org.owasp.seraphimdroid.services.CheckAppLaunchThread;
 import org.owasp.seraphimdroid.services.OutGoingSmsRecepter;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -56,7 +58,7 @@ public class MainActivity extends FragmentActivity {
 			pwdIntent.putExtra("PACKAGE_NAME", this.getPackageName());
 			isUnlocked = true;
 			startActivity(pwdIntent);
-				selectFragment(fragmentNo);
+			selectFragment(fragmentNo);
 		}
 		super.onResume();
 
@@ -87,11 +89,13 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		startService(new Intent(this, OutGoingSmsRecepter.class));
-		
-		SharedPreferences defaults = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		boolean callsBlocked = defaults.getBoolean("call_blocked_notification", true);
-		defaults.edit().putBoolean("call_blocked_notification", callsBlocked).commit();
-		
+
+		SharedPreferences defaults = PreferenceManager
+				.getDefaultSharedPreferences(getApplicationContext());
+		boolean callsBlocked = defaults.getBoolean("call_blocked_notification",
+				true);
+		defaults.edit().putBoolean("call_blocked_notification", callsBlocked)
+				.commit();
 
 		// if (!isUnlocked) {
 		// Intent pwdIntent = new Intent(this, PasswordActivity.class);
@@ -277,6 +281,7 @@ public class MainActivity extends FragmentActivity {
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		// isUnlocked = false;
+		
 		super.onStop();
 	}
 
@@ -284,9 +289,36 @@ public class MainActivity extends FragmentActivity {
 	public void onBackPressed() {
 		// onPause();
 		// onDestroy();
-		finish();
+showExitAlert();
+		// finish();
 		super.onBackPressed();
 
+	}
+
+	private void showExitAlert() {
+		AlertDialog.Builder exitBuilder = new AlertDialog.Builder(this);
+		exitBuilder.setTitle("Close application");
+		exitBuilder.setMessage("Do you really want to exit the application?");
+		exitBuilder.setNegativeButton("No",
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int arg1) {
+						// TODO Auto-generated method stub
+						dialog.dismiss();
+					}
+				});
+		exitBuilder.setPositiveButton("Yes",
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int arg1) {
+						// TODO Auto-generated method stub
+						dialog.dismiss();
+						MainActivity.this.finish();
+					}
+				});
+		exitBuilder.create().show();
 	}
 
 	@Override
@@ -295,22 +327,24 @@ public class MainActivity extends FragmentActivity {
 				|| keyCode == KeyEvent.KEYCODE_HOME) {
 			// onPause();
 			// onDestroy();
-			finish();
+			//finish();
+			showExitAlert();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
 
-	@Override
-	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK
-				|| keyCode == KeyEvent.KEYCODE_HOME) {
-
-			// onPause();
-			// onDestroy();
-			finish();
-		}
-		return super.onKeyUp(keyCode, event);
-	}
+//	@Override
+//	public boolean onKeyUp(int keyCode, KeyEvent event) {
+//		if (keyCode == KeyEvent.KEYCODE_BACK
+//				|| keyCode == KeyEvent.KEYCODE_HOME) {
+//
+//			// onPause();
+//			// onDestroy();
+//			//finish();
+//			showExitAlert();
+//		}
+//		return super.onKeyUp(keyCode, event);
+//	}
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {

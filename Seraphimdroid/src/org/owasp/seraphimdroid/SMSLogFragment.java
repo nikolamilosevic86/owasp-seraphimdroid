@@ -125,11 +125,16 @@ class SMSLogAdapter extends CursorAdapter {
 		final String number = cursor.getString(1);
 		String reason = cursor.getString(3);
 		String time = cursor.getString(2);
+		Integer type = cursor.getInt(cursor.getColumnIndex("type"));
+		String content = cursor.getString(cursor.getColumnIndex("content"));
 
 		Bundle extras = new Bundle();
+		extras.putInt("LOG_TYPE", LogDetailActivity.SMS_LOG);
 		extras.putString("NUMBER", number);
 		extras.putString("REASON", reason);
 		extras.putString("TIME", time);
+		extras.putInt("TYPE", type);
+		extras.putString("CONTENT", content);
 		convertView.setTag(extras);
 
 		int width = tvReason.getWidth();

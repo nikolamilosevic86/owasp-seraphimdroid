@@ -104,6 +104,7 @@ class USSDLogAdapter extends CursorAdapter {
 		String time = cursor.getString(2);
 
 		Bundle extras = new Bundle();
+		extras.putInt("LOG_TYPE", LogDetailActivity.USSD_LOG);
 		extras.putString("NUMBER", number);
 		extras.putString("REASON", reason);
 		extras.putString("TIME", time);

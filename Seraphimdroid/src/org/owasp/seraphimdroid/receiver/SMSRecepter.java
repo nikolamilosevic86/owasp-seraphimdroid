@@ -3,6 +3,7 @@ package org.owasp.seraphimdroid.receiver;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.owasp.seraphimdroid.LogDetailActivity;
 import org.owasp.seraphimdroid.MainActivity;
 import org.owasp.seraphimdroid.R;
 import org.owasp.seraphimdroid.database.DatabaseHelper;
@@ -92,6 +93,8 @@ public class SMSRecepter extends BroadcastReceiver {
 				cv.put("phone_number", receiverNumber);
 				cv.put("reason", reason);
 				cv.put("time", CallRecepter.getTime());
+				cv.put("content", message);
+				cv.put("type", LogDetailActivity.SMS_IN);
 				db.insert(DatabaseHelper.TABLE_SMS_LOGS, null, cv);
 				db.close();
 				dbHelper.close();

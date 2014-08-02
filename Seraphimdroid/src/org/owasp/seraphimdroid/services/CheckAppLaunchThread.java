@@ -119,6 +119,8 @@ public class CheckAppLaunchThread extends Thread {
 		if (packageName.equals(PasswordActivity.lastUnlocked)) {
 			return false;
 		}
+//		if(packageName.equals(context.getPackageName()))
+//			return true;
 		// if (PasswordActivity.lastUnlocked != null) {
 		//
 		// if (PasswordActivity.lastUnlocked.equals(packageName)) {

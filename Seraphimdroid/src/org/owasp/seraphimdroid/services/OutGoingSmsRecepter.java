@@ -2,6 +2,7 @@ package org.owasp.seraphimdroid.services;
 
 import java.util.List;
 
+import org.owasp.seraphimdroid.LogDetailActivity;
 import org.owasp.seraphimdroid.MainActivity;
 import org.owasp.seraphimdroid.R;
 import org.owasp.seraphimdroid.database.DatabaseHelper;
@@ -79,11 +80,12 @@ public class OutGoingSmsRecepter extends Service {
 
 			String type = cursor.getString(cursor.getColumnIndex("type"));
 			String message_id = cursor.getString(cursor.getColumnIndex("_id"));
+			String content = cursor.getString(cursor.getColumnIndex("body"));
 
 			if (type.equals("2") && !message_id.equals(messageId)) {
 
 				messageId = message_id;
-				
+
 				// Gettings current running task
 				ActivityManager am = (ActivityManager) getApplicationContext()
 						.getSystemService(ACTIVITY_SERVICE);
@@ -125,6 +127,8 @@ public class OutGoingSmsRecepter extends Service {
 					cv.put("reason", "SMS sent by " + appName
 							+ " without users notices or permission");
 					cv.put("time", CallRecepter.getTime());
+					cv.put("type", LogDetailActivity.SMS_OUT);
+					cv.put("content", content);
 					db.insert(DatabaseHelper.TABLE_SMS_LOGS, null, cv);
 					db.close();
 					dbHelper.close();
