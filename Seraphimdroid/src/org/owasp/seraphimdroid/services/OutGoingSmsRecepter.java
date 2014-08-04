@@ -1,5 +1,6 @@
 package org.owasp.seraphimdroid.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.owasp.seraphimdroid.LogDetailActivity;
@@ -35,6 +36,8 @@ public class OutGoingSmsRecepter extends Service {
 	private MyContentObserver observer;
 	private ContentResolver contentResolver;
 
+	private static List<String> SMSAppWhiteList = null;
+
 	@Override
 	public IBinder onBind(Intent arg0) {
 		// TODO Auto-generated method stub
@@ -48,6 +51,12 @@ public class OutGoingSmsRecepter extends Service {
 		contentResolver = getContentResolver();
 		contentResolver.registerContentObserver(Uri.parse(CONTENT_SMS), true,
 				observer);
+		if (SMSAppWhiteList == null)
+			SMSAppWhiteList = new ArrayList<String>();
+		SMSAppWhiteList.clear();
+		SMSAppWhiteList.add("com.android.mms");
+		SMSAppWhiteList.add("com.google.android.talk");
+
 		super.onCreate();
 	}
 
@@ -93,8 +102,12 @@ public class OutGoingSmsRecepter extends Service {
 						.getRunningTasks(Integer.MAX_VALUE);
 
 				// Check whether the messenger is in foreground or not.
-				if (!tasks.get(0).topActivity.getPackageName().equals(
-						"com.android.mms")) {
+				if (!SMSAppWhiteList.contains(tasks.get(0).topActivity
+						.getPackageName())) {
+
+					// }
+					// if (!tasks.get(0).topActivity.getPackageName().equals(
+					// "com.android.mms")) {
 					PackageManager pm = getPackageManager();
 					ApplicationInfo appInfo = null;
 					String appName = "";
