@@ -16,12 +16,12 @@
     </string-array>
 
     <integer-array name="drawer_icons">
-        <item>@android:drawable/ic_menu_preferences</item>
-        <item>@android:drawable/ic_menu_preferences</item>
-        <item>@android:drawable/ic_menu_preferences</item>
-        <item>@android:drawable/ic_menu_preferences</item>
-        <item>@android:drawable/ic_menu_preferences</item>
-        <item>@android:drawable/ic_menu_preferences</item>
+        <item>@drawable/icon_permission_scanner</item>
+        <item>@drawable/icon_logs</item>
+        <item>@drawable/icon_lock</item>
+        <item>@drawable/icon_geo_fencing</item>
+        <item>@drawable/icon_settings</item>
+        <item>@drawable/icon_about</item>
     </integer-array>
 
     <string name="password_hint">Enter PIN</string>
