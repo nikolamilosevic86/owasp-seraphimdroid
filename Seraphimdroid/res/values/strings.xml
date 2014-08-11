@@ -8,7 +8,7 @@
 
     <string-array name="item_names">
         <item>Permission Scanner</item>
-        <item>Blocker</item>
+        <item>Blocker Logs</item>
         <item>Applicaton Lock</item>
         <item>Geo-fencing</item>
         <item>Settings</item>
