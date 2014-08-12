@@ -28,3 +28,8 @@ Import these two projects, then add these to project library as folllows.
   6. Done.
 
 Start digging.
+
+
+API Key
+-------
+
