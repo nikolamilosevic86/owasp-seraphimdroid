@@ -30,6 +30,19 @@ Import these two projects, then add these to project library as folllows.
 Start digging.
 
 
-API Key
--------
+####API Key
+You need to create a debug API key for google maps to work. Follow the steps [here](https://developers.google.com/maps/documentation/android/start) to get the key.
+
+You need to generate the SHA1 for your eclipse, to do that enter this command 
+
+#####For windows
+keytool -list -alias -keystore "C:\Documents
+and Settings\Administrator\.android\debug.keystore" -storepass android -keypass
+android
+
+##### for linux
+keytool -list -alias -keystore "~\.android\debug.keystore" -storepass android -keypass
+android
+
+
 
