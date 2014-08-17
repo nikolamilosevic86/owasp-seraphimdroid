@@ -37,7 +37,7 @@ import android.widget.Toast;
 public class GeoFencingService extends Service {
 
 	public static Location center;
-	public static long TIME = 1000, // Seconds
+	public static long TIME = 1000 * 10, // Seconds
 			DISTANCE; // meters
 	private static int counter = 0;
 	private DevicePolicyManager deviceMan;

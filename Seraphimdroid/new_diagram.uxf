@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="12.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>660</x>
+      <y>250</y>
+      <w>400</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>
+org.owasp.seraphimdroid::PermissionScannerFragment
+--
+/Data members:/
+
+- lvPermissionList : ExpandableListView
+- isDataChanged : boolean
+- appList : ArrayList &lt;String&gt;
+- childPermissions : HashMap &lt;String, List&lt;PermissionData&gt;&gt;
+- pkgManager : PackageManager
+--
+/Methods and Contructors/
+- isSystemPackage(PackageInfo) : boolean
+- prepareList( ) : void
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>80</x>
+      <y>130</y>
+      <w>340</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>
+org.owasp.seraphimdroid.model::PermissionData
+--
+/Data Members/
+- description : String
+- maliciousUseDescription : String
+- permission : String
+- permissionName : String
+- weight : int
+--
+/Methods and Constructors/
++ PermissionData(String, String, String , String, int)
++ get( )/set( )</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>390</x>
+      <y>110</y>
+      <w>290</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..n
+</panel_attributes>
+    <additional_attributes>270;260;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>660</x>
+      <y>540</y>
+      <w>400</w>
+      <h>340</h>
+    </coordinates>
+    <panel_attributes>
+org.owasp.seraphimdroid.adapter::PermissionScannerAdapter
+--
+/Data Member/
+- childItem : HashMap
+- context : Context
+- groupHeader : List&lt;String&gt;
+- packageManager : PackageManager
+--
+/Methods and Constructors/
++ PermissionScannerAdapter( Context, List, HashMap)
++ getChild(int, int) : Object
++ getChildId(int ,int) : long
++ getChildrenCount(int) : int
++ getChildView(int, int, boolean, View, ViewGroup) : View
+- getColor(int) : int
++ getGroup(int) : Object
++ getGroupCount() : int
++ getGroupId(int) : long
++ getGroupView(int, boolean, View, ViewGroup) : View
++ hasStableIds() : boolean
++ isChildSelectable(int, int) :  boolean
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>30</x>
+      <y>440</y>
+      <w>340</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>
+org.owasp.seraphimdroid::PermissionGetter
+--
+/Data Members/
+- context : Context
+- maliciousDesc : String
+- weight : int
+- packageManager : PackageManager
+--
+/Methods and Constructors/
++ PermissionGetter (PackageManager, Context)
++ generatePermissionData(String) : PermissionData
+- retrieveData(String) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>80</x>
+      <y>20</y>
+      <w>340</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>Permission Scanner Related Classes
+--
+PermissionData, PermissionScannerFragment,
+PermissionGetter, PermissionScannerAdapter
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>220</x>
+      <y>690</y>
+      <w>340</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>
+org.owasp.seraphimdroid::PermissionDescription
+--
+/Data Members/
+- permissionGetter : PermissionGetter
+- tvMaliciousDescription : TextView
+- tvPermissionDescription : TextView
+- tvPermissionHeader : TextView
+--
+/Methods and Constructors/
++ onCreate(Bundle) : void
++ onResume ( ) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>260</x>
+      <y>380</y>
+      <w>272</w>
+      <h>330</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;
+Generates permissionData objects</panel_attributes>
+    <additional_attributes>200;310;140;50;110;60</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>90</x>
+      <y>290</y>
+      <w>272</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;
+Generates permissionData objects</panel_attributes>
+    <additional_attributes>180;30;100;150</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>370</x>
+      <y>290</y>
+      <w>310</w>
+      <h>270</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+Feeds layout for ExpandableListView
+</panel_attributes>
+    <additional_attributes>290;30;150;80;290;250</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>660</x>
+      <y>80</y>
+      <w>390</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Fragment
+--
++ OnCreateView(LayoutInfater, ViewGroup, Bundle) : View
++ onResume( ): void
++ onAttach(Activity) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>810</x>
+      <y>130</y>
+      <w>50</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;30;120</additional_attributes>
+  </element>
+</diagram>
