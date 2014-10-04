@@ -55,6 +55,7 @@ public class GeoFencingFragment extends Fragment {
 	private EditText etRadius;
 	private ImageButton imgBtnLocation;
 	public static final int ADMIN_ACTIVATION_REQ = 1001;
+	public static final int GPS_ALERT = 1002;
 
 	private SharedPreferences prefs;
 	public static final String lockKey = "org.owasp.seraphimdroid.geofencing.lock";
@@ -109,8 +110,8 @@ public class GeoFencingFragment extends Fragment {
 				.findFragmentById(R.id.maps);
 		if (mapFragment == null) {
 			mapFragment = SupportMapFragment.newInstance();
-			childFragmentManager.beginTransaction().replace(R.id.maps, mapFragment)
-					.commit();
+			childFragmentManager.beginTransaction()
+					.replace(R.id.maps, mapFragment).commit();
 		}
 
 	}
@@ -358,6 +359,17 @@ public class GeoFencingFragment extends Fragment {
 						Toast.LENGTH_LONG).show();
 			}
 			break;
+		case GPS_ALERT:
+			LocationManager lm = (LocationManager) getActivity()
+					.getSystemService(Context.LOCATION_SERVICE);
+
+			if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+				btnFence.setText(getString(R.string.geo_start_fencing));
+			} else {
+				showGPSAlert();
+			}
+
+			break;
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -557,6 +569,7 @@ public class GeoFencingFragment extends Fragment {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setMessage("GPS is needed to access this service. Please turn ON the GPS to use this feature.");
 		builder.setTitle("Enable GPS");
+		builder.setCancelable(false);
 		builder.setPositiveButton("GPS settings",
 				new DialogInterface.OnClickListener() {
 
@@ -564,7 +577,8 @@ public class GeoFencingFragment extends Fragment {
 					public void onClick(DialogInterface dialog, int arg1) {
 						Intent intent = new Intent(
 								Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-						startActivity(intent);
+						// startActivity(intent);
+						startActivityForResult(intent, GPS_ALERT);
 					}
 				}).setNegativeButton(getString(android.R.string.cancel),
 				new DialogInterface.OnClickListener() {
@@ -605,20 +619,19 @@ public class GeoFencingFragment extends Fragment {
 		super.onPause();
 		// mapView.onPause();
 	}
-	
-	
 
 	@Override
 	public void onDetach() {
 		super.onDetach();
-		try{
-			Field childFM = Fragment.class.getDeclaredField("childFragmentManager");
+		try {
+			Field childFM = Fragment.class
+					.getDeclaredField("childFragmentManager");
 			childFM.setAccessible(true);
 			childFM.set(this, null);
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	@Override
@@ -675,13 +688,18 @@ public class GeoFencingFragment extends Fragment {
 		@Override
 		protected Void doInBackground(Void... arg0) {
 			gettingLocation = true;
-			while (center == null) {
+			while (gettingLocation) {
 				if (timer > 3 && timer < 5)
 					pd.setCancelable(true);
-				if (timer > 10)
+				if (timer > 10) {
+					gettingLocation = false;
 					return null;
+				}
 				timer++;
-				center = gpsTracker.getLocation();
+				if (center == null) {
+					center = gpsTracker.getLocation();
+					gettingLocation = false;
+				}
 				try {
 					Thread.sleep(1000);
 
