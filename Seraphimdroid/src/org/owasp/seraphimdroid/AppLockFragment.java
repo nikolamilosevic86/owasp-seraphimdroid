@@ -2,6 +2,7 @@ package org.owasp.seraphimdroid;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.owasp.seraphimdroid.adapter.AppLockerAdapter;
@@ -23,7 +24,7 @@ import android.widget.ListView;
 public class AppLockFragment extends Fragment {
 
 	private ListView lvAppLockerList;
-
+	private PackageManager pm;
 	private List<String> appList;
 
 	@Override
@@ -53,19 +54,24 @@ public class AppLockFragment extends Fragment {
 
 	private void prepareList() {
 
-		PackageManager pm = getActivity().getPackageManager();
-		Intent localIntent = new Intent(Intent.ACTION_MAIN);
-		localIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-		List<ResolveInfo> installedAppList = pm.queryIntentActivities(
-				localIntent, 0);
-		Collections.sort(installedAppList,
-				new ResolveInfo.DisplayNameComparator(pm));
-
-		for (ResolveInfo ri : installedAppList) {
-			if (ri.activityInfo.applicationInfo.packageName
+		pm = getActivity().getPackageManager();
+		//Intent localIntent = new Intent(Intent.ACTION_MAIN);
+		//localIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+		List<AppContainer> container = new ArrayList<AppLockFragment.AppContainer>();
+		List<PackageInfo> installedAppList = pm.getInstalledPackages(0);
+		for (PackageInfo info: installedAppList) {
+			if(pm.getLaunchIntentForPackage(info.packageName)!=null) {
+				container.add(new AppContainer(pm.getApplicationLabel(info.applicationInfo).toString(),info.packageName));
+			}
+		}
+		Collections.sort(container,
+				new CustomCompare());
+		
+		for (AppContainer ri : container) {
+			if (ri.appPackageName
 					.equals("org.owasp.seraphimdroid"))
 				continue;
-			appList.add(ri.activityInfo.applicationInfo.packageName);
+			appList.add(ri.appPackageName);
 		}
 
 		//
@@ -86,6 +92,23 @@ public class AppLockFragment extends Fragment {
 		// e.printStackTrace();
 		// }
 		// }
+	}
+	
+	public class AppContainer {
+		String appLabel,appPackageName;
+		public AppContainer(String label, String packageName) {
+			this.appLabel = label;
+			this.appPackageName = packageName;
+		}
+	}
+	
+	private class CustomCompare implements Comparator<AppContainer> {
+
+		@Override
+		public int compare(AppContainer l, AppContainer r) {
+			return l.appLabel.compareToIgnoreCase(r.appLabel);
+		}
+		
 	}
 
 	@Override

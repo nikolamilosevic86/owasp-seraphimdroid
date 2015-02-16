@@ -1,6 +1,8 @@
 package org.owasp.seraphimdroid;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -198,6 +200,13 @@ public class PermissionScannerFragment extends Fragment {
 				: false;
 	}
 
+	private class CustomComparator implements Comparator<ApplicationInfo> {
+	    @Override
+	    public int compare(ApplicationInfo l, ApplicationInfo r) {
+	        return pkgManager.getApplicationLabel(l).toString().compareToIgnoreCase(pkgManager.getApplicationLabel(r).toString());
+	    }
+	}
+	
 	private class AsyncListGenerator extends AsyncTask<Void, Void, Void> {
 
 		ProgressDialog loading = new ProgressDialog(getActivity());
@@ -216,7 +225,8 @@ public class PermissionScannerFragment extends Fragment {
 			isDataChanged = false;
 			List<ApplicationInfo> installedApps = pkgManager
 					.getInstalledApplications(PackageManager.GET_META_DATA);
-
+			Collections.sort(installedApps, new CustomComparator());
+			
 			PermissionGetter permissionGetter = new PermissionGetter(
 					pkgManager, PermissionScannerFragment.this.getActivity());
 
