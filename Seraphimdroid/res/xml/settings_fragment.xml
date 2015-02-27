@@ -21,7 +21,13 @@
             android:title="@string/call_blocker_black_list_title" >
             <intent android:action="seraphimdroid.intent.blacklist" />
         </PreferenceScreen>
-
+        
+		<PreferenceScreen
+            android:summary="@string/custom_ussd_settings_summary"
+            android:title="@string/custom_ussd_settings_title" >
+            <intent android:action="seraphimdroid.intent.custom_ussd" />
+        </PreferenceScreen>
+        
         <CheckBoxPreference
             android:key="call_blocked_notification"
             android:summary="@string/call_blocker_notification_summary"

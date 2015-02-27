@@ -52,7 +52,6 @@ public class USSDLogFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View view,
 					int position, long id) {
-				// TODO Auto-generated method stub
 				Bundle extras = (Bundle) view.getTag();
 
 				Intent detailIntent = new Intent(getActivity(),

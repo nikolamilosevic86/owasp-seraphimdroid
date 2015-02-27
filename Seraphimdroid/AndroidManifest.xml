@@ -90,6 +90,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity 
+            android:name="org.owasp.seraphimdroid.CustomUSSDActivity"
+            android:configChanges="keyboard|keyboardHidden|screenSize|orientation"
+            android:excludeFromRecents="true" >
+            <intent-filter>
+                <action android:name="seraphimdroid.intent.custom_ussd" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="org.owasp.seraphimdroid.AddBlacklistContactActivity"
             android:configChanges="keyboard|keyboardHidden|screenSize|orientation"

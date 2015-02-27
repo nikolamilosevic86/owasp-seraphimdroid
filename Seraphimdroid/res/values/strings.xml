@@ -36,9 +36,11 @@
     <string name="app_lock_change_password">Change password</string>
     <string name="app_lock_change_password_summary">Change the current password for the Application Locker</string>
     <string name="call_blocker_settings_title">Call Blocker</string>
+    <string name="custom_ussd_settings_title">USSD Black List</string>
+    <string name="custom_ussd_settings_summary">View and Edit Blocked USSD Codes</string>
     <string name="call_blocker_blocked_calls_title">Blocked calls</string>
     <string name="call_blocker_blocked_calls_summary">Select what calls to block</string>
-    <string name="call_blocker_black_list_title">Black List</string>
+    <string name="call_blocker_black_list_title">Calls Black List</string>
     <string name="call_blocker_block_list_summary">Numbers which you want to block</string>
     <string name="call_blocker_notification_title">Show Notification</string>
     <string name="call_blocker_notification_summary">Show notification for blocked calls</string>
