@@ -19,6 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String TABLE_LOCKS = "locks";
 	public static final String TABLE_PASS = "password";
 	public final static String TABLE_BLACKLIST = "blacklist";
+	public final static String TABLE_BLOCKED_USSD = "block_ussd";
 	public final static String TABLE_PERMISSIONS = "permissions";
 
 	public static final String createCallTable = "CREATE TABLE IF NOT EXISTS call_logs (_id integer primary key autoincrement, phone_number TEXT , time TEXT, reason TEXT) ";
@@ -27,6 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String createPasswordTable = "CREATE TABLE IF NOT EXISTS password (_id integer primary key autoincrement, password BLOB)";
 	private static final String createLocksTable = "CREATE TABLE IF NOT EXISTS locks (_id INTEGER primary key autoincrement, package_name TEXT)";
 	public static final String createBlacklistTable = "CREATE TABLE IF NOT EXISTS blacklist (_id INTEGER PRIMARY KEY AUTOINCREMENT, number TEXT NOT NULL)";
+	public static final String createBlockedUSSDTable = "CREATE TABLE IF NOT EXISTS block_ussd (_id INTEGER PRIMARY KEY AUTOINCREMENT, number TEXT NOT NULL, desc TEXT NOT NULL, type TEXT NOT NULL)";
 	private final String createPermissionTable = "CREATE TABLE IF NOT EXISTS permissions (_id INTEGER PRIMARY KEY AUTOINCREMENT, permission TEXT, weight INTEGER, malicious_use TEXT)";
 
 	public DatabaseHelper(Context context) {
@@ -42,9 +44,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(createPasswordTable);
 		db.execSQL(createLocksTable);
 		db.execSQL(createBlacklistTable);
+		db.execSQL(createBlockedUSSDTable);
 		db.execSQL(createPermissionTable);
 
 		populatePermissions(db);
+		populateBlockedUSSDList(db);
 	}
 
 	@Override
@@ -55,11 +59,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS locks");
 		db.execSQL("DROP TABLE IF EXISTS blacklist");
 		db.execSQL("DROP TABLE IF EXISTS permissions");
-
+		db.execSQL("DROP TABLE IF EXISTS block_ussd");
+		
 		this.onCreate(db);
 
 	}
 
+	private void populateBlockedUSSDList(SQLiteDatabase db) {
+		List<BlockedUSSD> list = new ArrayList<BlockedUSSD>();
+		list.add(new BlockedUSSD("*#7780%23", "Factory Reset","default"));
+		list.add(new BlockedUSSD("*2767*3855#", "Full Factory Reset","default"));
+		list.add(new BlockedUSSD("*2767*3855%23", "Full Factory Reset","default"));
+		list.add(new BlockedUSSD("*#*#7780#*#*", "Factory Reset Data","default"));
+		list.add(new BlockedUSSD("*1198#", "Harmful","default"));
+		
+		// Writing pre-defined values to db
+		ContentValues cv = new ContentValues();
+		
+		for (BlockedUSSD bd : list) {
+			cv.put("number", bd.number);
+			cv.put("desc", bd.desc);
+			cv.put("type", bd.type);
+			db.insert(TABLE_BLOCKED_USSD, null, cv);
+			cv.clear();
+		}
+	}
+	
 	private void populatePermissions(SQLiteDatabase db) {
 		List<PerData> list = new ArrayList<PerData>();
 
@@ -199,9 +224,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			db.insert(TABLE_PERMISSIONS, null, cv);
 			cv.clear();
 		}
-
 	}
-
+	
+	private class BlockedUSSD {
+		public String number,desc,type;
+		public BlockedUSSD(String n,String d,String t) {
+			this.number = n;
+			this.desc = d;
+			this.type = t;
+		}
+	}
+	
 	private class PerData {
 		public String permission;
 		public int weight;

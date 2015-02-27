@@ -1,6 +1,7 @@
 package org.owasp.seraphimdroid.receiver;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 import org.owasp.seraphimdroid.MainActivity;
 import org.owasp.seraphimdroid.PasswordActivity;
 import org.owasp.seraphimdroid.R;
+import org.owasp.seraphimdroid.CustomUSSDActivity.BlockedUSSD;
 import org.owasp.seraphimdroid.database.DatabaseHelper;
 
 import android.app.Activity;
@@ -31,7 +33,7 @@ import android.widget.Toast;
 
 public class CallRecepter extends BroadcastReceiver {
 
-	private DatabaseHelper dbHelper;
+	private static DatabaseHelper dbHelper;
 	private final String ussdLog = "ussd_logs";
 	private final String callLog = "call_logs";
 
@@ -294,13 +296,20 @@ public class CallRecepter extends BroadcastReceiver {
 		return false;
 	}
 
-	private static List<String> harmfulCodes = Arrays.asList("*#7780#",
-			"*#7780%23",// Factory Reset
-			"*2767*3855#", "*2767*3855%23", // Full Factory Reset
-			"*#*#7780#*#*", // Factory data reset
-			"*1198#");
+	private static List<String> harmfulCodes = new ArrayList<String>();
 
 	public static boolean isUnsafeUssd(String number) {
+		harmfulCodes = new ArrayList<String>();
+		SQLiteDatabase db = dbHelper.getReadableDatabase();
+		String sql = "SELECT * from " + DatabaseHelper.TABLE_BLOCKED_USSD
+				+ " ORDER BY _id";
+		Cursor cursor = db.rawQuery(sql, null);
+	
+        if (cursor.moveToFirst()) {
+            do {
+                harmfulCodes.add(cursor.getString(1));
+            } while (cursor.moveToNext());
+        }
 		return harmfulCodes.contains(number) ? true : false;
 	}
 
