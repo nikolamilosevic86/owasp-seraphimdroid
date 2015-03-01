@@ -128,7 +128,7 @@ public class CustomUSSDActivity extends Activity {
 		
 		class ViewHolder {
 			TextView numberTv,descriptionTv;
-			ImageView editButtonIv;
+			ImageView editButtonIv,deleteButtonIv;
 		}
 		
 		public CustomUSSDAdapter(Context context, int resource) {
@@ -154,7 +154,7 @@ public class CustomUSSDActivity extends Activity {
 				view_holder.numberTv = (TextView) convertView.findViewById(R.id.blocked_ussd_number);
 				view_holder.descriptionTv = (TextView) convertView.findViewById(R.id.blocked_ussd_desc);
 				view_holder.editButtonIv = (ImageView) convertView.findViewById(R.id.edit);
-				
+				view_holder.deleteButtonIv = (ImageView) convertView.findViewById(R.id.delete);
 				convertView.setTag(view_holder);
 			}
 			else {
@@ -168,6 +168,8 @@ public class CustomUSSDActivity extends Activity {
 			if(bl.type.equals("default")) {
 				view_holder.editButtonIv.setBackgroundResource(R.drawable.icon_edit_disabled);
 				view_holder.editButtonIv.setOnClickListener(null);
+				view_holder.deleteButtonIv.setBackgroundResource(R.drawable.icon_delete_disabled);
+				view_holder.deleteButtonIv.setOnClickListener(null);
 			}
 			else {
 				view_holder.editButtonIv.setBackgroundResource(R.drawable.icon_edit);
@@ -177,6 +179,35 @@ public class CustomUSSDActivity extends Activity {
 					public void onClick(View v) {
 						createDialog(position);
 						alertDialog.show();
+					}
+				});
+				
+				view_holder.deleteButtonIv.setBackgroundResource(R.drawable.icon_delete);
+				view_holder.deleteButtonIv.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						final Builder builder = new AlertDialog.Builder(CustomUSSDActivity.this);
+						builder
+					    .setTitle("Confirm Delete")
+					    .setMessage("Are you sure you want to Delete?")
+					    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+					        public void onClick(DialogInterface dialog, int which) {
+					        	SQLiteDatabase db = dbHelper.getWritableDatabase();
+								db.delete(DatabaseHelper.TABLE_BLOCKED_USSD, "_id" + "=" + bl.getId(), null);
+								db.close();
+								Toast.makeText(context, "USSD Code removed Successfully", Toast.LENGTH_SHORT).show();
+								initListView();
+					        }
+					     })
+					    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+					        public void onClick(DialogInterface dialog, int which) { 
+					            dialog.cancel();
+					        }
+					     })
+					    .setIcon(R.drawable.ic_launcher_smal)
+					    .create().show();
+
 					}
 				});
 			}
@@ -224,17 +255,6 @@ public class CustomUSSDActivity extends Activity {
 		            dialog.cancel();
 		        }
 		     })
-		     .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					SQLiteDatabase db = dbHelper.getWritableDatabase();
-					db.delete(DatabaseHelper.TABLE_BLOCKED_USSD, "_id" + "=" + bl.getId(), null);
-					db.close();
-					Toast.makeText(context, "USSD Code removed Successfully", Toast.LENGTH_SHORT).show();
-					initListView();
-				}
-			})
 		    .setIcon(R.drawable.ic_launcher_smal);
 			
 			// create alert dialog
