@@ -6,7 +6,7 @@ import org.owasp.seraphimdroid.PasswordActivity;
 import org.owasp.seraphimdroid.database.DatabaseHelper;
 
 import android.app.ActivityManager;
-import android.app.ActivityManager.RunningTaskInfo;
+import android.app.ActivityManager.RunningAppProcessInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -22,7 +22,8 @@ public class CheckAppLaunchThread extends Thread {
 	private Handler handler;
 	private ActivityManager actMan;
 	private int timer = 100;
-
+	public static final String TAG = "App Thread";
+	
 	// private String lastUnlocked;
 
 	public CheckAppLaunchThread(Handler mainHandler, Context context) {
@@ -37,24 +38,23 @@ public class CheckAppLaunchThread extends Thread {
 	public void run() {
 		context.startService(new Intent(context, AppLockService.class));
 		Looper.prepare();
-		List<RunningTaskInfo> prevTasks;
-		List<RunningTaskInfo> recentTasks = actMan.getRunningTasks(1);
-
+		List<RunningAppProcessInfo> prevTasks;
+		List<RunningAppProcessInfo> recentTasks = actMan.getRunningAppProcesses();
+		
 		prevTasks = recentTasks;
 		Log.d("Thread", "Inside Thread");
 		while (true) {
 			try {
 
-				recentTasks = actMan.getRunningTasks(1);
+				recentTasks = actMan.getRunningAppProcesses();
 				Thread.sleep(timer);
-				if (recentTasks.get(0).topActivity.getPackageName().equals(
-						prevTasks.get(0).topActivity.getPackageName())) {
-					// do nothing
+				if (recentTasks.get(0).processName.equals(
+						prevTasks.get(0).processName)) {
+					Log.d(TAG, "Do nothing " + recentTasks.get(0).processName);
 				} else {
-					if (isAppLocked(recentTasks.get(0).topActivity
-							.getPackageName())) {
-						String pkgName = recentTasks.get(0).topActivity
-								.getPackageName();
+					if (isAppLocked(recentTasks.get(0).processName)) {
+						Log.d(TAG, "Locked " + recentTasks.get(0).processName);
+						String pkgName = recentTasks.get(0).processName;
 						// timer = 10000;
 						// Toast.makeText(context, appName,
 						// Toast.LENGTH_SHORT).show();
