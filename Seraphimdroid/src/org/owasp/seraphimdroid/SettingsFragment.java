@@ -9,6 +9,7 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
@@ -19,10 +20,12 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.provider.Settings;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -80,7 +83,55 @@ public class SettingsFragment extends PreferenceFragment {
 		remoteWipePref.setOnPreferenceClickListener(listener);
 		remoteLocationPref.setOnPreferenceClickListener(listener);
 		
-
+		PreferenceScreen settingsChangePreference = (PreferenceScreen) findPreference("settings_check");
+		settingsChangePreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_singlechoice);
+	            arrayAdapter.add("Once a Day");
+	            arrayAdapter.add("Once a Week");
+	            arrayAdapter.add("Once a Fortnight");
+	            arrayAdapter.add("Once a Month");
+	            AlertDialog.Builder builder = new AlertDialog.Builder(
+	                    getActivity());
+	            builder.setTitle("Set Interval");
+	            builder.setIcon(R.drawable.ic_launcher_small);
+	            builder.setNegativeButton("Cancel", new OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+				});
+	            builder.setAdapter(arrayAdapter, new OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						String strName = arrayAdapter.getItem(which);
+						Toast.makeText(getActivity(), "Interval changed to " + strName, Toast.LENGTH_SHORT).show();
+						int milliSeconds = 24*60*60*1000;
+						switch (which) {
+						case 1:
+							milliSeconds *= 7;
+							break;
+						case 2:
+							milliSeconds *= 15;
+							break;
+						case 3:
+							milliSeconds *= 30;
+							break;
+						default:
+							break;
+						}
+						defaultPrefs.edit().putInt("interval", milliSeconds).commit();
+					}
+				});
+	            
+	            builder.show();
+				return false;
+			}
+		});
 	}
 
 	private class CheckBoxPreferenceClickListener implements

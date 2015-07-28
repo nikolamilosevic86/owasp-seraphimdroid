@@ -11,6 +11,7 @@
     
     <PreferenceCategory android:title="@string/settings_check_settings_title" >
         <PreferenceScreen
+            android:key="settings_check"
             android:summary="@string/settings_check_check_interval_summary"
             android:title="@string/settings_check_check_interval_title" >
         </PreferenceScreen>

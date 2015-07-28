@@ -50,7 +50,7 @@ public class MainActivity extends FragmentActivity {
 
 	public static boolean shouldReceive = true;
 
-	private static int fragmentNo = 2;
+	private static int fragmentNo = 3;
 
 	@Override
 	protected void onResume() {
