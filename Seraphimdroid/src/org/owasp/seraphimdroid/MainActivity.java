@@ -6,6 +6,7 @@ import org.owasp.seraphimdroid.adapter.DrawerAdapter;
 import org.owasp.seraphimdroid.model.DrawerItem;
 import org.owasp.seraphimdroid.services.CheckAppLaunchThread;
 import org.owasp.seraphimdroid.services.OutGoingSmsRecepter;
+import org.owasp.seraphimdroid.services.SettingsCheckService;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -89,7 +90,8 @@ public class MainActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		startService(new Intent(this, OutGoingSmsRecepter.class));
-
+		startService(new Intent(MainActivity.this, SettingsCheckService.class));
+		
 		SharedPreferences defaults = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
 		boolean callsBlocked = defaults.getBoolean("call_blocked_notification",
@@ -159,8 +161,6 @@ public class MainActivity extends FragmentActivity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
-		// startService(new Intent(this, AppLockService.class));
-
 	}
 
 	@Override
@@ -184,7 +184,9 @@ public class MainActivity extends FragmentActivity {
 				R.drawable.ic_launcher)));
 		listItems.add(new DrawerItem(itemNames[5], iconList.getResourceId(5,
 				R.drawable.ic_launcher)));
-
+		listItems.add(new DrawerItem(itemNames[6], iconList.getResourceId(6,
+				R.drawable.ic_launcher)));
+		
 		iconList.recycle();
 	}
 
@@ -201,15 +203,18 @@ public class MainActivity extends FragmentActivity {
 			fragment = new PermissionScannerFragment();
 			break;
 		case 1:
-			fragment = new BlockerFragment();
+			fragment = new SettingsCheckerFragment();
 			break;
 		case 2:
-			fragment = new AppLockFragment();
+			fragment = new BlockerFragment();
 			break;
 		case 3:
+			fragment = new AppLockFragment();
+			break;
+		case 4:
 			fragment = new GeoFencingFragment();
 			break;
-		case 4: {
+		case 5: {
 
 			if (prevSupportFlag != null) {
 				FragmentManager fragMan = getSupportFragmentManager();
@@ -227,7 +232,7 @@ public class MainActivity extends FragmentActivity {
 			prevFrag = frag;
 		}
 			break;
-		case 5:
+		case 6:
 			fragment = new AboutFragment();
 			break;
 		default:

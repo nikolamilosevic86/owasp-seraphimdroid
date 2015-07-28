@@ -8,6 +8,14 @@
             <intent android:action="seraphimdroid.intent.change_password" />
         </PreferenceScreen>
     </PreferenceCategory>
+    
+    <PreferenceCategory android:title="@string/settings_check_settings_title" >
+        <PreferenceScreen
+            android:summary="@string/settings_check_check_interval_summary"
+            android:title="@string/settings_check_check_interval_title" >
+        </PreferenceScreen>
+    </PreferenceCategory>
+    
     <PreferenceCategory android:title="@string/call_blocker_settings_title" >
         <ListPreference
             android:entries="@array/blocked_calls_keys"
@@ -33,6 +41,7 @@
             android:summary="@string/call_blocker_notification_summary"
             android:title="@string/call_blocker_notification_title" />
     </PreferenceCategory>
+    
     <PreferenceCategory android:title="@string/geo_fencing_settings_title" >
         <ListPreference
             android:entries="@array/geo_failed_attempts_keys"

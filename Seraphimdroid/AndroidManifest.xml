@@ -119,6 +119,8 @@
             android:name="org.owasp.seraphimdroid.services.AppLockService"
             android:stopWithTask="false" >
         </service>
+        <service android:name="org.owasp.seraphimdroid.services.SettingsCheckService">
+        </service>
         <service android:name="org.owasp.seraphimdroid.PasswordActivity$SystemAlertDialogService">
         </service>
         <service android:name="org.owasp.seraphimdroid.services.KillBackgroundService" >

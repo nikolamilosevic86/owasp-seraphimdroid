@@ -8,6 +8,7 @@
 
     <string-array name="item_names">
         <item>Permission Scanner</item>
+        <item>Settings Checker</item>
         <item>Blocker Logs</item>
         <item>Applicaton Lock</item>
         <item>Geo-fencing</item>
@@ -16,6 +17,7 @@
     </string-array>
 
     <integer-array name="drawer_icons">
+        <item>@drawable/icon_permission_scanner</item>
         <item>@drawable/icon_permission_scanner</item>
         <item>@drawable/icon_logs</item>
         <item>@drawable/icon_lock</item>
@@ -30,6 +32,14 @@
     <string name="back_button_label">Back</string>
     <string name="next_button_label">Next</string>
 
+    <!-- Strings for Settings Check -->
+    <string name="settings_check_settings_title">Settings Check</string>
+    <string name="settings_check_check_interval_title">Set Check Interval</string>
+    <string name="settings_check_check_interval_summary">Set the interval at which the device settings are scanned</string>
+    <string name="click_here_to_change_setting">(Click to Change Setting)</string>
+    <string name="debugging_summary">Turning on USB Debuggin can allow for malicious code to run on your phone. It is recommended you turn OFF this feature.</string>
+    <string name="unknown_sources_summary">Your phone and personal data are more vulnerable to attack by apps from unknown sources. It is recommended you turn OFF this feature.</string>
+    
     <!-- Optional button to Skip a PreferenceActivity [CHAR LIMIT=20] -->
     <string name="skip_button_label">Skip</string>
     <string name="app_lock_settings_title">App Locker</string>
@@ -88,6 +98,7 @@
     <string name="turn_gps_on">Turn GPS on</string>
     <string name="uninstall_info">Long pressing the application will uninstall the application.</string>
     <string name="info_permission_scanner">This will scan all your installed applications for permission they use. These permissions allow apps to use certain mobile features which could be harmful if not used correctly. The Permission Scanner will alert you about those dangerous applications and provide you with the malicious details.</string>
+    <string name="info_settings_scanner">This will scan your settings and check for options that are not set to their recommended state. You can click on the settings option to change it to the respective optimal state.</string>
     <string name="info_blocked_logs">This contains all the logs to your blocked calls, malicious SMSes and USSDs. You can find the reason for the blocking and call blocked numbers from here.</string>
     <string name="info_app_lock">The Application Locker will provide you with the ability to lock application. You will be prompt for password if you try to open that app.</string>
     <string name="info_geo_fencing">Geo fencing let you set a perimeter for your phone. If the phone gets out of the perimeter it will perform actions like locking your phone, wiping you data(Ofcourse only if you choose so) and make an alert sound. You could also ask for location updates if you want.</string>
