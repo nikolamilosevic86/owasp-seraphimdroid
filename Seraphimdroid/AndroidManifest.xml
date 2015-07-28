@@ -27,6 +27,7 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
 	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 	
     <uses-feature
         android:name="android.hardware.telephony"
@@ -148,6 +149,13 @@
                 <action android:name="android.intent.action.SCREEN_OFF" />
             </intent-filter>
         </receiver>
+        <receiver
+		    android:name="org.owasp.seraphimdroid.receiver.BootReceiver"
+		    android:label="BootReceiver">
+		    <intent-filter>
+		        <action android:name="android.intent.action.BOOT_COMPLETED" />
+		    </intent-filter>
+		</receiver>
         <receiver android:name="org.owasp.seraphimdroid.receiver.SMSRecepter" >
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
