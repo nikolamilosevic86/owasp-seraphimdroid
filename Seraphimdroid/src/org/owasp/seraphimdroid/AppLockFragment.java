@@ -55,8 +55,6 @@ public class AppLockFragment extends Fragment {
 	private void prepareList() {
 
 		pm = getActivity().getPackageManager();
-		//Intent localIntent = new Intent(Intent.ACTION_MAIN);
-		//localIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 		List<AppContainer> container = new ArrayList<AppLockFragment.AppContainer>();
 		List<PackageInfo> installedAppList = pm.getInstalledPackages(0);
 		for (PackageInfo info: installedAppList) {
@@ -64,6 +62,7 @@ public class AppLockFragment extends Fragment {
 				container.add(new AppContainer(pm.getApplicationLabel(info.applicationInfo).toString(),info.packageName));
 			}
 		}
+		container.add(new AppContainer("Install/Uninstall", "com.android.packageinstaller"));
 		Collections.sort(container,
 				new CustomCompare());
 		
@@ -73,25 +72,6 @@ public class AppLockFragment extends Fragment {
 				continue;
 			appList.add(ri.appPackageName);
 		}
-
-		//
-		// List<ApplicationInfo> appInfoList = pm
-		// .getInstalledApplications(PackageManager.GET_META_DATA);
-		//
-		// for (ApplicationInfo appInfo : appInfoList) {
-		// try {
-		// if (!isSystemPackage(pm.getPackageInfo(appInfo.packageName,
-		// PackageManager.GET_META_DATA))
-		// && !appInfo.packageName
-		// .equals("org.owasp.seraphimdroid")) {
-		// appList.add(appInfo.packageName);
-		// }
-		// // addToDatabase(appInfo.packageName);
-		//
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
-		// }
 	}
 	
 	public class AppContainer {

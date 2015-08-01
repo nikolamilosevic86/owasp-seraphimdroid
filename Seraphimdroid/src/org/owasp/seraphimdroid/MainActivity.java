@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.owasp.seraphimdroid.adapter.DrawerAdapter;
 import org.owasp.seraphimdroid.model.DrawerItem;
+import org.owasp.seraphimdroid.receiver.ApplicationInstallReceiver;
 import org.owasp.seraphimdroid.services.CheckAppLaunchThread;
 import org.owasp.seraphimdroid.services.OutGoingSmsRecepter;
 import org.owasp.seraphimdroid.services.SettingsCheckService;
@@ -11,9 +12,11 @@ import org.owasp.seraphimdroid.services.SettingsCheckService;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -23,12 +26,14 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
 
@@ -83,14 +88,22 @@ public class MainActivity extends FragmentActivity {
 
 	}
 
+	int UNINSTALL_REQUEST_CODE = 1;
 	private android.app.Fragment prevFrag = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		//Initiate Services and Receivers
 		startService(new Intent(this, OutGoingSmsRecepter.class));
 		startService(new Intent(MainActivity.this, SettingsCheckService.class));
+		
+//		ApplicationInstallReceiver receiver = new ApplicationInstallReceiver();
+//		IntentFilter intentFilter = new IntentFilter();
+//		intentFilter.addAction(Intent.ACTION_UNINSTALL_PACKAGE);
+//		intentFilter.addDataScheme("package");
+//		registerReceiver(receiver, intentFilter);
 		
 		SharedPreferences defaults = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
@@ -163,6 +176,21 @@ public class MainActivity extends FragmentActivity {
 
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    super.onActivityResult(requestCode, resultCode, data);
+	    if (requestCode == UNINSTALL_REQUEST_CODE) {
+	    	Toast.makeText(getApplicationContext(), resultCode, Toast.LENGTH_LONG).show();
+	        if (resultCode == RESULT_OK) {
+	            Log.d("TAG", "onActivityResult: user accepted the (un)install");
+	        } else if (resultCode == RESULT_CANCELED) {
+	            Log.d("TAG", "onActivityResult: user canceled the (un)install");
+	        } else if (resultCode == RESULT_FIRST_USER) {
+	            Log.d("TAG", "onActivityResult: failed to (un)install");
+	        }
+	    }
+	}
+	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		// TODO Auto-generated method stub

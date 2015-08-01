@@ -149,6 +149,11 @@
                 <action android:name="android.intent.action.SCREEN_OFF" />
             </intent-filter>
         </receiver>
+        <receiver android:name="org.owasp.seraphimdroid.receiver.ApplicationInstallReceiver">
+	        <intent-filter>
+               <data android:scheme="package" />
+	        </intent-filter>
+	    </receiver>
         <receiver
 		    android:name="org.owasp.seraphimdroid.receiver.BootReceiver"
 		    android:label="BootReceiver">
