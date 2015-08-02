@@ -45,6 +45,9 @@
     <string name="app_lock_settings_title">App Locker</string>
     <string name="app_lock_change_password">Change password</string>
     <string name="app_lock_change_password_summary">Change the current password for the Application Locker</string>
+    <string name="app_installer_title">Application Installer</string>
+    <string name="app_installer_lock_title">Lock Application Installer</string>
+    <string name="app_installer_lock_summary">Request password on application install/uninstall</string>
     <string name="call_blocker_settings_title">Call Blocker</string>
     <string name="custom_ussd_settings_title">USSD Black List</string>
     <string name="custom_ussd_settings_summary">View and Edit Blocked USSD Codes</string>

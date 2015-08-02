@@ -7,11 +7,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -52,7 +54,7 @@ public class SettingsFragment extends PreferenceFragment {
 	//
 	// }
 	private CheckBoxPreference remoteLockPref, remoteWipePref,
-			remoteLocationPref;
+			remoteLocationPref, appInstallerLockPref;
 	private final int REMOTE_LOCK_ID = 201;
 	private final int REMOTE_WIPE_ID = 202;
 	private final int REMOTE_LOCATION_ID = 203;
@@ -76,7 +78,45 @@ public class SettingsFragment extends PreferenceFragment {
 		remoteLockPref = (CheckBoxPreference) findPreference("remote_lock");
 		remoteWipePref = (CheckBoxPreference) findPreference("remote_wipe");
 		remoteLocationPref = (CheckBoxPreference) findPreference("remote_location");
-
+		
+		appInstallerLockPref = (CheckBoxPreference) findPreference("lock_app_installer");
+		if(defaultPrefs.getBoolean("uninstall_locked", true)) {
+			appInstallerLockPref.setChecked(true);
+		}
+		appInstallerLockPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				CheckBoxPreference pref = (CheckBoxPreference) preference;
+				String pkgName = "com.android.packageinstaller";
+				DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
+				SQLiteDatabase db = dbHelper.getWritableDatabase();
+				Cursor cursor = db.rawQuery(
+						"SELECT * FROM locks WHERE package_name=\'" + pkgName
+								+ "\'", null);
+				if(pref.isChecked()) {
+					if (!cursor.moveToNext()) {
+						ContentValues cv = new ContentValues();
+						cv.put("package_name", pkgName);
+						db.insert(DatabaseHelper.TABLE_LOCKS, null, cv);
+						defaultPrefs.edit().putBoolean("uninstall_locked", true);
+					}
+				}
+				else {
+					if (cursor.moveToNext()) {
+						String[] whereArgs = { pkgName };
+						db.delete(DatabaseHelper.TABLE_LOCKS,
+								"package_name=?", whereArgs);
+						defaultPrefs.edit().putBoolean("uninstall_locked", false);
+					}
+				}
+				cursor.close();
+				db.close();
+				dbHelper.close();
+				return false;
+			}
+		});
+		
 		CheckBoxPreferenceClickListener listener = new CheckBoxPreferenceClickListener();
 
 		remoteLockPref.setOnPreferenceClickListener(listener);
@@ -215,7 +255,8 @@ public class SettingsFragment extends PreferenceFragment {
 							} else
 								pref.setChecked(true);
 
-						} else {
+						}
+						else {
 							Intent deviceAdminIntent = new Intent(
 									DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
 							deviceAdminIntent.putExtra(

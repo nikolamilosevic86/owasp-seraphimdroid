@@ -3,6 +3,7 @@ package org.owasp.seraphimdroid;
 import java.util.ArrayList;
 
 import org.owasp.seraphimdroid.adapter.DrawerAdapter;
+import org.owasp.seraphimdroid.database.DatabaseHelper;
 import org.owasp.seraphimdroid.model.DrawerItem;
 import org.owasp.seraphimdroid.receiver.ApplicationInstallReceiver;
 import org.owasp.seraphimdroid.services.CheckAppLaunchThread;
@@ -10,12 +11,15 @@ import org.owasp.seraphimdroid.services.OutGoingSmsRecepter;
 import org.owasp.seraphimdroid.services.SettingsCheckService;
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -99,14 +103,29 @@ public class MainActivity extends FragmentActivity {
 		startService(new Intent(this, OutGoingSmsRecepter.class));
 		startService(new Intent(MainActivity.this, SettingsCheckService.class));
 		
-//		ApplicationInstallReceiver receiver = new ApplicationInstallReceiver();
-//		IntentFilter intentFilter = new IntentFilter();
-//		intentFilter.addAction(Intent.ACTION_UNINSTALL_PACKAGE);
-//		intentFilter.addDataScheme("package");
-//		registerReceiver(receiver, intentFilter);
-		
 		SharedPreferences defaults = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
+		
+		//App Uninstall Lock
+		Boolean isUninstallLocked = defaults.getBoolean("uninstall_locked", true);
+		if(isUninstallLocked) {
+			String pkgName = "com.android.packageinstaller";
+			DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
+			SQLiteDatabase db = dbHelper.getWritableDatabase();
+			Cursor cursor = db.rawQuery(
+					"SELECT * FROM locks WHERE package_name=\'" + pkgName
+						+ "\'", null);
+			if (!cursor.moveToNext()) {
+				ContentValues cv = new ContentValues();
+				cv.put("package_name", pkgName);
+				db.insert(DatabaseHelper.TABLE_LOCKS, null, cv);
+			}
+			cursor.close();
+			db.close();
+			dbHelper.close();
+		}
+		
+		
 		boolean callsBlocked = defaults.getBoolean("call_blocked_notification",
 				true);
 		defaults.edit().putBoolean("call_blocked_notification", callsBlocked)

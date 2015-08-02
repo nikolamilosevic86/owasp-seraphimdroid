@@ -17,6 +17,14 @@
         </PreferenceScreen>
     </PreferenceCategory>
     
+    <PreferenceCategory 
+        android:title="@string/app_installer_title">
+        <CheckBoxPreference 
+            android:title="@string/app_installer_lock_title"
+            android:summary="@string/app_installer_lock_summary"
+            android:key="lock_app_installer"/>
+    </PreferenceCategory>
+    
     <PreferenceCategory android:title="@string/call_blocker_settings_title" >
         <ListPreference
             android:entries="@array/blocked_calls_keys"

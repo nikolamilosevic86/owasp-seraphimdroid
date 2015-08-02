@@ -31,13 +31,13 @@ public class SettingsCheckService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.d(TAG, "Started");
-		interval = PreferenceManager
-				.getDefaultSharedPreferences(getApplicationContext()).getInt("interval", 24*60*60*1000);
 		handler = new Handler();
 		runnable = new Runnable() {
 			
 			@Override
 			public void run() {
+				interval = PreferenceManager
+						.getDefaultSharedPreferences(getApplicationContext()).getInt("interval", 24*60*60*1000);
 				runCheck();
 				handler.postDelayed(runnable, interval);
 			}

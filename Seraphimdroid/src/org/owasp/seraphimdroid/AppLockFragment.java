@@ -62,7 +62,7 @@ public class AppLockFragment extends Fragment {
 				container.add(new AppContainer(pm.getApplicationLabel(info.applicationInfo).toString(),info.packageName));
 			}
 		}
-		container.add(new AppContainer("Install/Uninstall", "com.android.packageinstaller"));
+//		container.add(new AppContainer("Install/Uninstall", "com.android.packageinstaller"));
 		Collections.sort(container,
 				new CustomCompare());
 		
