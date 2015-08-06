@@ -50,7 +50,7 @@ public class CheckAppLaunchThread extends Thread {
 				Thread.sleep(timer);
 				if (recentTasks.get(0).processName.equals(
 						prevTasks.get(0).processName)) {
-					Log.d(TAG, "Do nothing " + recentTasks.get(0).processName);
+//					Log.d(TAG, "Do nothing " + recentTasks.get(0).processName);
 				} else {
 					if (isAppLocked(recentTasks.get(0).processName)) {
 						Log.d(TAG, "Locked " + recentTasks.get(0).processName);

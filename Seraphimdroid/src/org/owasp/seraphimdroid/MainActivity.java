@@ -5,22 +5,22 @@ import java.util.ArrayList;
 import org.owasp.seraphimdroid.adapter.DrawerAdapter;
 import org.owasp.seraphimdroid.database.DatabaseHelper;
 import org.owasp.seraphimdroid.model.DrawerItem;
-import org.owasp.seraphimdroid.receiver.ApplicationInstallReceiver;
+import org.owasp.seraphimdroid.receiver.SettingsCheckAlarmReceiver;
 import org.owasp.seraphimdroid.services.CheckAppLaunchThread;
 import org.owasp.seraphimdroid.services.OutGoingSmsRecepter;
-import org.owasp.seraphimdroid.services.SettingsCheckService;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -43,6 +43,9 @@ public class MainActivity extends FragmentActivity {
 
 	private CharSequence title, drawerTitle;
 
+	private AlarmManager alarmMgr;
+	private PendingIntent alarmIntent;
+	
 	private DrawerLayout drawerLayout;
 	private ListView drawerList;
 	private ActionBarDrawerToggle drawerToggle;
@@ -101,10 +104,22 @@ public class MainActivity extends FragmentActivity {
 		setContentView(R.layout.activity_main);
 		//Initiate Services and Receivers
 		startService(new Intent(this, OutGoingSmsRecepter.class));
-		startService(new Intent(MainActivity.this, SettingsCheckService.class));
 		
+		//Alarm Manager for Settings Check
+		alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+		Intent intent = new Intent(getBaseContext(), SettingsCheckAlarmReceiver.class);
+		alarmIntent = PendingIntent.getBroadcast(getBaseContext(), 0, intent, 0);
+
 		SharedPreferences defaults = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
+		
+		java.util.Calendar calendar = java.util.Calendar.getInstance();
+		calendar.setTimeInMillis(System.currentTimeMillis());
+		calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);
+		calendar.set(java.util.Calendar.MINUTE, 0);
+
+		alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+		        defaults.getInt("settings_interval", 24*60*60*1000), alarmIntent);
 		
 		//App Uninstall Lock
 		Boolean isUninstallLocked = defaults.getBoolean("uninstall_locked", true);

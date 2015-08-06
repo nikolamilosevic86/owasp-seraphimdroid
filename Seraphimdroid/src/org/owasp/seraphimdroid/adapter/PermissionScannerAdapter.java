@@ -1,5 +1,9 @@
 package org.owasp.seraphimdroid.adapter;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.SequenceInputStream;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,6 +15,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +23,10 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import weka.classifiers.functions.SMO;
+import weka.classifiers.pmml.consumer.SupportVectorMachineModel;
+import weka.core.Instance;
+import weka.core.SerializationHelper;
 
 public class PermissionScannerAdapter extends BaseExpandableListAdapter {
 
@@ -27,13 +36,23 @@ public class PermissionScannerAdapter extends BaseExpandableListAdapter {
 	private List<String> groupHeaders;
 	private HashMap<String, List<PermissionData>> childItems;
 	private PackageManager packageManager;
-
+	private SMO svmModel;
+	
 	public PermissionScannerAdapter(Context context, List<String> grpHeaders,
 			HashMap<String, List<PermissionData>> childs) {
 		this.context = context;
 		this.groupHeaders = grpHeaders;
 		this.childItems = childs;
 		this.packageManager = context.getPackageManager();
+		try {
+			AssetManager assetManager = context.getAssets();
+			InputStream modelInputStream = assetManager.open("SVMWithSMO.model");
+			svmModel = (SMO) SerializationHelper.read(modelInputStream);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -155,25 +174,25 @@ public class PermissionScannerAdapter extends BaseExpandableListAdapter {
 	}
 
 	private int getColor(int groupPos) {
-
-		int totalWeight = 0;
-
 		List<PermissionData> permissionList = childItems.get(groupHeaders
 				.get(groupPos));
-
-		for (PermissionData perData : permissionList) {
-			totalWeight += perData.getWeight();
-		}
-
-		if (totalWeight < 10) {
-			return Color.GREEN;
-		} else if (totalWeight >= 10 && totalWeight < 15) {
-			return Color.YELLOW;
-		} else if (totalWeight >= 15 && totalWeight < 20) {
-			return Color.parseColor("#FFA500");
-		} else {
-			return Color.RED;
-		}
+		
+//		Instance instance = 
+//		svmModel.classifyInstance(instance)
+//		for (PermissionData perData : permissionList) {
+//			totalWeight += perData.getWeight();
+//		}
+//		
+//		if (totalWeight < 10) {
+//			return Color.GREEN;
+//		} else if (totalWeight >= 10 && totalWeight < 15) {
+//			return Color.YELLOW;
+//		} else if (totalWeight >= 15 && totalWeight < 20) {
+//			return Color.parseColor("#FFA500");
+//		} else {
+//			return Color.RED;
+//		}
+		return 0;
 
 	}
 	

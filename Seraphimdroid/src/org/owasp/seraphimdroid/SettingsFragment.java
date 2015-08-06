@@ -2,9 +2,12 @@ package org.owasp.seraphimdroid;
 
 import org.owasp.seraphimdroid.database.DatabaseHelper;
 import org.owasp.seraphimdroid.receiver.GeoFencingAdminReceiver;
+import org.owasp.seraphimdroid.receiver.SettingsCheckAlarmReceiver;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.ContentValues;
@@ -61,6 +64,8 @@ public class SettingsFragment extends PreferenceFragment {
 	private DevicePolicyManager dpm;
 	private ComponentName component;
 	private SharedPreferences defaultPrefs;
+	private AlarmManager alarmMgr;
+	private PendingIntent alarmIntent;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -123,6 +128,19 @@ public class SettingsFragment extends PreferenceFragment {
 		remoteWipePref.setOnPreferenceClickListener(listener);
 		remoteLocationPref.setOnPreferenceClickListener(listener);
 		
+		Activity activity = getActivity();
+		alarmMgr = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
+		Intent intent = new Intent(activity, SettingsCheckAlarmReceiver.class);
+		alarmIntent = PendingIntent.getBroadcast(activity, 0, intent, 0);
+
+		final SharedPreferences defaults = PreferenceManager
+				.getDefaultSharedPreferences(activity);
+		
+		final java.util.Calendar calendar = java.util.Calendar.getInstance();
+		calendar.setTimeInMillis(System.currentTimeMillis());
+		calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);
+		calendar.set(java.util.Calendar.MINUTE, 0);
+		
 		PreferenceScreen settingsChangePreference = (PreferenceScreen) findPreference("settings_check");
 		settingsChangePreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
@@ -164,7 +182,9 @@ public class SettingsFragment extends PreferenceFragment {
 						default:
 							break;
 						}
-						defaultPrefs.edit().putInt("interval", milliSeconds).commit();
+						defaultPrefs.edit().putInt("settings_interval", milliSeconds).commit();
+						alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+						        milliSeconds, alarmIntent);
 					}
 				});
 	            
