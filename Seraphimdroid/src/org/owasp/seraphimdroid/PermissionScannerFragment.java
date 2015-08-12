@@ -210,7 +210,8 @@ public class PermissionScannerFragment extends Fragment {
 	private class AsyncListGenerator extends AsyncTask<Void, Void, Void> {
 
 		ProgressDialog loading = new ProgressDialog(getActivity());
-
+		PermissionScannerAdapter adapter;
+		
 		@Override
 		protected void onPreExecute() {
 			loading.setTitle("Scanning Permissions");
@@ -286,15 +287,15 @@ public class PermissionScannerFragment extends Fragment {
 
 			}
 			Log.d(TAG, "returning");
-
+			adapter = new PermissionScannerAdapter(
+					getActivity(), appList, childPermissions);
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
 			// Setting Adapters for the list view
-			lvPermissionList.setAdapter(new PermissionScannerAdapter(
-					getActivity(), appList, childPermissions));
+			lvPermissionList.setAdapter(adapter);
 			loading.dismiss();
 			super.onPostExecute(result);
 		}
