@@ -1,12 +1,7 @@
 package org.owasp.seraphimdroid.adapter;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.SequenceInputStream;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,11 +22,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import weka.classifiers.functions.SMO;
-import weka.classifiers.lazy.KStar;
-import weka.classifiers.trees.J48;
-import weka.classifiers.trees.RandomForest;
 import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instance;
@@ -42,15 +33,15 @@ import weka.filters.unsupervised.attribute.StringToWordVector;
 
 public class PermissionScannerAdapter extends BaseExpandableListAdapter {
 
-	// private static final String TAG = "PermissionScannerAdapter";
-
 	private Context context;
 	private List<String> groupHeaders;
 	private HashMap<String, List<PermissionData>> childItems;
 	private PackageManager packageManager;
 	private SMO svmModel;
+	int[] appClassificationColors;
 	String TAG = "PermissionsAdapter";
 	HashMap<String, Integer> map;
+	
 	
 	public PermissionScannerAdapter(Context context, List<String> grpHeaders,
 			HashMap<String, List<PermissionData>> childs) {
@@ -59,33 +50,28 @@ public class PermissionScannerAdapter extends BaseExpandableListAdapter {
 		this.groupHeaders = grpHeaders;
 		this.childItems = childs;
 		this.packageManager = context.getPackageManager();
+		this.appClassificationColors = new int[groupHeaders.size()];
 		map = new HashMap<String, Integer>();
 		for(int i=0; i<permissions.length; i++) {
 			map.put(permissions[i], i);
 		}
 		try {
 			AssetManager assetManager = context.getAssets();
-//			assetManager.
 			InputStream stream = assetManager.open("SMOWeka366.model");
-//			ObjectInputStream ois = new ObjectInputStream(stream);
-//		    Object result = ois.readObject();
-//		    ois.close();
 			svmModel = (SMO) SerializationHelper.read(stream);
 		} catch (FileNotFoundException e) {
-			Log.d(TAG, Log.getStackTraceString(e));
 			e.printStackTrace();
 		} catch (Exception e) {
-			Log.d(TAG, Log.getStackTraceString(e));
 			e.printStackTrace();
 		}
-		if(svmModel==null) {
-			Toast.makeText(context, "BOOYEAH :(", Toast.LENGTH_SHORT).show();	
-		}
+		
+		for(int i=0; i<groupHeaders.size(); i++) {
+			classifyPermissions(i);
+		}	
 	}
 
 	@Override
 	public Object getChild(int groupPos, int childPos) {
-		// TODO Auto-generated method stub
 		return childItems.get(groupHeaders.get(groupPos)).get(childPos);
 	}
 
@@ -128,7 +114,6 @@ public class PermissionScannerAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public Object getGroup(int groupPos) {
-
 		return groupHeaders.get(groupPos);
 	}
 
@@ -191,22 +176,17 @@ public class PermissionScannerAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public boolean hasStableIds() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean isChildSelectable(int groupPos, int childPos) {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
-	private int getColor(int groupPos) {
-		Log.d(TAG, "GetColor " + groupPos);
+	private void classifyPermissions(int groupPos) {
 		List<PermissionData> permissionList = childItems.get(groupHeaders
 				.get(groupPos));
-		
-//		Log.d(TAG, permissionsString);
 		
 		FastVector fvWekaAttributes = new FastVector(permissions.length+1);
 		
@@ -224,8 +204,6 @@ public class PermissionScannerAdapter extends BaseExpandableListAdapter {
 		Instances Instances = new Instances("Rel", fvWekaAttributes, 0);
 
 		Instance iExample = new Instance(permissions.length+1);
-//		Attribute attribute = (Attribute)fvWekaAttributes.elementAt(0);
-//		iExample.setValue(0, "READ_CONTACTS");
 		for (PermissionData perData : permissionList) {
 			String permission = perData.getPermission().replace("android.permission.","");
 			if(map.containsKey(permission)) {
@@ -237,26 +215,24 @@ public class PermissionScannerAdapter extends BaseExpandableListAdapter {
 		Instances.setClassIndex(0);
 		
 		StringToWordVector filter = new StringToWordVector();
-		Log.d(TAG, "Started Classification " + groupPos);
 		try {
 			filter.setInputFormat(Instances);
 			filter.input(Instances.instance(0));
-//			filter.setOptions(weka.core.Utils.splitOptions("-delimiters ,"));
 			filter.batchFinished();
-			Log.d(TAG, "About to apply filter " + groupPos);
 			Instances ins = Filter.useFilter(Instances, filter);
-			Log.d(TAG, "About to classify " + groupPos);
 			double prediction = svmModel.classifyInstance(ins.firstInstance());
 			if(prediction==1.0) {
-				return Color.RED;
+				appClassificationColors[groupPos] = Color.RED;
+				return;
 			}
 		} catch (Exception e) {
-			Log.d(TAG, Log.getStackTraceString(e));
 			e.printStackTrace();
 		}
-		
-		return Color.GREEN;
-
+		appClassificationColors[groupPos] = Color.GREEN;
+	}
+	
+	private int getColor(int groupPos) {
+		return appClassificationColors[groupPos];
 	}
 	
 	String[] permissions = {
