@@ -10,7 +10,7 @@ import org.owasp.seraphimdroid.database.DatabaseHelper;
 import org.owasp.seraphimdroid.receiver.CallRecepter;
 
 import android.app.ActivityManager;
-import android.app.ActivityManager.RunningTaskInfo;
+import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -40,7 +40,6 @@ public class OutGoingSmsRecepter extends Service {
 
 	@Override
 	public IBinder onBind(Intent arg0) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -98,12 +97,10 @@ public class OutGoingSmsRecepter extends Service {
 				// Gettings current running task
 				ActivityManager am = (ActivityManager) getApplicationContext()
 						.getSystemService(ACTIVITY_SERVICE);
-				final List<RunningTaskInfo> tasks = am
-						.getRunningTasks(Integer.MAX_VALUE);
+				List<RunningAppProcessInfo> tasks = am.getRunningAppProcesses();
 
 				// Check whether the messenger is in foreground or not.
-				if (!SMSAppWhiteList.contains(tasks.get(0).topActivity
-						.getPackageName())) {
+				if (!SMSAppWhiteList.contains(tasks.get(0).processName)) {
 
 					// }
 					// if (!tasks.get(0).topActivity.getPackageName().equals(
@@ -113,11 +110,10 @@ public class OutGoingSmsRecepter extends Service {
 					String appName = "";
 					try {
 						appInfo = pm.getApplicationInfo(
-								tasks.get(0).topActivity.getPackageName(),
+								tasks.get(0).processName,
 								PackageManager.GET_META_DATA);
 						appName = (String) appInfo.loadLabel(pm);
 					} catch (NameNotFoundException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 

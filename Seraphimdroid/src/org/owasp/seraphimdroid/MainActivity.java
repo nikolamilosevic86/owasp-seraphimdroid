@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.owasp.seraphimdroid.adapter.DrawerAdapter;
 import org.owasp.seraphimdroid.database.DatabaseHelper;
 import org.owasp.seraphimdroid.model.DrawerItem;
+import org.owasp.seraphimdroid.receiver.ApplicationInstallReceiver;
 import org.owasp.seraphimdroid.receiver.SettingsCheckAlarmReceiver;
 import org.owasp.seraphimdroid.services.CheckAppLaunchThread;
 import org.owasp.seraphimdroid.services.OutGoingSmsRecepter;
@@ -16,6 +17,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -97,13 +99,15 @@ public class MainActivity extends FragmentActivity {
 
 	int UNINSTALL_REQUEST_CODE = 1;
 	private android.app.Fragment prevFrag = null;
-
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		//Initiate Services and Receivers
 		startService(new Intent(this, OutGoingSmsRecepter.class));
+		startService(new Intent(this, ApplicationInstallReceiver.class));
 		
 		//Alarm Manager for Settings Check
 		alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
