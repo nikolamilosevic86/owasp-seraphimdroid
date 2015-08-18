@@ -29,9 +29,15 @@ import android.preference.PreferenceScreen;
 import android.provider.Settings;
 import android.text.InputType;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class SettingsFragment extends PreferenceFragment {
@@ -66,7 +72,8 @@ public class SettingsFragment extends PreferenceFragment {
 	private SharedPreferences defaultPrefs;
 	private AlarmManager alarmMgr;
 	private PendingIntent alarmIntent;
-
+	AlertDialog dialog;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -128,29 +135,23 @@ public class SettingsFragment extends PreferenceFragment {
 		remoteWipePref.setOnPreferenceClickListener(listener);
 		remoteLocationPref.setOnPreferenceClickListener(listener);
 		
-		Activity activity = getActivity();
+		final Activity activity = getActivity();
 		alarmMgr = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
 		Intent intent = new Intent(activity, SettingsCheckAlarmReceiver.class);
 		alarmIntent = PendingIntent.getBroadcast(activity, 0, intent, 0);
-
-		final SharedPreferences defaults = PreferenceManager
-				.getDefaultSharedPreferences(activity);
-		
-		final java.util.Calendar calendar = java.util.Calendar.getInstance();
-		calendar.setTimeInMillis(System.currentTimeMillis());
-		calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);
-		calendar.set(java.util.Calendar.MINUTE, 0);
 		
 		PreferenceScreen settingsChangePreference = (PreferenceScreen) findPreference("settings_check");
 		settingsChangePreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.select_dialog_singlechoice);
-	            arrayAdapter.add("Once a Day");
-	            arrayAdapter.add("Once a Week");
-	            arrayAdapter.add("Once a Fortnight");
-	            arrayAdapter.add("Once a Month");
+				String[] items = {
+						"Once a Day",
+						"Once a Week",
+						"Once a Fortnight",
+						"Once a Month"
+				};
+				final SettingsAdapter adapter = new SettingsAdapter(activity, items, 0);
 	            AlertDialog.Builder builder = new AlertDialog.Builder(
 	                    getActivity());
 	            builder.setTitle("Set Interval");
@@ -162,14 +163,74 @@ public class SettingsFragment extends PreferenceFragment {
 						dialog.cancel();
 					}
 				});
-	            builder.setAdapter(arrayAdapter, new OnClickListener() {
+	            builder.setAdapter(adapter, null);
+	            dialog = builder.create();
+	            dialog.show();
+				return false;
+			}
+		});
+	}
+
+	public class SettingsAdapter extends ArrayAdapter<String> {
+
+		LayoutInflater inflater;
+		String[] items;
+		int selected;
+		final java.util.Calendar calendar;
+		
+		public SettingsAdapter(Context context, String[] items, int resource) {
+			super(context, resource);
+			inflater = getActivity().getLayoutInflater();
+			this.items = items;
+			int interval = defaultPrefs.getInt("settings_interval", 24*60*60*1000);
+			interval /= 24*60*60*1000;
+			switch (interval) {
+			case 1:
+				selected = 0;
+				break;
+			case 7:
+				selected = 1;
+				break;
+			case 15:
+				selected = 2;
+				break;
+			case 30:
+				selected = 3;
+				break;
+			default:
+				break;
+			}
+			calendar = java.util.Calendar.getInstance();
+			calendar.setTimeInMillis(System.currentTimeMillis());
+			calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);
+			calendar.set(java.util.Calendar.MINUTE, 0);
+		}
+		
+		@Override
+		public int getCount() {
+			return items.length;
+		}
+		
+		@Override
+		public View getView(final int position, View convertView, ViewGroup parent) {
+			if(convertView==null) {
+				convertView = inflater.inflate(R.layout.settings_check_item, null);
+			}
+			((TextView) convertView.findViewById(R.id.text)).setText(items[position]);
+			if(position==selected) {
+				((RadioButton) convertView.findViewById(R.id.radio)).setChecked(true);
+			}
+			else {
+				((RadioButton) convertView.findViewById(R.id.radio)).setChecked(false);
+				((LinearLayout) convertView.findViewById(R.id.container)).setOnTouchListener(new OnTouchListener() {
 					
 					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						String strName = arrayAdapter.getItem(which);
+					public boolean onTouch(View v, MotionEvent event) {
+						String strName = items[position];
+						selected = position;
 						Toast.makeText(getActivity(), "Interval changed to " + strName, Toast.LENGTH_SHORT).show();
 						int milliSeconds = 24*60*60*1000;
-						switch (which) {
+						switch (position) {
 						case 1:
 							milliSeconds *= 7;
 							break;
@@ -185,15 +246,22 @@ public class SettingsFragment extends PreferenceFragment {
 						defaultPrefs.edit().putInt("settings_interval", milliSeconds).commit();
 						alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
 						        milliSeconds, alarmIntent);
+						dialog.cancel();
+						return false;
 					}
 				});
-	            
-	            builder.show();
-				return false;
 			}
-		});
+			
+			return convertView;
+		}
+		
+		@Override
+		public String getItem(int position) {
+			return items[position];
+		}
+		
 	}
-
+	
 	private class CheckBoxPreferenceClickListener implements
 			OnPreferenceClickListener {
 
