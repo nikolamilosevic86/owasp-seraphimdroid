@@ -9,6 +9,8 @@ import org.owasp.seraphimdroid.receiver.ApplicationInstallReceiver;
 import org.owasp.seraphimdroid.receiver.SettingsCheckAlarmReceiver;
 import org.owasp.seraphimdroid.services.CheckAppLaunchThread;
 import org.owasp.seraphimdroid.services.OutGoingSmsRecepter;
+import org.owasp.seraphimdroid.services.SIMCheckService;
+import org.owasp.seraphimdroid.services.ServicesLockService;
 
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -32,6 +34,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -81,12 +84,6 @@ public class MainActivity extends FragmentActivity {
 
 	@Override
 	protected void onDestroy() {
-		// Handler handler = new Handler(this.getMainLooper());
-		// CheckAppLaunchThread launchChecker = new
-		// CheckAppLaunchThread(handler, getApplicationContext());
-		// if(launchChecker.isAlive() == false){
-		// launchChecker.start();
-		// }
 		super.onDestroy();
 		Handler handler = new Handler(this.getMainLooper());
 		CheckAppLaunchThread launchChecker = new CheckAppLaunchThread(handler,
@@ -108,7 +105,8 @@ public class MainActivity extends FragmentActivity {
 		//Initiate Services and Receivers
 		startService(new Intent(this, OutGoingSmsRecepter.class));
 		startService(new Intent(this, ApplicationInstallReceiver.class));
-		
+		startService(new Intent(this, ServicesLockService.class));
+
 		//Alarm Manager for Settings Check
 		alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		Intent intent = new Intent(getBaseContext(), SettingsCheckAlarmReceiver.class);
@@ -124,6 +122,16 @@ public class MainActivity extends FragmentActivity {
 
 		alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
 		        defaults.getInt("settings_interval", 24*60*60*1000), alarmIntent);
+		
+		//Set SIM id if not set
+		TelephonyManager telephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		String hash = null;
+		if(telephony.getSimSerialNumber()!=null) {
+			hash = telephony.getSimSerialNumber() + telephony.getNetworkOperator() + telephony.getNetworkCountryIso();
+		}
+		if(hash!=null && defaults.contains("sim_1")==false) {
+			defaults.edit().putString("sim_1", hash).commit();
+		}
 		
 		//App Uninstall Lock
 		Boolean isUninstallLocked = defaults.getBoolean("uninstall_locked", true);
@@ -150,13 +158,6 @@ public class MainActivity extends FragmentActivity {
 		defaults.edit().putBoolean("call_blocked_notification", callsBlocked)
 				.commit();
 
-		// if (!isUnlocked) {
-		// Intent pwdIntent = new Intent(this, PasswordActivity.class);
-		// pwdIntent.putExtra("PACKAGE_NAME", this.getPackageName());
-		// isUnlocked = true;
-		// startActivity(pwdIntent);
-		// }
-
 		try {
 			fragmentNo = getIntent().getIntExtra("FRAGMENT_NO", fragmentNo);
 		} catch (Exception e) {
@@ -182,7 +183,6 @@ public class MainActivity extends FragmentActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				// TODO Auto-generated method stub
 				selectFragment(position);
 			}
 		});
@@ -200,14 +200,6 @@ public class MainActivity extends FragmentActivity {
 			}
 		};
 		drawerLayout.setDrawerListener(drawerToggle);
-
-		// if (savedInstanceState == null) {
-		// selectFragment(fragmentNo);
-		// }
-
-		// if (savedInstanceState != null) {
-		// isUnlocked = savedInstanceState.getBoolean("ISUNLOCKED", false);
-		// }
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
@@ -231,9 +223,7 @@ public class MainActivity extends FragmentActivity {
 	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		// TODO Auto-generated method stub
 		super.onSaveInstanceState(outState);
-		// outState.putBoolean("ISUNLOCKED", isUnlocked);
 	}
 
 	private void populateList() {
@@ -252,6 +242,8 @@ public class MainActivity extends FragmentActivity {
 				R.drawable.ic_launcher)));
 		listItems.add(new DrawerItem(itemNames[6], iconList.getResourceId(6,
 				R.drawable.ic_launcher)));
+		listItems.add(new DrawerItem(itemNames[7], iconList.getResourceId(7,
+				R.drawable.ic_launcher)));
 		
 		iconList.recycle();
 	}
@@ -263,7 +255,6 @@ public class MainActivity extends FragmentActivity {
 
 	public void selectFragment(int position) {
 		Fragment fragment = null;
-		// android.app.Fragment prevFrag = null;
 		switch (position) {
 		case 0:
 			fragment = new PermissionScannerFragment();
@@ -278,9 +269,12 @@ public class MainActivity extends FragmentActivity {
 			fragment = new AppLockFragment();
 			break;
 		case 4:
+			fragment = new ServicesLockFragment();
+			break;
+		case 5:
 			fragment = new GeoFencingFragment();
 			break;
-		case 5: {
+		case 6: {
 
 			if (prevSupportFlag != null) {
 				FragmentManager fragMan = getSupportFragmentManager();
@@ -298,7 +292,7 @@ public class MainActivity extends FragmentActivity {
 			prevFrag = frag;
 		}
 			break;
-		case 6:
+		case 7:
 			fragment = new AboutFragment();
 			break;
 		default:
@@ -337,31 +331,16 @@ public class MainActivity extends FragmentActivity {
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		drawerToggle.onConfigurationChanged(newConfig);
-		// isUnlocked = true;
-		// Display display = ((WindowManager) getSystemService(WINDOW_SERVICE))
-		// .getDefaultDisplay();
-		// int orientation = display.getRotation();
-		// if(orientation == Surface.ROTATION_270 || orientation ==
-		// Surface.ROTATION_270){
-		//
-		// }
-
 	}
 
 	@Override
 	protected void onStop() {
-		// TODO Auto-generated method stub
-		// isUnlocked = false;
-		
 		super.onStop();
 	}
 
 	@Override
 	public void onBackPressed() {
-		// onPause();
-		// onDestroy();
-showExitAlert();
-		// finish();
+		showExitAlert();
 		super.onBackPressed();
 
 	}

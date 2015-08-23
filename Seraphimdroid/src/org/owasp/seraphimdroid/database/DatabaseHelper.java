@@ -17,6 +17,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public final static String TABLE_SMS_LOGS = "sms_logs";
 	public final static String TABLE_USSD_LOGS = "ussd_logs";
 	public static final String TABLE_LOCKS = "locks";
+	public static final String TABLE_SERVICES_LOCKS = "services";
 	public static final String TABLE_PASS = "password";
 	public final static String TABLE_BLACKLIST = "blacklist";
 	public final static String TABLE_BLOCKED_USSD = "block_ussd";
@@ -27,6 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String createSMSTable = "CREATE TABLE IF NOT EXISTS sms_logs (_id integer primary key autoincrement, phone_number TEXT , time TEXT, reason TEXT, type INTEGER, content TEXT ) ";
 	public static final String createPasswordTable = "CREATE TABLE IF NOT EXISTS password (_id integer primary key autoincrement, password BLOB)";
 	private static final String createLocksTable = "CREATE TABLE IF NOT EXISTS locks (_id INTEGER primary key autoincrement, package_name TEXT)";
+	private static final String createServicesLocksTable = "CREATE TABLE IF NOT EXISTS services (_id INTEGER primary key autoincrement, service_name TEXT)";
 	public static final String createBlacklistTable = "CREATE TABLE IF NOT EXISTS blacklist (_id INTEGER PRIMARY KEY AUTOINCREMENT, number TEXT NOT NULL)";
 	public static final String createBlockedUSSDTable = "CREATE TABLE IF NOT EXISTS block_ussd (_id INTEGER PRIMARY KEY AUTOINCREMENT, number TEXT NOT NULL, desc TEXT NOT NULL, type TEXT NOT NULL)";
 	private final String createPermissionTable = "CREATE TABLE IF NOT EXISTS permissions (_id INTEGER PRIMARY KEY AUTOINCREMENT, permission TEXT, weight INTEGER, malicious_use TEXT)";
@@ -45,6 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(createLocksTable);
 		db.execSQL(createBlacklistTable);
 		db.execSQL(createBlockedUSSDTable);
+		db.execSQL(createServicesLocksTable);
 		db.execSQL(createPermissionTable);
 
 		populatePermissions(db);
@@ -57,6 +60,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS ussd_logs");
 		db.execSQL("DROP TABLE IF EXISTS sms_logs");
 		db.execSQL("DROP TABLE IF EXISTS locks");
+		db.execSQL("DROP TABLE IF EXISTS services");
 		db.execSQL("DROP TABLE IF EXISTS blacklist");
 		db.execSQL("DROP TABLE IF EXISTS permissions");
 		db.execSQL("DROP TABLE IF EXISTS block_ussd");

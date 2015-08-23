@@ -7,11 +7,9 @@ import java.util.List;
 
 import org.owasp.seraphimdroid.adapter.AppLockerAdapter;
 
-import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -37,10 +35,6 @@ public class AppLockFragment extends Fragment {
 		appList = new ArrayList<String>();
 		prepareList();
 
-		// DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
-		// Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
-		// "SELECT * FROM locks", null);
-
 		lvAppLockerList
 				.setAdapter(new AppLockerAdapter(getActivity(), appList));
 
@@ -62,7 +56,6 @@ public class AppLockFragment extends Fragment {
 				container.add(new AppContainer(pm.getApplicationLabel(info.applicationInfo).toString(),info.packageName));
 			}
 		}
-//		container.add(new AppContainer("Install/Uninstall", "com.android.packageinstaller"));
 		Collections.sort(container,
 				new CustomCompare());
 		
@@ -93,8 +86,6 @@ public class AppLockFragment extends Fragment {
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// TODO Auto-generated method stub
-//		inflater.inflate(R.menu.main, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
@@ -105,31 +96,4 @@ public class AppLockFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 	}
 
-//	private boolean addToDatabase(String pkgName) {
-//		DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
-//		SQLiteDatabase db = dbHelper.getWritableDatabase();
-//		String sql = "SELECT * FROM locks where package_name=\'" + pkgName
-//				+ "\'";
-//
-//		Cursor cursor = db.rawQuery(sql, null);
-//
-//		if (cursor.moveToNext()) {
-//			cursor.close();
-//			db.close();
-//			dbHelper.close();
-//			return false;
-//
-//		} else {
-//
-//			ContentValues cv = new ContentValues();
-//			cv.put("package_name", pkgName);
-//			cv.put("locked", 0);
-//			db.insert(DatabaseHelper.TABLE_LOCKS, null, cv);
-//			cursor.close();
-//			db.close();
-//			dbHelper.close();
-//			return true;
-//		}
-//
-//	}
 }

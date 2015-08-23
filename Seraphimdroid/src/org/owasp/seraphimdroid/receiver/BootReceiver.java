@@ -1,5 +1,7 @@
 package org.owasp.seraphimdroid.receiver;
 
+import org.owasp.seraphimdroid.services.SIMCheckService;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -32,6 +34,9 @@ public class BootReceiver extends BroadcastReceiver {
 
 			alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
 			        defaults.getInt("settings_interval", 24*60*60*1000), alarmIntent);
+			
+			//SIM Card Service
+			context.startService(new Intent(context, SIMCheckService.class));
         }
 	}
 

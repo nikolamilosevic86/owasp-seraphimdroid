@@ -35,33 +35,13 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class SettingsFragment extends PreferenceFragment {
 
-	// @Override
-	// public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	// Bundle savedInstanceState) {
-	//
-	// View view = inflater.inflate(R.layout.fragment_settings, container,
-	// false);
-	//
-	// LinearLayout layoutChangePassword = (LinearLayout) view
-	// .findViewById(R.id.layout_change_password);
-	// layoutChangePassword.setOnClickListener(new OnClickListener() {
-	//
-	// @Override
-	// public void onClick(View view) {
-	// changePassword(view);
-	// }
-	// });
-	//
-	// return view;
-	//
-	// }
 	private CheckBoxPreference remoteLockPref, remoteWipePref,
 			remoteLocationPref, appInstallerLockPref;
 	private final int REMOTE_LOCK_ID = 201;
@@ -222,7 +202,7 @@ public class SettingsFragment extends PreferenceFragment {
 			}
 			else {
 				((RadioButton) convertView.findViewById(R.id.radio)).setChecked(false);
-				((LinearLayout) convertView.findViewById(R.id.container)).setOnTouchListener(new OnTouchListener() {
+				((RelativeLayout) convertView.findViewById(R.id.container)).setOnTouchListener(new OnTouchListener() {
 					
 					@Override
 					public boolean onTouch(View v, MotionEvent event) {

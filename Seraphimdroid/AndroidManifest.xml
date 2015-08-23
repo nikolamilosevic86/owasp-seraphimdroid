@@ -20,6 +20,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -28,6 +29,7 @@
     <uses-permission android:name="android.permission.READ_SMS" />
 	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 	
     <uses-feature
         android:name="android.hardware.telephony"
@@ -134,6 +136,10 @@
         </service>
         <service android:name="org.owasp.seraphimdroid.services.AppInstallService">
         </service>
+        <service android:name="org.owasp.seraphimdroid.services.SIMCheckService">
+        </service>
+        <service android:name="org.owasp.seraphimdroid.services.ServicesLockService">
+        </service>
         
         <!-- Receiver Declaration -->
 
@@ -184,6 +190,12 @@
         </receiver>
         <receiver android:name="org.owasp.seraphimdroid.receiver.SettingsCheckAlarmReceiver">
         </receiver>
+        <receiver android:name="org.owasp.seraphimdroid.receiver.WifiStateReceiver">
+		    <intent-filter>
+		        <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+		    </intent-filter>
+		</receiver>
+		
         <!-- Google Maps API Key -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"

@@ -7,21 +7,26 @@ import java.util.Arrays;
 
 import org.owasp.seraphimdroid.database.DatabaseHelper;
 import org.owasp.seraphimdroid.model.NoImeEditText;
+import org.owasp.seraphimdroid.receiver.WifiStateReceiver;
 import org.owasp.seraphimdroid.services.AppLockService;
 import org.owasp.seraphimdroid.services.KillBackgroundService;
 import org.owasp.seraphimdroid.services.MakeACallService;
+import org.owasp.seraphimdroid.services.ServicesLockService;
 
 import android.app.Activity;
 import android.app.Service;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -53,8 +58,11 @@ public class PasswordActivity extends Activity implements OnClickListener {
 	private DatabaseHelper dbHelper;
 	private String passwordTrail, passwordConfirm;
 	private String pkgName;
+	String deviceId = "";
+	String service = "";
+	int state;
 	private boolean tryUnlocking;
-
+	
 	private boolean makeCall = false;
 	private String phoneNumber = "";
    
@@ -66,13 +74,19 @@ public class PasswordActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		setContentView(R.layout.activity_password);
 		
 		activityView = getLayoutInflater().inflate(R.layout.activity_password, null, false);
 		
 		//Retrieve the intent.
 		Intent rootIntent = getIntent();
 		pkgName = rootIntent.getStringExtra("PACKAGE_NAME");
+        if(rootIntent.getExtras().containsKey("device_id")) {
+        	deviceId = rootIntent.getStringExtra("device_id");
+        }
+        if(rootIntent.getExtras().containsKey("service")) {
+        	service = rootIntent.getStringExtra("service");
+        	state = Integer.parseInt(rootIntent.getStringExtra("state"));
+        }
         
 		// Initializing buttons.
 		initButtons();
@@ -115,7 +129,6 @@ public class PasswordActivity extends Activity implements OnClickListener {
 		
 		//Start Service
 		systemAlertDialogService = new Intent(PasswordActivity.this, SystemAlertDialogService.class);
-		systemAlertDialogService.putExtras(getIntent().getExtras());
 		startService(systemAlertDialogService);
 		
 	}
@@ -136,9 +149,7 @@ public class PasswordActivity extends Activity implements OnClickListener {
 	        layoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
 	        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
 	        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
-//	        layoutParams.alpha = 0.4f;
 	        layoutParams.packageName = getPackageName();
-//	        layoutParams.buttonBrightness = 1f;
 	        
 			windowManager.addView(activityView, layoutParams);
 			return super.onStartCommand(intent, flags, startId);
@@ -257,7 +268,6 @@ public class PasswordActivity extends Activity implements OnClickListener {
 
 	@Override
 	public void onClick(View view) {
-		// TODO Auto-generated method stub
 		tvAlert.setVisibility(View.GONE);
 		String tag = (String) view.getTag();
 		if (tag.equals("enter")) {
@@ -302,12 +312,8 @@ public class PasswordActivity extends Activity implements OnClickListener {
 							"Password created successfully", Toast.LENGTH_SHORT)
 							.show();
 					finish();
-					// startActivity(new Intent(PasswordActivity.this,
-					// MainActivity.class));
 				}
 			} else if (isPasswordCorrect(etPassword.getText().toString())) {
-				// startActivity(new Intent(PasswordActivity.this,
-				// MainActivity.class));
 				lastUnlocked = pkgName;
 				this.finish();
 			} else {
@@ -317,16 +323,16 @@ public class PasswordActivity extends Activity implements OnClickListener {
 
 		} else if (tag.equals("reset")) {
 			isFirstAttempt = true;
-			// layoutOk.setVisibility(View.VISIBLE);
 			Toast.makeText(getApplicationContext(), "Try Again",
 					Toast.LENGTH_LONG).show();
 		} else if (tag.equals("exit")) {
-			// if (!pkgName.equals(PasswordActivity.this.getPackageName())) {
 			Intent killIntent = new Intent(PasswordActivity.this,
 					KillBackgroundService.class);
 			killIntent.putExtra("PACKAGE_NAME", pkgName);
 			startService(killIntent);
-			// }
+			if(service.length()>0) {
+				ServicesLockService.registerWifi();
+			}
 			finish();
 		} else {
 
@@ -342,11 +348,46 @@ public class PasswordActivity extends Activity implements OnClickListener {
 								PasswordActivity.this, MakeACallService.class);
 						callServiceIntent.putExtra("PHONE_NUMBER", phoneNumber);
 						startService(callServiceIntent);
-					} else
+					} else {
+						if(deviceId.length()>0) {
+							//Check for SIM1
+							SharedPreferences defaultPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+							if(defaultPrefs.contains("sim_1")) {
+								if(defaultPrefs.getString("sim_1", "").equals(deviceId)==false) {
+									defaultPrefs.edit().putString("sim_1", deviceId).commit();
+								}
+							}
+							else {
+								defaultPrefs.edit().putString("sim_1", deviceId).commit();
+								lastUnlocked = pkgName;
+								this.finish();
+							}
+							//Check for SIM2
+//							if(defaultPrefs.contains("sim_2")) {
+//								if(defaultPrefs.getString("sim_2", "").equals(deviceId)==false) {
+//									defaultPrefs.edit().putString("sim_2", deviceId).commit();
+//								}
+//							}
+//							else {
+//								defaultPrefs.edit().putString("sim_2", deviceId).commit();
+//								lastUnlocked = pkgName;
+//								this.finish();
+//							}
+						}
+						if(service.length()>0) {
+							WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+							ServicesLockService.registerWifi();
+							if(state==0) {
+								WifiStateReceiver.setStatus(true);
+								wifiManager.setWifiEnabled(true);
+							}
+							else {
+								WifiStateReceiver.setStatus(false);
+								wifiManager.setWifiEnabled(false);
+							}
+						}
+					}
 						lastUnlocked = pkgName;
-//					if(pkgName.equals(this.getPackageName())){
-//						MainActivity.isUnlocked = true;
-//					}
 					this.finish();
 				}
 			}
@@ -383,10 +424,8 @@ public class PasswordActivity extends Activity implements OnClickListener {
 			MessageDigest digest = MessageDigest.getInstance("SHA-256");
 			hash = digest.digest(passwordConfirm.getBytes("UTF-8"));
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -424,10 +463,8 @@ public class PasswordActivity extends Activity implements OnClickListener {
 			cursor.close();
 			db.close();
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return isCorrect;

@@ -30,6 +30,7 @@
             android:entries="@array/blocked_calls_keys"
             android:entryValues="@array/blocked_calls_values"
             android:key="blocked_calls"
+            android:defaultValue="0"
             android:summary="@string/call_blocker_blocked_calls_summary"
             android:title="@string/call_blocker_blocked_calls_title" />
 
@@ -56,6 +57,7 @@
             android:entries="@array/geo_failed_attempts_keys"
             android:entryValues="@array/geo_failed_attempts_values"
             android:key="geo_password_tries"
+            android:defaultValue="1"
             android:summary="@string/geo_failed_attempts_summary"
             android:title="@string/geo_failed_attempts" />
 
@@ -63,6 +65,7 @@
             android:dialogMessage="@string/geo_number_dialog_message"
             android:dialogTitle="@string/geo_dialog_title"
             android:key="geo_location_number_primary"
+            android:defaultValue="1"
             android:summary="@string/geo_settings_number_summary"
             android:title="@string/geo_settings_number_title" />
 

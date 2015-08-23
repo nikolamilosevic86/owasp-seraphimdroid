@@ -116,7 +116,7 @@ public class AppLockerAdapter extends BaseAdapter {
 								ContentValues cv = new ContentValues();
 								cv.put("package_name", tag);
 								db.insert(DatabaseHelper.TABLE_LOCKS, null, cv);
-
+								
 								Toast.makeText(context, "Locked: " + appName,
 										Toast.LENGTH_SHORT).show();
 							}

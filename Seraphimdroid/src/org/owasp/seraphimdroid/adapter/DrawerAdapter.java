@@ -68,7 +68,7 @@ public class DrawerAdapter extends BaseAdapter {
 		boolean isInfoVisible = defaults.getBoolean("info_visible_" + position,
 				true);
 
-		if (position > 4 || !isInfoVisible) {
+		if (position > 5 || !isInfoVisible) {
 			imgInfoIcon.setVisibility(View.GONE);
 			imgInfoIcon.setClickable(false);
 		}
@@ -91,7 +91,6 @@ public class DrawerAdapter extends BaseAdapter {
 
 				@Override
 				public void onClick(DialogInterface dialog, int arg1) {
-					// TODO Auto-generated method stub
 					dialog.dismiss();
 				}
 			});
@@ -111,6 +110,9 @@ public class DrawerAdapter extends BaseAdapter {
 				info.setMessage(context.getString(R.string.info_app_lock));
 				break;
 			case 4:
+				info.setMessage(context.getString(R.string.info_service_lock));
+				break;
+			case 5:
 				info.setMessage(context.getString(R.string.info_geo_fencing));
 				break;
 			}
