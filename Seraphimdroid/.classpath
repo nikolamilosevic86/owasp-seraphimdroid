@@ -13,6 +13,6 @@
 			<accessrule kind="nonaccessible" pattern="com/android/internal/**"/>
 		</accessrules>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="weka-3.6.6-android.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/thewayofknowing/workspace/owasp-seraphimdroid/Seraphimdroid/libs/weka-3.6.6-android.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
