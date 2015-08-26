@@ -5,14 +5,6 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="/home/thewayofknowing/android-sdk-linux/platforms/android-22/android.jar" sourcepath="/home/thewayofknowing/android-sdk-linux/sources/android-22">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/home/thewayofknowing/android-sdk-linux/docs/reference"/>
-		</attributes>
-		<accessrules>
-			<accessrule kind="nonaccessible" pattern="com/android/internal/**"/>
-		</accessrules>
-	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="/home/thewayofknowing/workspace/owasp-seraphimdroid/Seraphimdroid/libs/weka-3.6.6-android.jar"/>
+	<classpathentry kind="lib" path="weka-3.6.6-android.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

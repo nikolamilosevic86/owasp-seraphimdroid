@@ -101,9 +101,14 @@ public class ServicesLockerAdapter extends BaseAdapter {
 									Toast.LENGTH_SHORT).show();
 							switch (position) {
 							case 0:
-								ServicesLockService.registerWifi();
+								ServicesLockService.registerWifiListener();
 								break;
-
+							case 1:
+								ServicesLockService.registerBluetoothListener();
+								break;
+							case 2:
+								ServicesLockService.registerMobileDataListener();
+								break;
 							default:
 								break;
 							}
@@ -118,9 +123,14 @@ public class ServicesLockerAdapter extends BaseAdapter {
 									Toast.LENGTH_SHORT).show();
 							switch (position) {
 							case 0:
-								ServicesLockService.unregisterWifi();;
+								ServicesLockService.unregisterWifiListener();;
 								break;
-
+							case 1:
+								ServicesLockService.unregisterBluetoothListener();
+								break;
+							case 3:
+								ServicesLockService.unregisterMobileDataListener();
+								break;
 							default:
 								break;
 							}

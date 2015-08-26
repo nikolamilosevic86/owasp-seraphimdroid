@@ -27,9 +27,11 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 public class OutGoingSmsRecepter extends Service {
 
+	private String TAG = "SMSRecepter";
 	private static final String CONTENT_SMS = "content://sms/";
 	static String messageId = "";
 
@@ -74,7 +76,6 @@ public class OutGoingSmsRecepter extends Service {
 
 		public MyContentObserver(Handler handler) {
 			super(handler);
-			// TODO Auto-generated constructor stub
 		}
 
 		@Override
@@ -102,9 +103,7 @@ public class OutGoingSmsRecepter extends Service {
 				// Check whether the messenger is in foreground or not.
 				if (!SMSAppWhiteList.contains(tasks.get(0).processName)) {
 
-					// }
-					// if (!tasks.get(0).topActivity.getPackageName().equals(
-					// "com.android.mms")) {
+					Log.d(TAG, tasks.get(0).processName);
 					PackageManager pm = getPackageManager();
 					ApplicationInfo appInfo = null;
 					String appName = "";

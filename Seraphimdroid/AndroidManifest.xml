@@ -13,6 +13,7 @@
 
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.GET_TASKS" />
@@ -27,7 +28,6 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
-	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 	
@@ -43,6 +43,8 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -66,7 +68,7 @@
             android:name="org.owasp.seraphimdroid.PasswordActivity"
             android:configChanges="keyboard|keyboardHidden|screenSize|orientation"
             android:excludeFromRecents="true"
-            android:theme="@android:style/Theme.DeviceDefault.Dialog.NoActionBar" >
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
         <activity
             android:name="org.owasp.seraphimdroid.PermissionDescription"
@@ -121,8 +123,6 @@
         <service
             android:name="org.owasp.seraphimdroid.services.AppLockService"
             android:stopWithTask="false" >
-        </service>
-        <service android:name="org.owasp.seraphimdroid.PasswordActivity$SystemAlertDialogService">
         </service>
         <service android:name="org.owasp.seraphimdroid.services.KillBackgroundService" >
         </service>
@@ -193,6 +193,20 @@
         <receiver android:name="org.owasp.seraphimdroid.receiver.WifiStateReceiver">
 		    <intent-filter>
 		        <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+		    </intent-filter>
+		</receiver>
+		<receiver
+		        android:name="org.owasp.seraphimdroid.receiver.BluetoothStateReceiver"
+		        android:enabled="true">
+		    <intent-filter>
+		        <action android:name="android.bluetooth.adapter.action.STATE_CHANGED"/>
+		    </intent-filter>
+		</receiver>
+		<receiver
+		        android:name="org.owasp.seraphimdroid.receiver.MobileDataStateReceiver"
+		        android:enabled="true">
+		    <intent-filter>
+		        <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
 		    </intent-filter>
 		</receiver>
 		

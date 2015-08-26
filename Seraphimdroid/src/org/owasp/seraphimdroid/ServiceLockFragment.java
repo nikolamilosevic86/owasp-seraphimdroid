@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-public class ServicesLockFragment extends Fragment{
+public class ServiceLockFragment extends Fragment{
 
 	private ListView lvServicesLockerList;
 	

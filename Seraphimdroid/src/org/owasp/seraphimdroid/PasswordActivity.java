@@ -1,12 +1,15 @@
 package org.owasp.seraphimdroid;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import org.owasp.seraphimdroid.database.DatabaseHelper;
 import org.owasp.seraphimdroid.model.NoImeEditText;
+import org.owasp.seraphimdroid.receiver.BluetoothStateReceiver;
+import org.owasp.seraphimdroid.receiver.MobileDataStateReceiver;
 import org.owasp.seraphimdroid.receiver.WifiStateReceiver;
 import org.owasp.seraphimdroid.services.AppLockService;
 import org.owasp.seraphimdroid.services.KillBackgroundService;
@@ -14,7 +17,7 @@ import org.owasp.seraphimdroid.services.MakeACallService;
 import org.owasp.seraphimdroid.services.ServicesLockService;
 
 import android.app.Activity;
-import android.app.Service;
+import android.bluetooth.BluetoothAdapter;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -25,14 +28,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.text.Html;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -66,16 +67,11 @@ public class PasswordActivity extends Activity implements OnClickListener {
 	private boolean makeCall = false;
 	private String phoneNumber = "";
    
-	//System alert dialog
-	private static WindowManager windowManager;
-	private static View activityView;
-	private Intent systemAlertDialogService;
-    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		activityView = getLayoutInflater().inflate(R.layout.activity_password, null, false);
+		setContentView(R.layout.activity_password);
 		
 		//Retrieve the intent.
 		Intent rootIntent = getIntent();
@@ -92,25 +88,34 @@ public class PasswordActivity extends Activity implements OnClickListener {
 		initButtons();
 
 		// Initializing View.
-		layoutOk = (LinearLayout) activityView.findViewById(R.id.layout_ok);
-		etPassword = (NoImeEditText) activityView.findViewById(R.id.et_password);
-		tvAlert = (TextView) activityView.findViewById(R.id.tv_alert);
-		tvAppLabel = (TextView) activityView.findViewById(R.id.tv_app_label);
-		imgAppIcon = (ImageView) activityView.findViewById(R.id.img_app_icon);
+		layoutOk = (LinearLayout) findViewById(R.id.layout_ok);
+		etPassword = (NoImeEditText) findViewById(R.id.et_password);
+		tvAlert = (TextView) findViewById(R.id.tv_alert);
+		tvAppLabel = (TextView) findViewById(R.id.tv_app_label);
+		imgAppIcon = (ImageView) findViewById(R.id.img_app_icon);
 
-		try {
-			PackageManager pm = getPackageManager();
-			ApplicationInfo appInfo = pm.getApplicationInfo(pkgName,
-					PackageManager.GET_META_DATA);
-			tvAppLabel.setText(appInfo.loadLabel(pm));
-			imgAppIcon.setImageDrawable(appInfo.loadIcon(pm));
-
-			makeCall = rootIntent.getBooleanExtra("MAKE_CALL", false);
-			phoneNumber = rootIntent.getStringExtra("PHONE_NUMBER");
-		} catch (Exception e) {
-
+		if(pkgName.length()>0) {
+			try {
+				PackageManager pm = getPackageManager();
+				ApplicationInfo appInfo = pm.getApplicationInfo(pkgName,
+						PackageManager.GET_META_DATA);
+				tvAppLabel.setText(appInfo.loadLabel(pm));
+				imgAppIcon.setImageDrawable(appInfo.loadIcon(pm));
+	
+				makeCall = rootIntent.getBooleanExtra("MAKE_CALL", false);
+				phoneNumber = rootIntent.getStringExtra("PHONE_NUMBER");
+			} catch (Exception e) {}
 		}
-
+		else {
+			if(deviceId.length()>0) {
+				tvAppLabel.setText(Html.fromHtml("<small>Seraphimdroid has detected a SIM change. In order to use the device, type Seraphimdroid passphrase.</small>"));
+			}
+			else if(service.length()>0) {
+				tvAppLabel.setText(Html.fromHtml("<small>Seraphimdroid is set to lock this service. In order to start service, type Seraphimdroid passphrase.</small>"));
+			}
+			imgAppIcon.setImageResource(R.drawable.ic_launcher_small);;
+		}
+		
 		// Initializing other required variables.
 
 		dbHelper = new DatabaseHelper(getApplicationContext());
@@ -127,40 +132,6 @@ public class PasswordActivity extends Activity implements OnClickListener {
 			etPassword.setHint("Enter 4 digit PIN");
 		}
 		
-		//Start Service
-		systemAlertDialogService = new Intent(PasswordActivity.this, SystemAlertDialogService.class);
-		startService(systemAlertDialogService);
-		
-	}
-
-	public static class SystemAlertDialogService extends Service {
-		
-		@Override
-		public IBinder onBind(Intent intent) {
-			return null;
-		}
-		
-		@Override
-		public int onStartCommand(Intent intent, int flags, int startId) {
-			Log.d(TAG, "Service Started");
-			windowManager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-			WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-	        layoutParams.gravity = Gravity.CENTER;
-	        layoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
-	        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-	        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
-	        layoutParams.packageName = getPackageName();
-	        
-			windowManager.addView(activityView, layoutParams);
-			return super.onStartCommand(intent, flags, startId);
-		}
-		
-		@Override
-		public void onDestroy() {
-			windowManager.removeView(activityView);
-			super.onDestroy();
-		}
-		
 	}
 	
 	@Override
@@ -171,7 +142,6 @@ public class PasswordActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onStop() {
-		stopService(systemAlertDialogService);
 		super.onStop();
 	}
 	
@@ -181,7 +151,6 @@ public class PasswordActivity extends Activity implements OnClickListener {
 				KillBackgroundService.class);
 		killIntent.putExtra("PACKAGE_NAME", pkgName);
 		startService(killIntent);
-		stopService(systemAlertDialogService);
 		finish();
 		super.onBackPressed();
 	}
@@ -216,18 +185,18 @@ public class PasswordActivity extends Activity implements OnClickListener {
 
 		btnPass = new Button[12];
 
-		btnPass[0] = (Button) activityView.findViewById(R.id.btn_password_0);
-		btnPass[1] = (Button) activityView.findViewById(R.id.btn_password_1);
-		btnPass[2] = (Button) activityView.findViewById(R.id.btn_password_2);
-		btnPass[3] = (Button) activityView.findViewById(R.id.btn_password_3);
-		btnPass[4] = (Button) activityView.findViewById(R.id.btn_password_4);
-		btnPass[5] = (Button) activityView.findViewById(R.id.btn_password_5);
-		btnPass[6] = (Button) activityView.findViewById(R.id.btn_password_6);
-		btnPass[7] = (Button) activityView.findViewById(R.id.btn_password_7);
-		btnPass[8] = (Button) activityView.findViewById(R.id.btn_password_8);
-		btnPass[9] = (Button) activityView.findViewById(R.id.btn_password_9);
-		btnPass[10] = (Button) activityView.findViewById(R.id.btn_password_reset);
-		btnPass[11] = (Button) activityView.findViewById(R.id.btn_password_ok);
+		btnPass[0] = (Button) findViewById(R.id.btn_password_0);
+		btnPass[1] = (Button) findViewById(R.id.btn_password_1);
+		btnPass[2] = (Button) findViewById(R.id.btn_password_2);
+		btnPass[3] = (Button) findViewById(R.id.btn_password_3);
+		btnPass[4] = (Button) findViewById(R.id.btn_password_4);
+		btnPass[5] = (Button) findViewById(R.id.btn_password_5);
+		btnPass[6] = (Button) findViewById(R.id.btn_password_6);
+		btnPass[7] = (Button) findViewById(R.id.btn_password_7);
+		btnPass[8] = (Button) findViewById(R.id.btn_password_8);
+		btnPass[9] = (Button) findViewById(R.id.btn_password_9);
+		btnPass[10] = (Button) findViewById(R.id.btn_password_reset);
+		btnPass[11] = (Button) findViewById(R.id.btn_password_ok);
 
 		for (int i = 0; i < 12; i++) {
 			btnPass[i].setOnClickListener(this);
@@ -250,7 +219,7 @@ public class PasswordActivity extends Activity implements OnClickListener {
 
 		}
 
-		btnClear = (Button) activityView.findViewById(R.id.btn_password_delete);
+		btnClear = (Button) findViewById(R.id.btn_password_delete);
 		btnClear.setText("Clear");
 		btnClear.setOnClickListener(new OnClickListener() {
 
@@ -330,9 +299,6 @@ public class PasswordActivity extends Activity implements OnClickListener {
 					KillBackgroundService.class);
 			killIntent.putExtra("PACKAGE_NAME", pkgName);
 			startService(killIntent);
-			if(service.length()>0) {
-				ServicesLockService.registerWifi();
-			}
 			finish();
 		} else {
 
@@ -375,16 +341,54 @@ public class PasswordActivity extends Activity implements OnClickListener {
 //							}
 						}
 						if(service.length()>0) {
-							WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-							ServicesLockService.registerWifi();
-							if(state==0) {
-								WifiStateReceiver.setStatus(true);
-								wifiManager.setWifiEnabled(true);
+							switch (service) {
+							case "wifi":
+								WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+								if(state==0) {
+									WifiStateReceiver.setStatus(true);
+									wifiManager.setWifiEnabled(true);
+								}
+								else {
+									WifiStateReceiver.setStatus(false);
+									wifiManager.setWifiEnabled(false);
+								}
+								break;
+							case "bluetooth":
+								if(state==0) {
+									BluetoothStateReceiver.setStatus(true);
+									BluetoothAdapter.getDefaultAdapter().enable();
+								}
+								else {
+									BluetoothStateReceiver.setStatus(false);
+									BluetoothAdapter.getDefaultAdapter().disable();
+								}
+								break;
+							case "mobile":
+								if(state==0) {
+									MobileDataStateReceiver.setStatus(true);
+									try {
+										MobileDataStateReceiver.changeMobileDataStatus(getApplicationContext(), true);
+									} catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException
+											| IllegalArgumentException | NoSuchMethodException
+											| InvocationTargetException e) {
+										e.printStackTrace();
+									}
+								}
+								else {
+									MobileDataStateReceiver.setStatus(false);
+									try {
+										MobileDataStateReceiver.changeMobileDataStatus(getApplicationContext(), false);
+									} catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException
+											| IllegalArgumentException | NoSuchMethodException
+											| InvocationTargetException e) {
+										e.printStackTrace();
+									}
+								}
+								break;
+							default:
+								break;
 							}
-							else {
-								WifiStateReceiver.setStatus(false);
-								wifiManager.setWifiEnabled(false);
-							}
+							
 						}
 					}
 						lastUnlocked = pkgName;

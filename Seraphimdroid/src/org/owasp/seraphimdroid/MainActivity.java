@@ -269,7 +269,7 @@ public class MainActivity extends FragmentActivity {
 			fragment = new AppLockFragment();
 			break;
 		case 4:
-			fragment = new ServicesLockFragment();
+			fragment = new ServiceLockFragment();
 			break;
 		case 5:
 			fragment = new GeoFencingFragment();
