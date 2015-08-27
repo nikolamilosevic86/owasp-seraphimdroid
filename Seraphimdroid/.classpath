@@ -5,6 +5,6 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="weka-3.6.6-android.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/weka-3.6.6-android.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
