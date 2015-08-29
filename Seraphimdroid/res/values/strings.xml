@@ -19,10 +19,10 @@
 
     <integer-array name="drawer_icons">
         <item>@drawable/icon_permission_scanner</item>
-        <item>@drawable/icon_permission_scanner</item>
+        <item>@drawable/icon_settings_check</item>
         <item>@drawable/icon_logs</item>
         <item>@drawable/icon_lock</item>
-        <item>@drawable/icon_lock</item>
+        <item>@drawable/icon_service_lock</item>
         <item>@drawable/icon_geo_fencing</item>
         <item>@drawable/icon_settings</item>
         <item>@drawable/icon_about</item>

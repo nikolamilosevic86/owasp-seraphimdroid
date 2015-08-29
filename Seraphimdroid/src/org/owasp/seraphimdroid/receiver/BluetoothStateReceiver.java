@@ -1,11 +1,14 @@
 package org.owasp.seraphimdroid.receiver;
 
 import org.owasp.seraphimdroid.PasswordActivity;
+import org.owasp.seraphimdroid.database.DatabaseHelper;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 public class BluetoothStateReceiver extends BroadcastReceiver {
 
@@ -15,6 +18,14 @@ public class BluetoothStateReceiver extends BroadcastReceiver {
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		DatabaseHelper dbHelper = new DatabaseHelper(context);
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		Cursor cursor = db.rawQuery(
+				"SELECT * FROM services WHERE service_name=\'Bluetooth"
+						+ "\'", null);
+		if(!cursor.moveToNext()) {
+			return;
+		}
 		if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(intent.getAction())) {
             if(intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1) == BluetoothAdapter.STATE_OFF && wasOn==true) {
             	BluetoothAdapter.getDefaultAdapter().enable();
@@ -32,7 +43,7 @@ public class BluetoothStateReceiver extends BroadcastReceiver {
 		passwordAct.putExtra("PACKAGE_NAME", "");
 		passwordAct.putExtra("service", service);
 		passwordAct.putExtra("state", state + "");
-		passwordAct.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		passwordAct.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
 		context.startActivity(passwordAct);
 	}
 	

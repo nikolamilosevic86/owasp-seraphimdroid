@@ -99,19 +99,6 @@ public class ServicesLockerAdapter extends BaseAdapter {
 							db.insert(DatabaseHelper.TABLE_SERVICES_LOCKS, null, cv);
 							Toast.makeText(context, "Locked: " + service,
 									Toast.LENGTH_SHORT).show();
-							switch (position) {
-							case 0:
-								ServicesLockService.registerWifiListener();
-								break;
-							case 1:
-								ServicesLockService.registerBluetoothListener();
-								break;
-							case 2:
-								ServicesLockService.registerMobileDataListener();
-								break;
-							default:
-								break;
-							}
 						}
 					} else {
 
@@ -121,19 +108,6 @@ public class ServicesLockerAdapter extends BaseAdapter {
 									"service_name=?", whereArgs);
 							Toast.makeText(context, "Unlocked: " + service,
 									Toast.LENGTH_SHORT).show();
-							switch (position) {
-							case 0:
-								ServicesLockService.unregisterWifiListener();;
-								break;
-							case 1:
-								ServicesLockService.unregisterBluetoothListener();
-								break;
-							case 3:
-								ServicesLockService.unregisterMobileDataListener();
-								break;
-							default:
-								break;
-							}
 						}
 
 					}

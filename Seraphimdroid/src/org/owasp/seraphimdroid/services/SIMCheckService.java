@@ -67,7 +67,7 @@ public class SIMCheckService extends IntentService {
 		Intent passwordAct = new Intent(context, PasswordActivity.class);
 		passwordAct.putExtra("PACKAGE_NAME", "SIM Change");
 		passwordAct.putExtra("device_id", id+"");
-		passwordAct.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		passwordAct.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
 		context.startActivity(passwordAct);
 	}
 

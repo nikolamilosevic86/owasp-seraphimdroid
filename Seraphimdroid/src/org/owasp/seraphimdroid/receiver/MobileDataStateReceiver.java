@@ -5,10 +5,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.owasp.seraphimdroid.PasswordActivity;
+import org.owasp.seraphimdroid.database.DatabaseHelper;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
@@ -18,6 +21,14 @@ public class MobileDataStateReceiver extends BroadcastReceiver {
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		DatabaseHelper dbHelper = new DatabaseHelper(context);
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		Cursor cursor = db.rawQuery(
+				"SELECT * FROM services WHERE service_name=\'Mobile Network Data"
+						+ "\'", null);
+		if(!cursor.moveToNext()) {
+			return;
+		}
 		NetworkInfo networkInfo =  intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
 		if (networkInfo.getType()==ConnectivityManager.TYPE_MOBILE && !networkInfo.isConnected() && wasOn==true) {
 			try {
@@ -44,7 +55,7 @@ public class MobileDataStateReceiver extends BroadcastReceiver {
 		passwordAct.putExtra("PACKAGE_NAME", "");
 		passwordAct.putExtra("service", service);
 		passwordAct.putExtra("state", state + "");
-		passwordAct.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		passwordAct.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
 		context.startActivity(passwordAct);
 	}
 	

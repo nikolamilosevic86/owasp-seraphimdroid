@@ -1,10 +1,13 @@
 package org.owasp.seraphimdroid.receiver;
 
 import org.owasp.seraphimdroid.PasswordActivity;
+import org.owasp.seraphimdroid.database.DatabaseHelper;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.wifi.WifiManager;
 
 public class WifiStateReceiver extends BroadcastReceiver {
@@ -16,6 +19,14 @@ public class WifiStateReceiver extends BroadcastReceiver {
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		DatabaseHelper dbHelper = new DatabaseHelper(context);
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		Cursor cursor = db.rawQuery(
+				"SELECT * FROM services WHERE service_name=\'WiFi"
+						+ "\'", null);
+		if(!cursor.moveToNext()) {
+			return;
+		}
 		int extraWifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN);
 		switch (extraWifiState) {
 		case android.net.wifi.WifiManager.WIFI_STATE_ENABLED:
@@ -42,7 +53,7 @@ public class WifiStateReceiver extends BroadcastReceiver {
 		passwordAct.putExtra("PACKAGE_NAME", "");
 		passwordAct.putExtra("service", service);
 		passwordAct.putExtra("state", state + "");
-		passwordAct.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		passwordAct.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
 		context.startActivity(passwordAct);
 	}
 	
