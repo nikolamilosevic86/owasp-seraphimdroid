@@ -91,7 +91,7 @@ public class SettingsFragment extends PreferenceFragment {
 						ContentValues cv = new ContentValues();
 						cv.put("package_name", pkgName);
 						db.insert(DatabaseHelper.TABLE_LOCKS, null, cv);
-						defaultPrefs.edit().putBoolean("uninstall_locked", true);
+						defaultPrefs.edit().putBoolean("uninstall_locked", true).commit();
 					}
 				}
 				else {
@@ -99,7 +99,7 @@ public class SettingsFragment extends PreferenceFragment {
 						String[] whereArgs = { pkgName };
 						db.delete(DatabaseHelper.TABLE_LOCKS,
 								"package_name=?", whereArgs);
-						defaultPrefs.edit().putBoolean("uninstall_locked", false);
+						defaultPrefs.edit().putBoolean("uninstall_locked", false).commit();
 					}
 				}
 				cursor.close();

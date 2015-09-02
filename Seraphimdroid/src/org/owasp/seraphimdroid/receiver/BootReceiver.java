@@ -1,5 +1,6 @@
 package org.owasp.seraphimdroid.receiver;
 
+import org.owasp.seraphimdroid.services.CheckAppLaunchThread;
 import org.owasp.seraphimdroid.services.SIMCheckService;
 
 import android.app.AlarmManager;
@@ -8,6 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 
 public class BootReceiver extends BroadcastReceiver {
