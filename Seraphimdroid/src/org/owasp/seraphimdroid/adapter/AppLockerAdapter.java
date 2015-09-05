@@ -7,12 +7,19 @@ import org.owasp.seraphimdroid.AppLockFragment;
 import org.owasp.seraphimdroid.R;
 import org.owasp.seraphimdroid.database.DatabaseHelper;
 
+import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.app.AppOpsManager;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,19 +46,16 @@ public class AppLockerAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return appList.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
 		return appList.get(position);
 	}
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 
@@ -70,7 +74,7 @@ public class AppLockerAdapter extends BaseAdapter {
 		TextView tvAppType = (TextView) view
 				.findViewById(R.id.tv_app_locker_app_type);
 		ImageView imgIcon = (ImageView) view.findViewById(R.id.app_locker_icon);
-		ToggleButton tb = (ToggleButton) view.findViewById(R.id.tb_is_locked);
+		final ToggleButton tb = (ToggleButton) view.findViewById(R.id.tb_is_locked);
 
 		// Setting properties
 
@@ -90,52 +94,77 @@ public class AppLockerAdapter extends BaseAdapter {
 
 				if (lockedApps.contains(pkgName)) {
 					tb.setChecked(true);
-					tb.setText("Locked");
 				} else {
 					tb.setChecked(false);
-					tb.setText("Unlocked");
 				}
 			tb.setTag(pkgName);
 			tb.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View view) {
-					ToggleButton tb = (ToggleButton) view;
-					String tag = (String) tb.getTag();
-
-					DatabaseHelper dbHelper = new DatabaseHelper(context);
-					SQLiteDatabase db = dbHelper.getWritableDatabase();
-					Cursor cursor = db.rawQuery(
-							"SELECT * FROM locks WHERE package_name=\'" + tag
-									+ "\'", null);
-
-					if (tag.equals(pkgName)) {
-						if (tb.isChecked()) {
-
-							if (!cursor.moveToNext()) {
-								ContentValues cv = new ContentValues();
-								cv.put("package_name", tag);
-								db.insert(DatabaseHelper.TABLE_LOCKS, null, cv);
-								
-								Toast.makeText(context, "Locked: " + appName,
-										Toast.LENGTH_SHORT).show();
-							}
-						} else {
-
-							if (cursor.moveToNext()) {
-								String[] whereArgs = { tag };
-								db.delete(DatabaseHelper.TABLE_LOCKS,
-										"package_name=?", whereArgs);
-								Toast.makeText(context, "Unlocked: " + appName,
-										Toast.LENGTH_SHORT).show();
-							}
-
-						}
+					Boolean isEnabled = true;
+					if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP && !isUsageAccessEnabled()) {
+				    	 AlertDialog.Builder exitBuilder = new AlertDialog.Builder(context);
+					 		exitBuilder.setTitle("Request Permission");
+					 		exitBuilder.setMessage("Due to your current Android version, you currently cannot lock apps. Please allow access to restore functionality");
+					 		exitBuilder.setNegativeButton("Cancel",
+					 				new DialogInterface.OnClickListener() {
+			
+					 					@Override
+					 					public void onClick(DialogInterface dialog, int arg1) {
+					 						dialog.dismiss();
+					 					}
+					 				});
+					 		exitBuilder.setPositiveButton("Allow",
+					 				new DialogInterface.OnClickListener() {
+			
+					 					@Override
+					 					public void onClick(DialogInterface dialog, int arg1) {
+					 						context.startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+					 						dialog.dismiss();
+					 					}
+					 				});
+					 	 exitBuilder.create().show();
+					 	 tb.setChecked(false);
 					}
-					generateLockedApps();
-					cursor.close();
-					db.close();
-					dbHelper.close();
+					else {
+						ToggleButton tb = (ToggleButton) view;
+						String tag = (String) tb.getTag();
+	
+						DatabaseHelper dbHelper = new DatabaseHelper(context);
+						SQLiteDatabase db = dbHelper.getWritableDatabase();
+						Cursor cursor = db.rawQuery(
+								"SELECT * FROM locks WHERE package_name=\'" + tag
+										+ "\'", null);
+	
+						if (tag.equals(pkgName)) {
+							if (tb.isChecked()) {
+	
+								if (!cursor.moveToNext()) {
+									ContentValues cv = new ContentValues();
+									cv.put("package_name", tag);
+									db.insert(DatabaseHelper.TABLE_LOCKS, null, cv);
+									
+									Toast.makeText(context, "Locked: " + appName,
+											Toast.LENGTH_SHORT).show();
+								}
+							} else {
+	
+								if (cursor.moveToNext()) {
+									String[] whereArgs = { tag };
+									db.delete(DatabaseHelper.TABLE_LOCKS,
+											"package_name=?", whereArgs);
+									Toast.makeText(context, "Unlocked: " + appName,
+											Toast.LENGTH_SHORT).show();
+								}
+	
+							}
+						}
+						generateLockedApps();
+						cursor.close();
+						db.close();
+						dbHelper.close();
+					}
 				}
 			});
 
@@ -145,6 +174,20 @@ public class AppLockerAdapter extends BaseAdapter {
 		return view;
 	}
 
+	@TargetApi(Build.VERSION_CODES.KITKAT)
+	private Boolean isUsageAccessEnabled() {
+		try {
+		   PackageManager packageManager = context.getPackageManager();
+		   ApplicationInfo applicationInfo = packageManager.getApplicationInfo(context.getPackageName(), 0);
+		   AppOpsManager appOpsManager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+		   int mode = appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, applicationInfo.uid, applicationInfo.packageName);
+		   return (mode == AppOpsManager.MODE_ALLOWED);
+
+		} catch (PackageManager.NameNotFoundException e) {
+		   return false;
+		}
+	}
+	
 	private void generateLockedApps() {
 		lockedApps.clear();
 		DatabaseHelper dbHelper = new DatabaseHelper(this.context);

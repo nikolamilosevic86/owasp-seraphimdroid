@@ -5,6 +5,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.owasp.seraphimdroid.database.DatabaseHelper;
 import org.owasp.seraphimdroid.model.NoImeEditText;
@@ -17,6 +20,11 @@ import org.owasp.seraphimdroid.services.MakeACallService;
 import org.owasp.seraphimdroid.services.ServicesLockService;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningAppProcessInfo;
+import android.app.ActivityManager.RunningTaskInfo;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ContentValues;
 import android.content.Context;
@@ -27,6 +35,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
@@ -93,15 +102,20 @@ public class PasswordActivity extends Activity implements OnClickListener {
 		tvAlert = (TextView) findViewById(R.id.tv_alert);
 		tvAppLabel = (TextView) findViewById(R.id.tv_app_label);
 		imgAppIcon = (ImageView) findViewById(R.id.img_app_icon);
-
+		imgAppIcon.setImageResource(R.drawable.ic_launcher_small);
+		
 		if(pkgName.length()>0) {
 			try {
 				PackageManager pm = getPackageManager();
 				ApplicationInfo appInfo = pm.getApplicationInfo(pkgName,
 						PackageManager.GET_META_DATA);
-				tvAppLabel.setText(appInfo.loadLabel(pm));
-				imgAppIcon.setImageDrawable(appInfo.loadIcon(pm));
-	
+				String label = (String) appInfo.loadLabel(pm);
+				if(pkgName.equals(getPackageName())) {
+					tvAppLabel.setText(label);
+				}
+				else {
+					tvAppLabel.setText(Html.fromHtml("<small>" + label+ " is locked by SeraphimDroid. In order to use this app, type Seraphimdroid passphrase.</small>"));
+				}
 				makeCall = rootIntent.getBooleanExtra("MAKE_CALL", false);
 				phoneNumber = rootIntent.getStringExtra("PHONE_NUMBER");
 			} catch (Exception e) {}
@@ -113,7 +127,6 @@ public class PasswordActivity extends Activity implements OnClickListener {
 			else if(service.length()>0) {
 				tvAppLabel.setText(Html.fromHtml("<small>Seraphimdroid is set to lock this service. In order to start service, type Seraphimdroid passphrase.</small>"));
 			}
-			imgAppIcon.setImageResource(R.drawable.ic_launcher_small);;
 		}
 		
 		// Initializing other required variables.
@@ -391,14 +404,15 @@ public class PasswordActivity extends Activity implements OnClickListener {
 							
 						}
 					}
-						lastUnlocked = pkgName;
+					lastUnlocked = pkgName;
+					
 					this.finish();
 				}
 			}
 
 		}
 	}
-
+	
 	private boolean isPasswordCreated() {
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
 		Cursor cursor = db.rawQuery("SELECT * FROM password", null);

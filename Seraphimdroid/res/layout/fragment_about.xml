@@ -24,15 +24,15 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="#cc03aa"
             android:textSize="25sp" />
-
+        
         <TextView
             android:id="@+id/tv_tagline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignRight="@+id/tv_app_name_label"
             android:layout_below="@+id/tv_app_name_label"
-            android:layout_marginRight="0dp"
+            android:layout_centerHorizontal="true"
             android:text="Protector of your Droid"
+            android:layout_marginTop="8dp"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
@@ -90,9 +90,10 @@
             android:layout_below="@+id/tv_tagline"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:text="Version 1.0"
+            android:text="Version 2.0"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textStyle="bold" />
+
     </RelativeLayout>
 
 </ScrollView>

@@ -2,6 +2,8 @@ package org.owasp.seraphimdroid.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.owasp.seraphimdroid.LogDetailActivity;
 import org.owasp.seraphimdroid.MainActivity;
@@ -11,6 +13,8 @@ import org.owasp.seraphimdroid.receiver.CallRecepter;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -24,6 +28,7 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -96,20 +101,39 @@ public class OutGoingSmsRecepter extends Service {
 				messageId = message_id;
 
 				// Gettings current running task
-				ActivityManager am = (ActivityManager) getApplicationContext()
-						.getSystemService(ACTIVITY_SERVICE);
-				List<RunningAppProcessInfo> tasks = am.getRunningAppProcesses();
+				String topPackageName = "";
+				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { 
+				    UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService("usagestats");                       
+				    long time = System.currentTimeMillis(); 
+				    // We get usage stats for the last 10 seconds
+				    List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000*5, time);                                    
+				    if(stats != null) {
+				        SortedMap<Long,UsageStats> mySortedMap = new TreeMap<Long,UsageStats>();
+				        for (UsageStats usageStats : stats) {
+				            mySortedMap.put(usageStats.getLastTimeUsed(),usageStats);
+				        }                    
+				        if(mySortedMap != null && !mySortedMap.isEmpty()) {
+				            topPackageName =  mySortedMap.get(mySortedMap.lastKey()).getPackageName();                                   
+				        }                                       
+				    }
+				}
+				else {
+					ActivityManager am = (ActivityManager) getApplicationContext()
+							.getSystemService(ACTIVITY_SERVICE);
+					topPackageName = am.getRunningAppProcesses().get(0).processName;
+				}
+				
 
 				// Check whether the messenger is in foreground or not.
-				if (!SMSAppWhiteList.contains(tasks.get(0).processName)) {
+				if (!SMSAppWhiteList.contains(topPackageName)) {
 
-					Log.d(TAG, tasks.get(0).processName);
+					Log.d(TAG, topPackageName);
 					PackageManager pm = getPackageManager();
 					ApplicationInfo appInfo = null;
 					String appName = "";
 					try {
 						appInfo = pm.getApplicationInfo(
-								tasks.get(0).processName,
+								topPackageName,
 								PackageManager.GET_META_DATA);
 						appName = (String) appInfo.loadLabel(pm);
 					} catch (NameNotFoundException e) {

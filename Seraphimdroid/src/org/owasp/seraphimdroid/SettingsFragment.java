@@ -4,9 +4,11 @@ import org.owasp.seraphimdroid.database.DatabaseHelper;
 import org.owasp.seraphimdroid.receiver.GeoFencingAdminReceiver;
 import org.owasp.seraphimdroid.receiver.SettingsCheckAlarmReceiver;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.AppOpsManager;
 import android.app.PendingIntent;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
@@ -14,11 +16,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
@@ -79,32 +84,57 @@ public class SettingsFragment extends PreferenceFragment {
 			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				CheckBoxPreference pref = (CheckBoxPreference) preference;
-				String pkgName = "com.android.packageinstaller";
-				DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
-				SQLiteDatabase db = dbHelper.getWritableDatabase();
-				Cursor cursor = db.rawQuery(
-						"SELECT * FROM locks WHERE package_name=\'" + pkgName
-								+ "\'", null);
-				if(pref.isChecked()) {
-					if (!cursor.moveToNext()) {
-						ContentValues cv = new ContentValues();
-						cv.put("package_name", pkgName);
-						db.insert(DatabaseHelper.TABLE_LOCKS, null, cv);
-						defaultPrefs.edit().putBoolean("uninstall_locked", true).commit();
-					}
+				if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP && !isUsageAccessEnabled()) {
+			    	AlertDialog.Builder exitBuilder = new AlertDialog.Builder(getActivity());
+			 		exitBuilder.setTitle("Request Permission");
+			 		exitBuilder.setMessage("Due to your current Android version, you currently cannot lock apps. Please allow access to restore functionality");
+			 		exitBuilder.setNegativeButton("Cancel",
+			 				new DialogInterface.OnClickListener() {
+	
+			 					@Override
+			 					public void onClick(DialogInterface dialog, int arg1) {
+			 						dialog.dismiss();
+			 					}
+			 				});
+			 		exitBuilder.setPositiveButton("Allow",
+			 				new DialogInterface.OnClickListener() {
+	
+			 					@Override
+			 					public void onClick(DialogInterface dialog, int arg1) {
+			 						startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+			 						dialog.dismiss();
+			 					}
+			 				});
+			 		exitBuilder.create().show();
+			 		appInstallerLockPref.setChecked(false);
 				}
 				else {
-					if (cursor.moveToNext()) {
-						String[] whereArgs = { pkgName };
-						db.delete(DatabaseHelper.TABLE_LOCKS,
-								"package_name=?", whereArgs);
-						defaultPrefs.edit().putBoolean("uninstall_locked", false).commit();
+					String pkgName = "com.android.packageinstaller";
+					DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
+					SQLiteDatabase db = dbHelper.getWritableDatabase();
+					Cursor cursor = db.rawQuery(
+							"SELECT * FROM locks WHERE package_name=\'" + pkgName
+									+ "\'", null);
+					if(preference.isEnabled()) {
+						if (!cursor.moveToNext()) {
+							ContentValues cv = new ContentValues();
+							cv.put("package_name", pkgName);
+							db.insert(DatabaseHelper.TABLE_LOCKS, null, cv);
+							defaultPrefs.edit().putBoolean("uninstall_locked", true).commit();
+						}
 					}
+					else {
+						if (cursor.moveToNext()) {
+							String[] whereArgs = { pkgName };
+							db.delete(DatabaseHelper.TABLE_LOCKS,
+									"package_name=?", whereArgs);
+							defaultPrefs.edit().putBoolean("uninstall_locked", false).commit();
+						}
+					}
+					cursor.close();
+					db.close();
+					dbHelper.close();
 				}
-				cursor.close();
-				db.close();
-				dbHelper.close();
 				return false;
 			}
 		});
@@ -151,6 +181,20 @@ public class SettingsFragment extends PreferenceFragment {
 		});
 	}
 
+	@TargetApi(Build.VERSION_CODES.KITKAT)
+	private Boolean isUsageAccessEnabled() {
+		try {
+		   PackageManager packageManager = getActivity().getPackageManager();
+		   ApplicationInfo applicationInfo = packageManager.getApplicationInfo(getActivity().getPackageName(), 0);
+		   AppOpsManager appOpsManager = (AppOpsManager) getActivity().getSystemService(Context.APP_OPS_SERVICE);
+		   int mode = appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, applicationInfo.uid, applicationInfo.packageName);
+		   return (mode == AppOpsManager.MODE_ALLOWED);
+
+		} catch (PackageManager.NameNotFoundException e) {
+		   return false;
+		}
+	}
+	
 	public class SettingsAdapter extends ArrayAdapter<String> {
 
 		LayoutInflater inflater;

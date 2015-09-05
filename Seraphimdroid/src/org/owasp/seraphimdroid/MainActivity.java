@@ -11,9 +11,12 @@ import org.owasp.seraphimdroid.services.CheckAppLaunchThread;
 import org.owasp.seraphimdroid.services.OutGoingSmsRecepter;
 import org.owasp.seraphimdroid.services.SIMCheckService;
 import org.owasp.seraphimdroid.services.ServicesLockService;
-
+import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.AppOpsManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
@@ -21,10 +24,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -33,6 +40,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -62,21 +70,27 @@ public class MainActivity extends FragmentActivity {
 	private DrawerAdapter adapter;
 
 	private boolean isUnlocked = false;
-
+	
 	private Fragment prevSupportFlag = null;
-
+	
 	public static boolean shouldReceive = true;
 
-	private static int fragmentNo = 3;
+	private int fragmentNo = 3;
 
 	@Override
 	protected void onResume() {
 		if (!isUnlocked) {
 			Intent pwdIntent = new Intent(this, PasswordActivity.class);
+			pwdIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			pwdIntent.putExtra("PACKAGE_NAME", this.getPackageName());
-			isUnlocked = true;
 			startActivity(pwdIntent);
+			isUnlocked = true;
 			selectFragment(fragmentNo);
+		}
+		else {
+			if(PasswordActivity.lastUnlocked.equals(getPackageName())==false) {
+				finish();
+			}
 		}
 		super.onResume();
 
@@ -102,18 +116,19 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+	
 		//Initiate Services and Receivers
 		startService(new Intent(this, OutGoingSmsRecepter.class));
 		startService(new Intent(this, ApplicationInstallReceiver.class));
 		startService(new Intent(this, ServicesLockService.class));
-
+		
+		SharedPreferences defaults = PreferenceManager
+				.getDefaultSharedPreferences(getApplicationContext());
+		
 		//Alarm Manager for Settings Check
 		alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		Intent intent = new Intent(getBaseContext(), SettingsCheckAlarmReceiver.class);
 		alarmIntent = PendingIntent.getBroadcast(getBaseContext(), 0, intent, 0);
-
-		SharedPreferences defaults = PreferenceManager
-				.getDefaultSharedPreferences(getApplicationContext());
 		
 		java.util.Calendar calendar = java.util.Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());
@@ -134,6 +149,12 @@ public class MainActivity extends FragmentActivity {
 		}
 		
 		//App Uninstall Lock
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP && !isUsageAccessEnabled()) {
+	    	 defaults.edit().putBoolean("uninstall_locked", false).commit();
+	     }
+	     else {
+	    	 defaults.edit().putBoolean("uninstall_locked", true).commit();
+	     }
 		Boolean isUninstallLocked = defaults.getBoolean("uninstall_locked", true);
 		if(isUninstallLocked) {
 			String pkgName = "com.android.packageinstaller";
@@ -160,6 +181,7 @@ public class MainActivity extends FragmentActivity {
 
 		try {
 			fragmentNo = getIntent().getIntExtra("FRAGMENT_NO", fragmentNo);
+			Toast.makeText(getApplicationContext(), "fragmentNo: " + getIntent().getIntExtra("FRAGMENT_NO", -1), Toast.LENGTH_LONG).show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -226,6 +248,20 @@ public class MainActivity extends FragmentActivity {
 		super.onSaveInstanceState(outState);
 	}
 
+	@TargetApi(Build.VERSION_CODES.KITKAT)
+	private Boolean isUsageAccessEnabled() {
+		try {
+		   PackageManager packageManager = getPackageManager();
+		   ApplicationInfo applicationInfo = packageManager.getApplicationInfo(getPackageName(), 0);
+		   AppOpsManager appOpsManager = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
+		   int mode = appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, applicationInfo.uid, applicationInfo.packageName);
+		   return (mode == AppOpsManager.MODE_ALLOWED);
+
+		} catch (PackageManager.NameNotFoundException e) {
+		   return false;
+		}
+	}
+	
 	private void populateList() {
 		// populate the list.
 		listItems.add(new DrawerItem(itemNames[0], iconList.getResourceId(0,
@@ -300,6 +336,7 @@ public class MainActivity extends FragmentActivity {
 		}
 
 		if (fragment != null) {
+			Toast.makeText(getApplicationContext(), fragment.getClass() + " " + position, Toast.LENGTH_LONG).show();
 			if (prevFrag != null) {
 				android.app.FragmentManager fm = getFragmentManager();
 				fm.beginTransaction().remove(prevFrag).commit();
@@ -341,12 +378,10 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public void onBackPressed() {
 		showExitAlert();
-		super.onBackPressed();
-
 	}
 
 	private void showExitAlert() {
-		AlertDialog.Builder exitBuilder = new AlertDialog.Builder(this);
+		AlertDialog.Builder exitBuilder = new AlertDialog.Builder(MainActivity.this);
 		exitBuilder.setTitle("Close application");
 		exitBuilder.setMessage("Do you really want to exit the application?");
 		exitBuilder.setNegativeButton("No",
@@ -354,7 +389,6 @@ public class MainActivity extends FragmentActivity {
 
 					@Override
 					public void onClick(DialogInterface dialog, int arg1) {
-						// TODO Auto-generated method stub
 						dialog.dismiss();
 					}
 				});
@@ -363,38 +397,13 @@ public class MainActivity extends FragmentActivity {
 
 					@Override
 					public void onClick(DialogInterface dialog, int arg1) {
-						// TODO Auto-generated method stub
 						dialog.dismiss();
 						MainActivity.this.finish();
 					}
 				});
-		exitBuilder.create().show();
+		exitBuilder.setIcon(R.drawable.ic_launcher_smal);
+		exitBuilder.show();
 	}
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK
-				|| keyCode == KeyEvent.KEYCODE_HOME) {
-			// onPause();
-			// onDestroy();
-			//finish();
-			showExitAlert();
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-
-//	@Override
-//	public boolean onKeyUp(int keyCode, KeyEvent event) {
-//		if (keyCode == KeyEvent.KEYCODE_BACK
-//				|| keyCode == KeyEvent.KEYCODE_HOME) {
-//
-//			// onPause();
-//			// onDestroy();
-//			//finish();
-//			showExitAlert();
-//		}
-//		return super.onKeyUp(keyCode, event);
-//	}
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {

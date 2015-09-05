@@ -93,9 +93,9 @@ public class ApplicationInstallReceiver extends BroadcastReceiver{
 			filter.batchFinished();
 			Instances ins = Filter.useFilter(Instances, filter);
 			double prediction = svmModel.classifyInstance(ins.firstInstance());
-			if(prediction==1.0) {
+//			if(prediction==1.0) {
 				fireNotification(arg0);
-			}
+//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -103,13 +103,12 @@ public class ApplicationInstallReceiver extends BroadcastReceiver{
 	
 	private void fireNotification(Context context) {
 	    Intent notificationIntent = new Intent(context, MainActivity.class);
-	    //Open Settings Check Fragment
+	    //Open Application Lock Fragment
 	    notificationIntent.putExtra("FRAGMENT_NO", 0);
-	    notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-	            | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+	    notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
 	    PendingIntent intent = PendingIntent.getActivity(context, 0,
-	            notificationIntent, 0);
+	            notificationIntent,  PendingIntent.FLAG_UPDATE_CURRENT);
 	    Notification notification;
 	    notification= new NotificationCompat.Builder(context)
                 .setContentTitle("Malicious App Install")

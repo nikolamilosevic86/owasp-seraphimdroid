@@ -1,16 +1,21 @@
 package org.owasp.seraphimdroid.services;
 
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.owasp.seraphimdroid.PasswordActivity;
 import org.owasp.seraphimdroid.database.DatabaseHelper;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -23,6 +28,7 @@ public class CheckAppLaunchThread extends Thread {
 	private ActivityManager actMan;
 	private int timer = 100;
 	public static final String TAG = "App Thread";
+	public static String lastUnlocked;
 	
 	// private String lastUnlocked;
 
@@ -38,39 +44,49 @@ public class CheckAppLaunchThread extends Thread {
 	public void run() {
 		context.startService(new Intent(context, AppLockService.class));
 		Looper.prepare();
-		List<RunningAppProcessInfo> prevTasks;
-		List<RunningAppProcessInfo> recentTasks = actMan.getRunningAppProcesses();
+		String prevTasks;
+		String recentTasks = "";
 		
 		prevTasks = recentTasks;
 		Log.d("Thread", "Inside Thread");
 		while (true) {
 			try {
-
-				recentTasks = actMan.getRunningAppProcesses();
+				String topPackageName = "";
+				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { 
+				    UsageStatsManager mUsageStatsManager = (UsageStatsManager) context.getSystemService("usagestats");                       
+				    long time = System.currentTimeMillis(); 
+				    // We get usage stats for the last 10 seconds
+				    List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000*5, time);                                    
+				    if(stats != null) {
+				        SortedMap<Long,UsageStats> mySortedMap = new TreeMap<Long,UsageStats>();
+				        for (UsageStats usageStats : stats) {
+				            mySortedMap.put(usageStats.getLastTimeUsed(),usageStats);
+				        }                    
+				        if(mySortedMap != null && !mySortedMap.isEmpty()) {
+				            topPackageName =  mySortedMap.get(mySortedMap.lastKey()).getPackageName();                                   
+				        }                                       
+				    }
+				}
+				else {
+					topPackageName = actMan.getRunningAppProcesses().get(0).processName;
+				}
+				recentTasks = topPackageName;
 				Thread.sleep(timer);
-				if (recentTasks.get(0).processName.equals(
-						prevTasks.get(0).processName)) {
-//					Log.d(TAG, "Do nothing " + recentTasks.get(0).processName);
+				if (recentTasks.length()==0 || recentTasks.equals(
+						prevTasks)) {
 				} else {
-					if (isAppLocked(recentTasks.get(0).processName)) {
-						Log.d(TAG, "Locked " + recentTasks.get(0).processName);
-						String pkgName = recentTasks.get(0).processName;
-						// timer = 10000;
-						// Toast.makeText(context, appName,
-						// Toast.LENGTH_SHORT).show();
-						// handler.post(new ToastRunnable(pkgName));
-						handler.post(new RequestPassword(context, pkgName));
-
+					if (isAppLocked(recentTasks)) {
+						Log.d(TAG, "Locked " + recentTasks);
+						handler.post(new RequestPassword(context, recentTasks));
 					}
 				}
 
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
+			
 			prevTasks = recentTasks;
-			// Looper.loop();
+			
 		}
 
 	}
@@ -105,7 +121,7 @@ public class CheckAppLaunchThread extends Thread {
 
 			Intent passwordAct = new Intent(context, PasswordActivity.class);
 			passwordAct.putExtra("PACKAGE_NAME", pkgName);
-			passwordAct.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			passwordAct.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			this.mContext.startActivity(passwordAct);
 
 		}
@@ -113,25 +129,9 @@ public class CheckAppLaunchThread extends Thread {
 	}
 
 	private boolean isAppLocked(String packageName) {
-		// if(packageName.equals(context.getPackageName())){
-		// return false;
-		// }
 		if (packageName.equals(PasswordActivity.lastUnlocked)) {
 			return false;
 		}
-//		if(packageName.equals(context.getPackageName()))
-//			return true;
-		// if (PasswordActivity.lastUnlocked != null) {
-		//
-		// if (PasswordActivity.lastUnlocked.equals(packageName)) {
-		// // lastUnlocked = PasswordActivity.lastUnlocked;
-		// PasswordActivity.lastUnlocked = null;
-		// return false;
-		// }
-		// }
-		// if (packageName.equals(lastUnlocked)) {
-		// return false;
-		// }
 		PasswordActivity.lastUnlocked = null;
 		DatabaseHelper dbHelper = new DatabaseHelper(context);
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -141,7 +141,7 @@ public class CheckAppLaunchThread extends Thread {
 		if (cursor.moveToNext()) {
 			isLocked = true;
 		}
-
+		
 		cursor.close();
 		db.close();
 		dbHelper.close();

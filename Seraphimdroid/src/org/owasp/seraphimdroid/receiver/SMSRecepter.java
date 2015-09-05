@@ -101,19 +101,19 @@ public class SMSRecepter extends BroadcastReceiver {
 
 				// Putting a notification
 				Intent smsLogIntent = new Intent(context, MainActivity.class);
-				smsLogIntent.putExtra("FRAGMENT_NO", 1);
+				smsLogIntent.putExtra("FRAGMENT_NO", 2);
 				smsLogIntent.putExtra("TAB_NO", 1);
 				PendingIntent pSmsLogIntent = PendingIntent.getActivity(
-						context, 0, smsLogIntent,
-						PendingIntent.FLAG_CANCEL_CURRENT);
+						context, 3, smsLogIntent,
+						PendingIntent.FLAG_UPDATE_CURRENT);
 				Notification smsNoti = new NotificationCompat.Builder(context)
 						.setContentIntent(pSmsLogIntent)
-						.setContentTitle("Potetial Malicious SMS")
+						.setContentTitle("Potential Malicious SMS")
 						.setAutoCancel(true)
 						.setSmallIcon(R.drawable.ic_launcher).build();
 				((NotificationManager) context
 						.getSystemService(Context.NOTIFICATION_SERVICE))
-						.notify(0, smsNoti);
+						.notify(3, smsNoti);
 
 			}
 
