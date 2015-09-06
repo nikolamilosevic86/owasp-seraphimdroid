@@ -7,21 +7,6 @@ OWASP Seraphimdroid has two aims:
 - To protect user's privacy and secure the device against malicious features that may cost user money
 - To educate user about threats and risks for their privacy, privacy of their data and security of their device.
 
-Features:
-•	Permission scanner. Permission scanner will show you the list of all installed application and the permission they are using. Also app will describe potential malicious use of certain permissions. Seraphimdroid is using machine learning in order to predict whether application might be malicious (be a virus, Trojan, worm, rootkit, etc) or not and will notify the user. 
-•	Application locker. With OWASP Seraphimdroid, you may lock access to certain or to all of your application with password
-•	Service locker. This feature enables user to lock usage of WiFi, mobile network and Bluetooth with a password.
-•	Install lock. This feature can lock all installing and uninstalling action on your device. Great for parental control.
-•	Incoming SMS blocker. This feature will scan all incoming messages and alert user if it find in the content potential phishing
-•	Outgoing SMS scanner. The application will monitor outgoing SMS and alert user if the some of the application is trying to send SMS. This is the usual scenario how malware creators earn money - by sending premium SMS messages.
-•	Outgoing call blocker. This feature will allow you to perform normally outgoing calls, but it will block outgoing calls performed by other installed applications. Similarly to outgoing SMSes, this is the scenario malware creators use to earn money.
-•	Geo-fencing. This feature allows user to set a location range where the device should be. If the device exits the range it may set up alarm or start sending messages to the defined number with its location.
-•	SIM change detector. Ask password when SIM card is changed in order to assure that the owner of the device is changing SIM card. Perfect for theft protection.
-•	Remote location. If you lost your phone, you'll be able to send SMS with a defined secret code as a content and your phone will reply with the location coordinates of the device. 
-•	Remote lock. Similarly, you may lock your device using a message with secret code
-•	Remote wipe. If your phone is stolen, you may send a message with secret code and wipe all user data from the phone.
-
-
 OWASP Seraphimdroid is an open source project, supported by OWASP (Open Web Application Security Project) Foundation. 
 
 Feel free to contact project leader if you want to participate or contribute to the project 
