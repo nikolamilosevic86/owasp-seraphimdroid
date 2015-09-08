@@ -50,7 +50,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
 
@@ -88,7 +87,7 @@ public class MainActivity extends FragmentActivity {
 			selectFragment(fragmentNo);
 		}
 		else {
-			if(PasswordActivity.lastUnlocked.equals(getPackageName())==false) {
+			if(PasswordActivity.lastUnlocked!=null && PasswordActivity.lastUnlocked.equals(getPackageName())==false) {
 				finish();
 			}
 		}
@@ -181,7 +180,6 @@ public class MainActivity extends FragmentActivity {
 
 		try {
 			fragmentNo = getIntent().getIntExtra("FRAGMENT_NO", fragmentNo);
-			Toast.makeText(getApplicationContext(), "fragmentNo: " + getIntent().getIntExtra("FRAGMENT_NO", -1), Toast.LENGTH_LONG).show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -232,7 +230,6 @@ public class MainActivity extends FragmentActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	    super.onActivityResult(requestCode, resultCode, data);
 	    if (requestCode == UNINSTALL_REQUEST_CODE) {
-	    	Toast.makeText(getApplicationContext(), resultCode, Toast.LENGTH_LONG).show();
 	        if (resultCode == RESULT_OK) {
 	            Log.d("TAG", "onActivityResult: user accepted the (un)install");
 	        } else if (resultCode == RESULT_CANCELED) {
@@ -336,7 +333,6 @@ public class MainActivity extends FragmentActivity {
 		}
 
 		if (fragment != null) {
-			Toast.makeText(getApplicationContext(), fragment.getClass() + " " + position, Toast.LENGTH_LONG).show();
 			if (prevFrag != null) {
 				android.app.FragmentManager fm = getFragmentManager();
 				fm.beginTransaction().remove(prevFrag).commit();
