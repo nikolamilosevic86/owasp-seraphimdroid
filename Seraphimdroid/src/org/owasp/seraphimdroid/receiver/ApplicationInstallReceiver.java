@@ -93,9 +93,9 @@ public class ApplicationInstallReceiver extends BroadcastReceiver{
 			filter.batchFinished();
 			Instances ins = Filter.useFilter(Instances, filter);
 			double prediction = svmModel.classifyInstance(ins.firstInstance());
-//			if(prediction==1.0) {
+			if(prediction==1.0) {
 				fireNotification(arg0);
-//			}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
