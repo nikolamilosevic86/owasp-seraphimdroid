@@ -13,7 +13,9 @@ Feel free to contact project leader if you want to participate or contribute to 
 
 website: https://www.owasp.org/index.php/OWASP_SeraphimDroid_Project
 
+
 ##How to set up Eclipse for project.
+###Important note: Procet was ported for Android Studio, so the following instruction does not stand anymore. New instruction will be available soon
   Requirement
   1. Android Support Library
   2. Google Play Services
