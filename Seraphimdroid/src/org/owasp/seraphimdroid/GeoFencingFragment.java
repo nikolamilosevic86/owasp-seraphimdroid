@@ -1,11 +1,5 @@
 package org.owasp.seraphimdroid;
 
-import java.lang.reflect.Field;
-
-import org.owasp.seraphimdroid.receiver.GeoFencingAdminReceiver;
-import org.owasp.seraphimdroid.services.GPSTracker;
-import org.owasp.seraphimdroid.services.GeoFencingService;
-
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -42,6 +36,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+
+import org.owasp.seraphimdroid.receiver.GeoFencingAdminReceiver;
+import org.owasp.seraphimdroid.services.GPSTracker;
+import org.owasp.seraphimdroid.services.GeoFencingService;
+
+import java.lang.reflect.Field;
 
 public class GeoFencingFragment extends Fragment {
 

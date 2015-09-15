@@ -1,7 +1,5 @@
 package org.owasp.seraphimdroid;
 
-import org.owasp.seraphimdroid.adapter.TabsPagerAdapter;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
+
+import org.owasp.seraphimdroid.adapter.TabsPagerAdapter;
 
 public class BlockerFragment extends Fragment implements OnPageChangeListener,
 		OnTabChangeListener {

@@ -1,13 +1,13 @@
 package org.owasp.seraphimdroid;
 
-import org.owasp.seraphimdroid.adapter.ServicesLockerAdapter;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import org.owasp.seraphimdroid.adapter.ServicesLockerAdapter;
 
 public class ServiceLockFragment extends Fragment{
 

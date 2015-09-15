@@ -1,13 +1,5 @@
 package org.owasp.seraphimdroid.services;
 
-import java.io.IOException;
-import java.util.Calendar;
-
-import org.owasp.seraphimdroid.GeoFencingFragment;
-import org.owasp.seraphimdroid.MainActivity;
-import org.owasp.seraphimdroid.R;
-import org.owasp.seraphimdroid.receiver.GeoFencingAdminReceiver;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -33,6 +25,14 @@ import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import org.owasp.seraphimdroid.GeoFencingFragment;
+import org.owasp.seraphimdroid.MainActivity;
+import org.owasp.seraphimdroid.R;
+import org.owasp.seraphimdroid.receiver.GeoFencingAdminReceiver;
+
+import java.io.IOException;
+import java.util.Calendar;
 
 public class GeoFencingService extends Service {
 

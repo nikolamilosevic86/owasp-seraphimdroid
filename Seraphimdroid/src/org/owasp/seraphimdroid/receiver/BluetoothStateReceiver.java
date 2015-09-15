@@ -1,14 +1,14 @@
 package org.owasp.seraphimdroid.receiver;
 
-import org.owasp.seraphimdroid.PasswordActivity;
-import org.owasp.seraphimdroid.database.DatabaseHelper;
-
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import org.owasp.seraphimdroid.PasswordActivity;
+import org.owasp.seraphimdroid.database.DatabaseHelper;
 
 public class BluetoothStateReceiver extends BroadcastReceiver {
 

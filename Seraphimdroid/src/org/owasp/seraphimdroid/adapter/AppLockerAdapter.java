@@ -1,12 +1,5 @@
 package org.owasp.seraphimdroid.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.owasp.seraphimdroid.AppLockFragment;
-import org.owasp.seraphimdroid.R;
-import org.owasp.seraphimdroid.database.DatabaseHelper;
-
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
@@ -29,6 +22,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import org.owasp.seraphimdroid.AppLockFragment;
+import org.owasp.seraphimdroid.R;
+import org.owasp.seraphimdroid.database.DatabaseHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AppLockerAdapter extends BaseAdapter {
 

@@ -1,14 +1,5 @@
 package org.owasp.seraphimdroid.receiver;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.owasp.seraphimdroid.LogDetailActivity;
-import org.owasp.seraphimdroid.MainActivity;
-import org.owasp.seraphimdroid.R;
-import org.owasp.seraphimdroid.database.DatabaseHelper;
-import org.owasp.seraphimdroid.services.GPSTracker;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -26,6 +17,15 @@ import android.support.v4.app.NotificationCompat;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
+
+import org.owasp.seraphimdroid.LogDetailActivity;
+import org.owasp.seraphimdroid.MainActivity;
+import org.owasp.seraphimdroid.R;
+import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.services.GPSTracker;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SMSRecepter extends BroadcastReceiver {
 

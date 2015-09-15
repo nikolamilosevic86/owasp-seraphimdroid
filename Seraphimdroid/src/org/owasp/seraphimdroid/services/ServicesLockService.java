@@ -1,10 +1,5 @@
 package org.owasp.seraphimdroid.services;
 
-import org.owasp.seraphimdroid.database.DatabaseHelper;
-import org.owasp.seraphimdroid.receiver.BluetoothStateReceiver;
-import org.owasp.seraphimdroid.receiver.MobileDataStateReceiver;
-import org.owasp.seraphimdroid.receiver.WifiStateReceiver;
-
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
@@ -17,7 +12,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.IBinder;
-import weka.classifiers.functions.IsotonicRegression;
+
+import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.receiver.BluetoothStateReceiver;
+import org.owasp.seraphimdroid.receiver.MobileDataStateReceiver;
+import org.owasp.seraphimdroid.receiver.WifiStateReceiver;
 
 public class ServicesLockService extends Service{
 

@@ -1,13 +1,5 @@
 package org.owasp.seraphimdroid.adapter;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-
-import org.owasp.seraphimdroid.R;
-import org.owasp.seraphimdroid.model.PermissionData;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -22,6 +14,15 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.owasp.seraphimdroid.R;
+import org.owasp.seraphimdroid.model.PermissionData;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+
 import weka.classifiers.functions.SMO;
 import weka.core.Attribute;
 import weka.core.FastVector;

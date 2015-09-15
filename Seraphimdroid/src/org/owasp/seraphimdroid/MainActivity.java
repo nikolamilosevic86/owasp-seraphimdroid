@@ -1,28 +1,14 @@
 package org.owasp.seraphimdroid;
 
-import java.util.ArrayList;
-
-import org.owasp.seraphimdroid.adapter.DrawerAdapter;
-import org.owasp.seraphimdroid.database.DatabaseHelper;
-import org.owasp.seraphimdroid.model.DrawerItem;
-import org.owasp.seraphimdroid.receiver.ApplicationInstallReceiver;
-import org.owasp.seraphimdroid.receiver.SettingsCheckAlarmReceiver;
-import org.owasp.seraphimdroid.services.CheckAppLaunchThread;
-import org.owasp.seraphimdroid.services.OutGoingSmsRecepter;
-import org.owasp.seraphimdroid.services.SIMCheckService;
-import org.owasp.seraphimdroid.services.ServicesLockService;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -30,7 +16,6 @@ import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,16 +25,25 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+
+import org.owasp.seraphimdroid.adapter.DrawerAdapter;
+import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.model.DrawerItem;
+import org.owasp.seraphimdroid.receiver.ApplicationInstallReceiver;
+import org.owasp.seraphimdroid.receiver.SettingsCheckAlarmReceiver;
+import org.owasp.seraphimdroid.services.CheckAppLaunchThread;
+import org.owasp.seraphimdroid.services.OutGoingSmsRecepter;
+import org.owasp.seraphimdroid.services.ServicesLockService;
+
+import java.util.ArrayList;
 
 public class MainActivity extends FragmentActivity {
 

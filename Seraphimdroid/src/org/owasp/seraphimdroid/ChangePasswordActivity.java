@@ -1,11 +1,5 @@
 package org.owasp.seraphimdroid;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
-import org.owasp.seraphimdroid.database.DatabaseHelper;
-
 import android.app.Activity;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,6 +10,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.owasp.seraphimdroid.database.DatabaseHelper;
+
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class ChangePasswordActivity extends Activity {
 

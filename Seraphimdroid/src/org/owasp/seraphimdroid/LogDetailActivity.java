@@ -1,7 +1,5 @@
 package org.owasp.seraphimdroid;
 
-import org.owasp.seraphimdroid.receiver.CallRecepter;
-
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
@@ -10,6 +8,8 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.TextView;
+
+import org.owasp.seraphimdroid.receiver.CallRecepter;
 
 public class LogDetailActivity extends Activity {
 

@@ -1,12 +1,5 @@
 package org.owasp.seraphimdroid.receiver;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import org.owasp.seraphimdroid.PasswordActivity;
-import org.owasp.seraphimdroid.database.DatabaseHelper;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +7,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+
+import org.owasp.seraphimdroid.PasswordActivity;
+import org.owasp.seraphimdroid.database.DatabaseHelper;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class MobileDataStateReceiver extends BroadcastReceiver {
 

@@ -1,11 +1,5 @@
 package org.owasp.seraphimdroid.adapter;
 
-import java.io.InputStream;
-
-import org.owasp.seraphimdroid.R;
-import org.owasp.seraphimdroid.database.DatabaseHelper;
-import org.owasp.seraphimdroid.receiver.CallRecepter;
-
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
@@ -21,6 +15,12 @@ import android.widget.CursorAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.owasp.seraphimdroid.R;
+import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.receiver.CallRecepter;
+
+import java.io.InputStream;
 
 public class BlacklistAdapter extends CursorAdapter {
 

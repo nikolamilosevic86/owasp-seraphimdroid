@@ -1,13 +1,13 @@
 package org.owasp.seraphimdroid;
 
-import org.owasp.seraphimdroid.model.PermissionData;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+
+import org.owasp.seraphimdroid.model.PermissionData;
 
 public class PermissionDescription extends Activity {
 

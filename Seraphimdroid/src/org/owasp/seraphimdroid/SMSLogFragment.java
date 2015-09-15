@@ -1,8 +1,5 @@
 package org.owasp.seraphimdroid;
 
-import org.owasp.seraphimdroid.database.DatabaseHelper;
-import org.owasp.seraphimdroid.receiver.CallRecepter;
-
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -24,6 +21,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.receiver.CallRecepter;
 
 public class SMSLogFragment extends Fragment {
 

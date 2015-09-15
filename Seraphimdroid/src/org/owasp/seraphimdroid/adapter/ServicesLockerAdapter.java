@@ -1,25 +1,24 @@
 package org.owasp.seraphimdroid.adapter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.owasp.seraphimdroid.R;
-import org.owasp.seraphimdroid.database.DatabaseHelper;
-import org.owasp.seraphimdroid.services.ServicesLockService;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import org.owasp.seraphimdroid.R;
+import org.owasp.seraphimdroid.database.DatabaseHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ServicesLockerAdapter extends BaseAdapter {
 

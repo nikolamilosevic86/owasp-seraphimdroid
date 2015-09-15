@@ -1,11 +1,5 @@
 package org.owasp.seraphimdroid.receiver;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.HashMap;
-
-import org.owasp.seraphimdroid.MainActivity;
-import org.owasp.seraphimdroid.R;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -16,6 +10,14 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.support.v4.app.NotificationCompat;
+
+import org.owasp.seraphimdroid.MainActivity;
+import org.owasp.seraphimdroid.R;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.HashMap;
+
 import weka.classifiers.functions.SMO;
 import weka.core.Attribute;
 import weka.core.FastVector;

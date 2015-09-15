@@ -1,12 +1,12 @@
 package org.owasp.seraphimdroid.adapter;
 
-import org.owasp.seraphimdroid.CallLogFragment;
-import org.owasp.seraphimdroid.SMSLogFragment;
-import org.owasp.seraphimdroid.USSDLogFragment;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import org.owasp.seraphimdroid.CallLogFragment;
+import org.owasp.seraphimdroid.SMSLogFragment;
+import org.owasp.seraphimdroid.USSDLogFragment;
 
 public class LogSwipeAdapter extends FragmentPagerAdapter{
 

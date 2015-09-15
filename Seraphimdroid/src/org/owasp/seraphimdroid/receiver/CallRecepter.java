@@ -1,17 +1,5 @@
 package org.owasp.seraphimdroid.receiver;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-
-import org.owasp.seraphimdroid.MainActivity;
-import org.owasp.seraphimdroid.PasswordActivity;
-import org.owasp.seraphimdroid.R;
-import org.owasp.seraphimdroid.CustomUSSDActivity.BlockedUSSD;
-import org.owasp.seraphimdroid.database.DatabaseHelper;
-
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -30,6 +18,16 @@ import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import org.owasp.seraphimdroid.MainActivity;
+import org.owasp.seraphimdroid.PasswordActivity;
+import org.owasp.seraphimdroid.R;
+import org.owasp.seraphimdroid.database.DatabaseHelper;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 public class CallRecepter extends BroadcastReceiver {
 

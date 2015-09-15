@@ -1,8 +1,5 @@
 package org.owasp.seraphimdroid;
 
-import org.owasp.seraphimdroid.adapter.BlacklistAdapter;
-import org.owasp.seraphimdroid.database.DatabaseHelper;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -13,6 +10,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
+
+import org.owasp.seraphimdroid.adapter.BlacklistAdapter;
+import org.owasp.seraphimdroid.database.DatabaseHelper;
 
 public class BlacklistActivity extends Activity {
 

@@ -1,10 +1,5 @@
 package org.owasp.seraphimdroid.adapter;
 
-import java.util.List;
-
-import org.owasp.seraphimdroid.R;
-import org.owasp.seraphimdroid.model.DrawerItem;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -18,6 +13,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.owasp.seraphimdroid.R;
+import org.owasp.seraphimdroid.model.DrawerItem;
+
+import java.util.List;
 
 public class DrawerAdapter extends BaseAdapter {
 

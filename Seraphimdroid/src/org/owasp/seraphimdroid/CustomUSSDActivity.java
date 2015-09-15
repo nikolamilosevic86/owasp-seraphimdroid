@@ -1,10 +1,5 @@
 package org.owasp.seraphimdroid;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.owasp.seraphimdroid.database.DatabaseHelper;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -14,7 +9,6 @@ import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +20,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.owasp.seraphimdroid.database.DatabaseHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CustomUSSDActivity extends Activity {
 

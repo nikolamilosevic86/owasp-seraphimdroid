@@ -1,9 +1,5 @@
 package org.owasp.seraphimdroid;
 
-import org.owasp.seraphimdroid.database.DatabaseHelper;
-import org.owasp.seraphimdroid.receiver.GeoFencingAdminReceiver;
-import org.owasp.seraphimdroid.receiver.SettingsCheckAlarmReceiver;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -16,10 +12,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.LocationManager;
@@ -44,6 +40,10 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.receiver.GeoFencingAdminReceiver;
+import org.owasp.seraphimdroid.receiver.SettingsCheckAlarmReceiver;
 
 public class SettingsFragment extends PreferenceFragment {
 

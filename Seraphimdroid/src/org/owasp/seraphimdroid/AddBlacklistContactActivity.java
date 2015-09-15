@@ -1,10 +1,5 @@
 package org.owasp.seraphimdroid;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.owasp.seraphimdroid.database.DatabaseHelper;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
@@ -21,6 +16,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import org.owasp.seraphimdroid.database.DatabaseHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddBlacklistContactActivity extends Activity {
 

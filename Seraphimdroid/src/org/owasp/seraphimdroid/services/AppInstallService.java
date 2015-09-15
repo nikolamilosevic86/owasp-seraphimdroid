@@ -1,11 +1,11 @@
 package org.owasp.seraphimdroid.services;
 
-import org.owasp.seraphimdroid.receiver.ApplicationInstallReceiver;
-
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
+
+import org.owasp.seraphimdroid.receiver.ApplicationInstallReceiver;
 
 public class AppInstallService extends Service {
 

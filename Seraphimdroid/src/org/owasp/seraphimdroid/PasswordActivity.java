@@ -1,30 +1,6 @@
 package org.owasp.seraphimdroid;
 
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationTargetException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
-import org.owasp.seraphimdroid.database.DatabaseHelper;
-import org.owasp.seraphimdroid.model.NoImeEditText;
-import org.owasp.seraphimdroid.receiver.BluetoothStateReceiver;
-import org.owasp.seraphimdroid.receiver.MobileDataStateReceiver;
-import org.owasp.seraphimdroid.receiver.WifiStateReceiver;
-import org.owasp.seraphimdroid.services.AppLockService;
-import org.owasp.seraphimdroid.services.KillBackgroundService;
-import org.owasp.seraphimdroid.services.MakeACallService;
-import org.owasp.seraphimdroid.services.ServicesLockService;
-
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningAppProcessInfo;
-import android.app.ActivityManager.RunningTaskInfo;
-import android.app.usage.UsageStats;
-import android.app.usage.UsageStatsManager;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ContentValues;
 import android.content.Context;
@@ -35,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.wifi.WifiManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
@@ -49,6 +24,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.model.NoImeEditText;
+import org.owasp.seraphimdroid.receiver.BluetoothStateReceiver;
+import org.owasp.seraphimdroid.receiver.MobileDataStateReceiver;
+import org.owasp.seraphimdroid.receiver.WifiStateReceiver;
+import org.owasp.seraphimdroid.services.AppLockService;
+import org.owasp.seraphimdroid.services.KillBackgroundService;
+import org.owasp.seraphimdroid.services.MakeACallService;
+
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 public class PasswordActivity extends Activity implements OnClickListener {
 

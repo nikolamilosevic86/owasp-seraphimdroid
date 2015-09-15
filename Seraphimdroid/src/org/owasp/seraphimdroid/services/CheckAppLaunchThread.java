@@ -1,14 +1,6 @@
 package org.owasp.seraphimdroid.services;
 
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
-import org.owasp.seraphimdroid.PasswordActivity;
-import org.owasp.seraphimdroid.database.DatabaseHelper;
-
 import android.app.ActivityManager;
-import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
@@ -20,6 +12,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
+
+import org.owasp.seraphimdroid.PasswordActivity;
+import org.owasp.seraphimdroid.database.DatabaseHelper;
+
+import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class CheckAppLaunchThread extends Thread {
 
