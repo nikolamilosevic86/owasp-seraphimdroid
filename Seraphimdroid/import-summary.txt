@@ -1,0 +1,225 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+Ignored Files:
+--------------
+The following files were *not* copied into the new Gradle project; you
+should evaluate whether these are still needed in your project and if
+so manually move them:
+
+* .gitignore
+* .idea\
+* .idea\.name
+* .idea\compiler.xml
+* .idea\copyright\
+* .idea\copyright\profiles_settings.xml
+* .idea\misc.xml
+* .idea\modules.xml
+* .idea\vcs.xml
+* .idea\workspace.xml
+* API Key
+* Thumbs.db
+* app\
+* app\build.gradle
+* app\libs\
+* app\libs\weka-3.6.6-android.jar
+* app\lint.xml
+* app\src\
+* app\src\main\
+* app\src\main\AndroidManifest.xml
+* app\src\main\assets\
+* app\src\main\assets\SMOWeka366.model
+* app\src\main\java\
+* app\src\main\java\org\
+* app\src\main\java\org\owasp\
+* app\src\main\java\org\owasp\seraphimdroid\
+* app\src\main\java\org\owasp\seraphimdroid\AboutFragment.java
+* app\src\main\java\org\owasp\seraphimdroid\AddBlacklistContactActivity.java
+* app\src\main\java\org\owasp\seraphimdroid\AppLockFragment.java
+* app\src\main\java\org\owasp\seraphimdroid\BlacklistActivity.java
+* app\src\main\java\org\owasp\seraphimdroid\BlockerFragment.java
+* app\src\main\java\org\owasp\seraphimdroid\CallLogFragment.java
+* app\src\main\java\org\owasp\seraphimdroid\ChangePasswordActivity.java
+* app\src\main\java\org\owasp\seraphimdroid\CustomUSSDActivity.java
+* app\src\main\java\org\owasp\seraphimdroid\GeoFencingFragment.java
+* app\src\main\java\org\owasp\seraphimdroid\LogDetailActivity.java
+* app\src\main\java\org\owasp\seraphimdroid\MainActivity.java
+* app\src\main\java\org\owasp\seraphimdroid\MyTabFactory.java
+* app\src\main\java\org\owasp\seraphimdroid\PasswordActivity.java
+* app\src\main\java\org\owasp\seraphimdroid\PermissionDescription.java
+* app\src\main\java\org\owasp\seraphimdroid\PermissionGetter.java
+* app\src\main\java\org\owasp\seraphimdroid\PermissionScannerFragment.java
+* app\src\main\java\org\owasp\seraphimdroid\SMSLogFragment.java
+* app\src\main\java\org\owasp\seraphimdroid\ServiceLockFragment.java
+* app\src\main\java\org\owasp\seraphimdroid\SettingsCheckerFragment.java
+* app\src\main\java\org\owasp\seraphimdroid\SettingsFragment.java
+* app\src\main\java\org\owasp\seraphimdroid\USSDLogFragment.java
+* app\src\main\java\org\owasp\seraphimdroid\adapter\
+* app\src\main\java\org\owasp\seraphimdroid\adapter\AppLockerAdapter.java
+* app\src\main\java\org\owasp\seraphimdroid\adapter\BlacklistAdapter.java
+* app\src\main\java\org\owasp\seraphimdroid\adapter\DrawerAdapter.java
+* app\src\main\java\org\owasp\seraphimdroid\adapter\LogSwipeAdapter.java
+* app\src\main\java\org\owasp\seraphimdroid\adapter\PermissionScannerAdapter.java
+* app\src\main\java\org\owasp\seraphimdroid\adapter\ServicesLockerAdapter.java
+* app\src\main\java\org\owasp\seraphimdroid\adapter\TabsPagerAdapter.java
+* app\src\main\java\org\owasp\seraphimdroid\database\
+* app\src\main\java\org\owasp\seraphimdroid\database\DatabaseHelper.java
+* app\src\main\java\org\owasp\seraphimdroid\model\
+* app\src\main\java\org\owasp\seraphimdroid\model\DrawerItem.java
+* app\src\main\java\org\owasp\seraphimdroid\model\NoImeEditText.java
+* app\src\main\java\org\owasp\seraphimdroid\model\PermissionData.java
+* app\src\main\java\org\owasp\seraphimdroid\receiver\
+* app\src\main\java\org\owasp\seraphimdroid\receiver\ApplicationInstallReceiver.java
+* app\src\main\java\org\owasp\seraphimdroid\receiver\BluetoothStateReceiver.java
+* app\src\main\java\org\owasp\seraphimdroid\receiver\BootReceiver.java
+* app\src\main\java\org\owasp\seraphimdroid\receiver\CallRecepter.java
+* app\src\main\java\org\owasp\seraphimdroid\receiver\GeoFencingAdminReceiver.java
+* app\src\main\java\org\owasp\seraphimdroid\receiver\LockLauncher.java
+* app\src\main\java\org\owasp\seraphimdroid\receiver\MobileDataStateReceiver.java
+* app\src\main\java\org\owasp\seraphimdroid\receiver\SIMChangeReceiver.java
+* app\src\main\java\org\owasp\seraphimdroid\receiver\SMSRecepter.java
+* app\src\main\java\org\owasp\seraphimdroid\receiver\SettingsCheckAlarmReceiver.java
+* app\src\main\java\org\owasp\seraphimdroid\receiver\WifiStateReceiver.java
+* app\src\main\java\org\owasp\seraphimdroid\services\
+* app\src\main\java\org\owasp\seraphimdroid\services\AppInstallService.java
+* app\src\main\java\org\owasp\seraphimdroid\services\AppLockService.java
+* app\src\main\java\org\owasp\seraphimdroid\services\CheckAppLaunchThread.java
+* app\src\main\java\org\owasp\seraphimdroid\services\GPSTracker.java
+* app\src\main\java\org\owasp\seraphimdroid\services\GeoFencingService.java
+* app\src\main\java\org\owasp\seraphimdroid\services\KillBackgroundService.java
+* app\src\main\java\org\owasp\seraphimdroid\services\MakeACallService.java
+* app\src\main\java\org\owasp\seraphimdroid\services\OutGoingSmsRecepter.java
+* app\src\main\java\org\owasp\seraphimdroid\services\SIMCheckService.java
+* app\src\main\java\org\owasp\seraphimdroid\services\ServicesLockService.java
+* app\src\main\res\
+* app\src\main\res\drawable-hdpi\
+* app\src\main\res\drawable-hdpi\ic_drawer.png
+* app\src\main\res\drawable\
+* app\src\main\res\drawable\add_from_contact_image.png
+* app\src\main\res\drawable\button_add.png
+* app\src\main\res\drawable\button_disabled.xml
+* app\src\main\res\drawable\button_enabled.xml
+* app\src\main\res\drawable\button_pressed.xml
+* app\src\main\res\drawable\contact.png
+* app\src\main\res\drawable\ic_green_tick.png
+* app\src\main\res\drawable\ic_launcher.png
+* app\src\main\res\drawable\ic_launcher_smal.png
+* app\src\main\res\drawable\ic_launcher_small.png
+* app\src\main\res\drawable\ic_red_cross.png
+* app\src\main\res\drawable\icon_about.png
+* app\src\main\res\drawable\icon_bluetooth.png
+* app\src\main\res\drawable\icon_data.png
+* app\src\main\res\drawable\icon_delete.png
+* app\src\main\res\drawable\icon_delete_disabled.png
+* app\src\main\res\drawable\icon_edit.png
+* app\src\main\res\drawable\icon_edit_disabled.png
+* app\src\main\res\drawable\icon_geo_fencing.png
+* app\src\main\res\drawable\icon_lock.png
+* app\src\main\res\drawable\icon_logs.png
+* app\src\main\res\drawable\icon_permission_scanner.png
+* app\src\main\res\drawable\icon_service_lock.png
+* app\src\main\res\drawable\icon_settings.png
+* app\src\main\res\drawable\icon_settings_check.png
+* app\src\main\res\drawable\icon_wifi.png
+* app\src\main\res\drawable\image_button_enabled.xml
+* app\src\main\res\drawable\image_button_pressed.xml
+* app\src\main\res\drawable\image_button_selector.xml
+* app\src\main\res\drawable\item_normal.xml
+* app\src\main\res\drawable\item_pressed.xml
+* app\src\main\res\drawable\list_selector.xml
+* app\src\main\res\drawable\location_btn_selector.xml
+* app\src\main\res\drawable\location_button_enabled.xml
+* app\src\main\res\drawable\password_buttons.xml
+* app\src\main\res\drawable\settings_bg.xml
+* app\src\main\res\drawable\settings_enabled.xml
+* app\src\main\res\drawable\settings_layout.xml
+* app\src\main\res\drawable\settings_pressed.xml
+* app\src\main\res\drawable\settings_selector.xml
+* app\src\main\res\layout\
+* app\src\main\res\layout\activity_change_password.xml
+* app\src\main\res\layout\activity_log_detail.xml
+* app\src\main\res\layout\activity_main.xml
+* app\src\main\res\layout\activity_password.xml
+* app\src\main\res\layout\activity_permission_description.xml
+* app\src\main\res\layout\app_locker_item.xml
+* app\src\main\res\layout\blacklist_add_dialog.xml
+* app\src\main\res\layout\blacklist_item.xml
+* app\src\main\res\layout\custom_ussd.xml
+* app\src\main\res\layout\custom_ussd_add_dialog.xml
+* app\src\main\res\layout\custom_ussd_item.xml
+* app\src\main\res\layout\drawer_row_layout.xml
+* app\src\main\res\layout\edit_text_dialog_view.xml
+* app\src\main\res\layout\fragment_about.xml
+* app\src\main\res\layout\fragment_application_locker.xml
+* app\src\main\res\layout\fragment_blocker.xml
+* app\src\main\res\layout\fragment_call_log.xml
+* app\src\main\res\layout\fragment_geofencing.xml
+* app\src\main\res\layout\fragment_permission_scanner.xml
+* app\src\main\res\layout\fragment_services_locker.xml
+* app\src\main\res\layout\fragment_settings.xml
+* app\src\main\res\layout\fragment_settings_scanner.xml
+* app\src\main\res\layout\fragment_sms_log.xml
+* app\src\main\res\layout\fragment_ussd_log.xml
+* app\src\main\res\layout\log_item.xml
+* app\src\main\res\layout\permission_scanner_group.xml
+* app\src\main\res\layout\permission_scanner_item.xml
+* app\src\main\res\layout\settings_check_item.xml
+* app\src\main\res\menu\
+* app\src\main\res\menu\blacklist_activity_menu.xml
+* app\src\main\res\menu\main.xml
+* app\src\main\res\raw\
+* app\src\main\res\raw\alarm_sound.mp3
+* app\src\main\res\values-v11\
+* app\src\main\res\values-v11\styles.xml
+* app\src\main\res\values-v14\
+* app\src\main\res\values-v14\styles.xml
+* app\src\main\res\values-w820dp\
+* app\src\main\res\values-w820dp\dimens.xml
+* app\src\main\res\values\
+* app\src\main\res\values\array.xml
+* app\src\main\res\values\colors.xml
+* app\src\main\res\values\dimens.xml
+* app\src\main\res\values\strings.xml
+* app\src\main\res\values\styles.xml
+* app\src\main\res\xml\
+* app\src\main\res\xml\device_admin_policies.xml
+* app\src\main\res\xml\settings_fragment.xml
+* build.gradle
+* gradle\
+* gradle\wrapper\
+* gradle\wrapper\gradle-wrapper.jar
+* gradle\wrapper\gradle-wrapper.properties
+* gradlew
+* gradlew.bat
+* ic_launcher-web.png
+* keystore
+* new_diagram.uxf
+* proguard-project.txt
+* settings.gradle
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+* AndroidManifest.xml => app\src\main\AndroidManifest.xml
+* assets\ => app\src\main\assets\
+* libs\weka-3.6.6-android.jar => app\libs\weka-3.6.6-android.jar
+* lint.xml => app\lint.xml
+* res\ => app\src\main\res\
+* src\ => app\src\main\java\
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name" translatable="false">SeraphimDroid</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="icon_desc">Drawer Icon</string>
+
+    <string-array name="item_names">
+        <item>Permission Scanner</item>
+        <item>Settings Checker</item>
+        <item>Blocker Logs</item>
+        <item>Applicaton Lock</item>
+        <item>Service Lock</item>
+        <item>Geo-fencing</item>
+        <item>Settings</item>
+        <item>About</item>
+    </string-array>
+
+    <integer-array name="drawer_icons">
+        <item>@drawable/icon_permission_scanner</item>
+        <item>@drawable/icon_settings_check</item>
+        <item>@drawable/icon_logs</item>
+        <item>@drawable/icon_lock</item>
+        <item>@drawable/icon_service_lock</item>
+        <item>@drawable/icon_geo_fencing</item>
+        <item>@drawable/icon_settings</item>
+        <item>@drawable/icon_about</item>
+    </integer-array>
+
+    <string name="password_hint">Enter PIN</string>
+
+    <!-- Strings for possible PreferenceActivity Back/Next buttons -->
+    <string name="back_button_label">Back</string>
+    <string name="next_button_label">Next</string>
+
+    <!-- Strings for Settings Check -->
+    <string name="settings_check_settings_title">Settings Check</string>
+    <string name="settings_check_check_interval_title">Set Check Interval</string>
+    <string name="settings_check_check_interval_summary">Set the interval at which the device settings are scanned</string>
+    <string name="click_here_to_change_setting">(Click to Change Setting)</string>
+    <string name="debugging_summary">Turning on USB Debuggin can allow for malicious code to run on your phone. It is recommended you turn OFF this feature.</string>
+    <string name="unknown_sources_summary">Your phone and personal data are more vulnerable to attack by apps from unknown sources. It is recommended you turn OFF this feature.</string>
+    
+    <!-- Optional button to Skip a PreferenceActivity [CHAR LIMIT=20] -->
+    <string name="skip_button_label">Skip</string>
+    <string name="app_lock_settings_title">App Locker</string>
+    <string name="app_lock_change_password">Change password</string>
+    <string name="app_lock_change_password_summary">Change the current password for the Application Locker</string>
+    <string name="app_installer_title">Application Installer</string>
+    <string name="app_installer_lock_title">Lock Application Installer</string>
+    <string name="app_installer_lock_summary">Request password on application install/uninstall</string>
+    <string name="call_blocker_settings_title">Call Blocker</string>
+    <string name="custom_ussd_settings_title">USSD Black List</string>
+    <string name="custom_ussd_settings_summary">View and Edit Blocked USSD Codes</string>
+    <string name="call_blocker_blocked_calls_title">Blocked calls</string>
+    <string name="call_blocker_blocked_calls_summary">Select what calls to block</string>
+    <string name="call_blocker_black_list_title">Calls Black List</string>
+    <string name="call_blocker_block_list_summary">Numbers which you want to block</string>
+    <string name="call_blocker_notification_title">Show Notification</string>
+    <string name="call_blocker_notification_summary">Show notification for blocked calls</string>
+    <string name="change_password">Change Password</string>
+    <string name="contact_icon">Contact Image</string>
+    <string name="add_contact_icon">Add number from contacts</string>
+    <string name="add_text">Add</string>
+    <string name="add_contact">Add new contact</string>
+    <string name="delete_record">Delete record</string>
+    <string name="your_location_text">Your Current Location</string>
+    <string name="radius_label">Radius</string>
+    <string name="geo_start_fencing">Start Fencing</string>
+    <string name="geo_stop_fencing">Stop Fencing</string>
+    <string name="remote_lock_text">Remote Lock</string>
+    <string name="remote_wipe_text">Remote Wipe</string>
+    <string name="siren_text">Siren?</string>
+    <string name="meters_text">meters</string>
+    <string name="geo_fencing_settings_title">Geo Fencing</string>
+    <string name="geo_failed_attempts">Failed Attempts</string>
+    <string name="geo_failed_attempts_summary">No. of tries before wiping the data</string>
+    <string name="send_location_text">Send Location</string>
+    <string name="geo_number_dialog_message">This number will be used to send the location cordinates. You need to enable this in order to get current location of your device</string>
+    <string name="geo_dialog_title">Enter number</string>
+    <string name="geo_settings_number_title">Enter primary secure number</string>
+    <string name="geo_settings_number_summary">Enter a number that should be used to send location data, in case phone gets lost</string>
+    <string name="geo_lock_info">Opting for this service you will be able to lock your phone in case your phone gets out of the perimeter range set by you. This will protect you privacy protect access to your phone without password</string>
+    <string name="geo_wipe_info">This will wipe your phone data in case a certain number of password attempts go wrong. Be careful to opt for this service. You could loose your data. This will also be activated only when you go out of the perimeter range</string>
+    <string name="geo_siren_info">Your phone will start making sound as soon as it goes out of the perimeter range so to let you know someone is stealing it.</string>
+    <string name="geo_location_info">This will let you receive your device\'s current location on a secure number set by you in the settings. Be sure to set the number before opting for this service.</string>
+    <string name="geo_send_location_interval_title">Send Location Interval</string>
+    <string name="geo_send_location_interval_summary">Select the interval with which the device\'s current location should be sent.</string>
+    <string name="remote_services_title">Remote Services</string>
+    <string name="remote_lock_title">Remote Lock</string>
+    <string name="remote_lock_summary">Enable remote lock, this will allow you to lock your device by sending a secret code message.</string>
+    <string name="remote_wipe_summary">Enable/disable remote wipe, this will let you wipe your data by sending a secret code message.</string>
+    <string name="remote_location_title">Remote Location</string>
+    <string name="remote_location_summary">Enable/disable remote location, this will send your devices current location if secret code message is received.</string>
+    <string name="remote_secret_code_dialog_title">Secret Code</string>
+    <string name="remote_secret_code_dialog_message">Enter a secret code which will be used to enable the remote lock, remote wipe and remote location services. Careful the code should not be a usual word cause it could trigger the remote services and could wipe your data unexpectedly.</string>
+    <string name="remote_secret_code">Remote Secret Code</string>
+    <string name="remote_secret_code_summary">Secret code to lock enable remote services</string>
+    <string name="name_label_text">Name</string>
+    <string name="number_label_text">Number</string>
+    <string name="reason_label_text">Reason</string>
+    <string name="turn_gps_on">Turn GPS on</string>
+    <string name="uninstall_info">Long pressing the application will uninstall the application.</string>
+    <string name="info_permission_scanner">This will scan all your installed applications for permission they use. These permissions allow apps to use certain mobile features which could be harmful if not used correctly. The Permission Scanner will alert you about those dangerous applications and provide you with the malicious details.</string>
+    <string name="info_settings_scanner">This will scan your settings and check for options that are not set to their recommended state. You can click on the settings option to change it to the respective optimal state.</string>
+    <string name="info_blocked_logs">This contains all the logs to your blocked calls, malicious SMSes and USSDs. You can find the reason for the blocking and call blocked numbers from here.</string>
+    <string name="info_app_lock">The Application Locker will provide you with the ability to lock application. You will be prompt for password if you try to open that app.</string>
+    <string name="info_service_lock">The Service Locker will provide you with the ability to lock services. You will be prompt for password if you try to turn on/off that service.</string>
+    <string name="info_geo_fencing">Geo fencing let you set a perimeter for your phone. If the phone gets out of the perimeter it will perform actions like locking your phone, wiping you data(Ofcourse only if you choose so) and make an alert sound. You could also ask for location updates if you want.</string>
+    <string name="context_label_text">SMS Content</string>
+    <string name="sms_type_label">SMS Type</string>
+
+</resources>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    android:orientation="vertical" >
+    
+    <!-- USB DEBUGGIN -->
+    <RelativeLayout 
+        android:id="@+id/debugging"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:clickable="true">
+        
+        <TextView 
+            android:id="@+id/textView1"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_alignParentTop="true"
+            android:textSize="16sp"
+            android:text="USB Debugging"/>
+        
+        <ImageView 
+            android:id="@+id/imageView1"
+            android:layout_height="17dp"
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"
+            android:padding="2dp"
+            android:src="@drawable/ic_red_cross"
+            android:layout_alignBottom="@+id/textView1"/>
+        
+        <TextView 
+            android:id="@+id/textView2"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/textView1"
+            android:layout_marginTop="2dp"
+            android:textSize="11sp"
+            android:text="@string/debugging_summary"/>
+        
+        <TextView 
+            android:id="@+id/debugging_click_here"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal"
+            android:layout_below="@+id/textView2"
+            android:layout_marginTop="1dp"
+            android:textSize="11sp"
+            android:text="@string/click_here_to_change_setting"/>
+        
+    </RelativeLayout>
+    
+    <!-- UNKNOWN SOURCES -->
+    <RelativeLayout 
+        android:id="@+id/unknown_sources"
+        android:layout_marginTop="15dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:clickable="true">
+        
+        <TextView 
+            android:id="@+id/textView3"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/imageView2"
+            android:textSize="16sp"
+            android:text="Unknown Sources"/>
+        
+        <ImageView 
+            android:id="@+id/imageView2"
+            android:layout_height="17dp"
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"
+            android:padding="2dp"
+            android:src="@drawable/ic_red_cross"
+            android:layout_alignBottom="@+id/textView3"/>
+        
+        <TextView 
+            android:id="@+id/textView4"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/textView3"
+            android:layout_marginTop="2dp"
+            android:textSize="11sp"
+            android:text="@string/unknown_sources_summary"/>
+        
+        <TextView 
+            android:id="@+id/unknown_sources_click_here"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal"
+            android:layout_below="@+id/textView4"
+            android:layout_marginTop="1dp"
+            android:textSize="11sp"
+            android:text="@string/click_here_to_change_setting"/>
+        
+    </RelativeLayout>
+    
+</LinearLayout>
