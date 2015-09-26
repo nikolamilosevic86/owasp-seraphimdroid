@@ -18,6 +18,7 @@ OWASP Seraphimdroid is free and open source community driven project, supported 
 Feel free to contact project leader if you want to participate or contribute to the project 
 
 website: https://www.owasp.org/index.php/OWASP_SeraphimDroid_Project
+
 Google play: https://play.google.com/store/apps/details?id=org.owasp.seraphimdroid
 
 
