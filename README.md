@@ -5,6 +5,8 @@ owasp-seraphimdroid
 
 To create, as a community, an open platform for education and protection of Android users against privacy and security threats.
 
+##Project description
+
 OWASP Seraphimdroid is a privacy and security protection app for Android devices. It enables users to protect their devices against malicious software (viruses, trojans, worms, etc.), phishing SMS, MMS messages, execution of dangerous USSD codes, theft and loosing. Also, it enables user to protect their privacy and to control the usage of applications and services via various kinds of locks.
 
 OWASP Seraphimdroid has two aims:
