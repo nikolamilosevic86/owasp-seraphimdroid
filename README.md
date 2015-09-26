@@ -13,7 +13,7 @@ OWASP Seraphimdroid has two aims:
 - To protect user's privacy and secure the device against malicious features that may cost user money
 - To educate user about threats and risks for their privacy, privacy of their data and security of their device.
 
-OWASP Seraphimdroid is free and open source community driven project, supported by OWASP (Open Web Application Security Project) Foundation. Everyone is welcome to participate. If you are interested, please join our [[https://lists.owasp.org/mailman/listinfo/owasp_seraphimdroid_project mailing list]] 
+OWASP Seraphimdroid is free and open source community driven project, supported by OWASP (Open Web Application Security Project) Foundation. Everyone is welcome to participate. If you are interested, please join our [https://lists.owasp.org/mailman/listinfo/owasp_seraphimdroid_project mailing list] 
 
 Feel free to contact project leader if you want to participate or contribute to the project 
 
