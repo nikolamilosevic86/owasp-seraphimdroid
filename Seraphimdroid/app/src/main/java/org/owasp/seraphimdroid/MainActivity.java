@@ -142,7 +142,7 @@ public class MainActivity extends FragmentActivity {
 		}
 		
 		//App Uninstall Lock
-		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP && !isUsageAccessEnabled()) {
+		if (android.os.Build.VERSION.SDK_INT >= 21 && !isUsageAccessEnabled()) {
 	    	 defaults.edit().putBoolean("uninstall_locked", false).commit();
 	     }
 	     else {
@@ -245,7 +245,7 @@ public class MainActivity extends FragmentActivity {
 		   PackageManager packageManager = getPackageManager();
 		   ApplicationInfo applicationInfo = packageManager.getApplicationInfo(getPackageName(), 0);
 		   AppOpsManager appOpsManager = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
-		   int mode = appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, applicationInfo.uid, applicationInfo.packageName);
+		   int mode = appOpsManager.checkOpNoThrow( "android:get_usage_stats", applicationInfo.uid, applicationInfo.packageName);
 		   return (mode == AppOpsManager.MODE_ALLOWED);
 
 		} catch (PackageManager.NameNotFoundException e) {

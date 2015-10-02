@@ -8,7 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.apache.http.util.EncodingUtils;
 
 public class AboutFragment extends Fragment {
 
@@ -35,6 +40,24 @@ public class AboutFragment extends Fragment {
 		OnClickListener listener = new WebLinkListener();
 		tvProjectPage.setOnClickListener(listener);
 		tvGithub.setOnClickListener(listener);
+
+		ImageView button = (ImageView) view.findViewById(R.id.paypal_donate);
+		button.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				android.net.Uri linkUri = null;
+				linkUri = android.net.Uri
+						.parse("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=paypal@owasp.org&no_shipping=0&no_note=1&currency_code=USD&tax=0&lc=US&bn=PP-DonationsBF&item_name=OWASP Seraphimdroid project");
+				CharSequence text = "Thank you! We love you!";
+				Toast.makeText(getView().getContext() ,text,Toast.LENGTH_LONG).show();
+				Intent intent = new Intent();
+				intent.setAction(Intent.ACTION_VIEW);
+				intent.setData(linkUri);
+				startActivity(intent);
+			}
+		});
 
 		return view;
 	}

@@ -51,7 +51,7 @@ public class CheckAppLaunchThread extends Thread {
 		while (true) {
 			try {
 				String topPackageName = "";
-				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { 
+				if(Build.VERSION.SDK_INT >= 21) {
 				    UsageStatsManager mUsageStatsManager = (UsageStatsManager) context.getSystemService("usagestats");                       
 				    long time = System.currentTimeMillis(); 
 				    // We get usage stats for the last 10 seconds

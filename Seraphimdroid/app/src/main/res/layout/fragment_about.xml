@@ -19,10 +19,11 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15dp"
             android:drawableLeft="@drawable/ic_launcher_smal"
+            android:drawablePadding="15dp"
             android:gravity="center"
             android:text="@string/app_name"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#cc03aa"
+            android:textColor="#3333FF"
             android:textSize="25sp" />
         
         <TextView
@@ -57,13 +58,25 @@
             android:textStyle="bold"
             android:layout_marginTop="16dp" />
 
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="300dp"
+            android:id="@+id/paypal_donate"
+            android:src="@drawable/paypaldonate"
+            android:onClick="paypalDonate"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:layout_marginTop="230dp"
+
+            />
+
         <TextView
             android:id="@+id/tv_project_code_link"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_below="@+id/tv_dev_names"
+            android:layout_below="@+id/paypal_donate"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="150dp"
+            android:layout_marginTop="-80dp"
             android:text="GitHub"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#0000ff"
