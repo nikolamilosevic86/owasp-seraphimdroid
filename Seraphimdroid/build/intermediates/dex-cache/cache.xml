@@ -9,41 +9,6 @@
         <dex dex="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\pre-dexed\debug\gson-2.3.1-3a95d9ecb13111f16c07c21acbf761ce2f9474be.jar" />
     </item>
     <item
-        jar="C:\Users\Nikola\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.3.1\ecb6e1f8e4b0e84c4b886c2f14a1500caf309757\gson-2.3.1.jar"
-        jumboMode="false"
-        revision="23.0.0"
-        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
-        <dex dex="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\pre-dexed\debug\gson-2.3.1-3a95d9ecb13111f16c07c21acbf761ce2f9474be.jar" />
-    </item>
-    <item
-        jar="C:\Users\Nikola\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.3.1\ecb6e1f8e4b0e84c4b886c2f14a1500caf309757\gson-2.3.1.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
-        <dex dex="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\pre-dexed\debug\gson-2.3.1-3a95d9ecb13111f16c07c21acbf761ce2f9474be.jar" />
-    </item>
-    <item
-        jar="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\exploded-aar\com.google.android.gms\play-services\5.0.89\jars\classes.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="d71573c9c5ea98a8db47ad6ff993a63d492b3bfa">
-        <dex dex="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\pre-dexed\debug\classes-0de94c9864bca1f5f967aba4cef31dceaabe2867.jar" />
-    </item>
-    <item
-        jar="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\exploded-aar\com.google.android.gms\play-services\5.0.89\jars\classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="d71573c9c5ea98a8db47ad6ff993a63d492b3bfa">
-        <dex dex="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\pre-dexed\debug\classes-0de94c9864bca1f5f967aba4cef31dceaabe2867.jar" />
-    </item>
-    <item
-        jar="C:\Users\Nikola\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-v4\19.1.0\support-v4-19.1.0.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67">
-        <dex dex="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\pre-dexed\debug\support-v4-19.1.0-6d8d1102cc04bcc413710cac300cc723ade6561e.jar" />
-    </item>
-    <item
         jar="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\libs\weka-3.6.6-android.jar"
         jumboMode="false"
         revision="21.1.2"
@@ -51,18 +16,11 @@
         <dex dex="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\pre-dexed\debug\weka-3.6.6-android-7c2444cdf479582cf17f7d8f3bb74665d80fec9c.jar" />
     </item>
     <item
-        jar="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\19.1.0\jars\classes.jar"
+        jar="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\libs\weka-3.6.6-android.jar"
         jumboMode="false"
-        revision="19.1.0"
-        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28">
-        <dex dex="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\pre-dexed\debug\classes-13d0ba78dcdd6b6dd28c7373459d7efceb55ec05.jar" />
-    </item>
-    <item
-        jar="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\19.1.0\jars\classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28">
-        <dex dex="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\pre-dexed\debug\classes-13d0ba78dcdd6b6dd28c7373459d7efceb55ec05.jar" />
+        revision="23.0.0"
+        sha1="393c0f9cfcb27bc590a64a2abb4de789fc5a130f">
+        <dex dex="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\pre-dexed\debug\weka-3.6.6-android-7c2444cdf479582cf17f7d8f3bb74665d80fec9c.jar" />
     </item>
     <item
         jar="C:\Users\Nikola\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-v4\19.1.0\support-v4-19.1.0.jar"
@@ -79,11 +37,53 @@
         <dex dex="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\pre-dexed\debug\weka-3.6.6-android-7c2444cdf479582cf17f7d8f3bb74665d80fec9c.jar" />
     </item>
     <item
-        jar="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\libs\weka-3.6.6-android.jar"
+        jar="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\19.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28">
+        <dex dex="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\pre-dexed\debug\classes-13d0ba78dcdd6b6dd28c7373459d7efceb55ec05.jar" />
+    </item>
+    <item
+        jar="C:\Users\Nikola\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.3.1\ecb6e1f8e4b0e84c4b886c2f14a1500caf309757\gson-2.3.1.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
+        <dex dex="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\pre-dexed\debug\gson-2.3.1-3a95d9ecb13111f16c07c21acbf761ce2f9474be.jar" />
+    </item>
+    <item
+        jar="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\19.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28">
+        <dex dex="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\pre-dexed\debug\classes-13d0ba78dcdd6b6dd28c7373459d7efceb55ec05.jar" />
+    </item>
+    <item
+        jar="C:\Users\Nikola\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-v4\19.1.0\support-v4-19.1.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67">
+        <dex dex="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\pre-dexed\debug\support-v4-19.1.0-6d8d1102cc04bcc413710cac300cc723ade6561e.jar" />
+    </item>
+    <item
+        jar="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\exploded-aar\com.google.android.gms\play-services\5.0.89\jars\classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="d71573c9c5ea98a8db47ad6ff993a63d492b3bfa">
+        <dex dex="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\pre-dexed\debug\classes-0de94c9864bca1f5f967aba4cef31dceaabe2867.jar" />
+    </item>
+    <item
+        jar="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\exploded-aar\com.google.android.gms\play-services\5.0.89\jars\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="d71573c9c5ea98a8db47ad6ff993a63d492b3bfa">
+        <dex dex="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\pre-dexed\debug\classes-0de94c9864bca1f5f967aba4cef31dceaabe2867.jar" />
+    </item>
+    <item
+        jar="C:\Users\Nikola\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.3.1\ecb6e1f8e4b0e84c4b886c2f14a1500caf309757\gson-2.3.1.jar"
         jumboMode="false"
         revision="23.0.0"
-        sha1="393c0f9cfcb27bc590a64a2abb4de789fc5a130f">
-        <dex dex="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\pre-dexed\debug\weka-3.6.6-android-7c2444cdf479582cf17f7d8f3bb74665d80fec9c.jar" />
+        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
+        <dex dex="C:\Android\owasp-seraphimdroid5\Seraphimdroid\app\build\intermediates\pre-dexed\debug\gson-2.3.1-3a95d9ecb13111f16c07c21acbf761ce2f9474be.jar" />
     </item>
 
 </items>
