@@ -21,6 +21,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -158,10 +159,12 @@
                 <action android:name="android.intent.action.SCREEN_OFF" />
             </intent-filter>
         </receiver>
+
         <receiver android:name="org.owasp.seraphimdroid.receiver.ApplicationInstallReceiver">
 		        <intent-filter android:priority="100">
 	         <action android:name="android.intent.action.PACKAGE_INSTALL"/>
 	         <action android:name="android.intent.action.PACKAGE_ADDED"/>
+                    <action android:name="android.intent.action.PACKAGE_CHANGED"/>
 	         <data android:scheme="package"/> 
 	    </intent-filter>
 	    </receiver>
