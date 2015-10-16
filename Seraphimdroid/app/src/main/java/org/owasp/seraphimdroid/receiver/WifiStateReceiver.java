@@ -8,8 +8,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
@@ -20,9 +22,11 @@ import android.widget.Toast;
 import org.owasp.seraphimdroid.MainActivity;
 import org.owasp.seraphimdroid.PasswordActivity;
 import org.owasp.seraphimdroid.R;
+import org.owasp.seraphimdroid.WiFiInfoActivity;
 import org.owasp.seraphimdroid.database.DatabaseHelper;
 
 import java.util.BitSet;
+import java.util.List;
 
 public class WifiStateReceiver extends BroadcastReceiver {
 	
@@ -60,59 +64,77 @@ public class WifiStateReceiver extends BroadcastReceiver {
 					// Do your work.
 
 					// e.g. To check the Network Name or other info:
-					WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-					WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-					String ssid = wifiInfo.getSSID();
-					WifiConfiguration activeConfig = null;
-					for (WifiConfiguration conn : wifiManager.getConfiguredNetworks()) {
-						if (conn.status == WifiConfiguration.Status.CURRENT) {
-							activeConfig = conn;
-							break;
+//					WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+//					WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+//					String ssid = wifiInfo.getSSID();
+//					WifiConfiguration activeConfig = null;
+//					for (WifiConfiguration conn : wifiManager.getConfiguredNetworks()) {
+//						if (conn.status == WifiConfiguration.Status.CURRENT) {
+//							activeConfig = conn;
+//							break;
+//						}
+//					}
+
+
+					WifiManager wifi = (WifiManager) context. getSystemService(Context.WIFI_SERVICE);
+					List<ScanResult> networkList = wifi.getScanResults();
+
+//get current connected SSID for comparison to ScanResult
+					WifiInfo wi = wifi.getConnectionInfo();
+					String currentSSID = wi.getSSID();
+					currentSSID = currentSSID.replace("\"","");
+					if (networkList != null) {
+						for (ScanResult network : networkList)
+						{
+							//check if current connected SSID
+							if (currentSSID.equals(network.SSID)){
+								//get capabilities of current connection
+								String Capabilities =  network.capabilities;
+								Log.d ("OWASP Seraphimdroid", network.SSID + " capabilities : " + Capabilities);
+
+								if (Capabilities.contains("WPA2")) {
+//									Log.w("Seraphimdroid", "Network is WPA2");
+//									System.out.print("Network is WPA2");
+//									Intent wifiLogIntent = new Intent(context, WiFiInfoActivity.class);
+//									PendingIntent pSmsLogIntent = PendingIntent.getActivity(
+//											context, 3, wifiLogIntent,
+//											PendingIntent.FLAG_UPDATE_CURRENT);
+//									Notification wifiNoti = new NotificationCompat.Builder(context)
+//											.setContentIntent(pSmsLogIntent)
+//											.setContentTitle("Secure Wifi network")
+//											.setContentText("WPA2 network is considered secure")
+//											.setAutoCancel(true)
+//											.setVibrate(new long[]{300, 500, 300})
+//											.setLights(Color.RED, 2000, 3000)
+//											.setSmallIcon(R.drawable.ic_launcher).build();
+//									((NotificationManager) context
+//											.getSystemService(Context.NOTIFICATION_SERVICE))
+//											.notify(6, wifiNoti);
+								}
+								else if (Capabilities.contains("WPA")) {
+									//do something
+								}
+								else if (Capabilities.contains("WEP")) {
+									Log.w("Seraphimdroid", "Network is WPA");
+									System.out.print("Network is WPA");
+									Intent wifiLogIntent = new Intent(context, WiFiInfoActivity.class);
+									PendingIntent pSmsLogIntent = PendingIntent.getActivity(
+											context, 3, wifiLogIntent,
+											PendingIntent.FLAG_UPDATE_CURRENT);
+									Notification wifiNoti = new NotificationCompat.Builder(context)
+											.setContentIntent(pSmsLogIntent)
+											.setContentTitle("InSecure Wifi network")
+											.setContentText("WPA network is not considered secure")
+											.setAutoCancel(true)
+											.setVibrate(new long[]{300, 500, 300})
+											.setLights(Color.RED, 2000, 3000)
+											.setSmallIcon(R.drawable.ic_launcher).build();
+									((NotificationManager) context
+											.getSystemService(Context.NOTIFICATION_SERVICE))
+											.notify(6, wifiNoti);
+								}
+							}
 						}
-					}
-
-					boolean zeroProtocol = activeConfig.allowedProtocols.get(0);
-					boolean oneProtocol = activeConfig.allowedProtocols.get(1);
-					if (zeroProtocol) {
-						Log.w("Seraphimdroid", "Network is WPA");
-						Toast.makeText(context, "Network is WPA", Toast.LENGTH_LONG);
-						System.out.print("Network is WPA");
-						Intent smsLogIntent = new Intent(context, MainActivity.class);
-						smsLogIntent.putExtra("FRAGMENT_NO", 2);
-						smsLogIntent.putExtra("TAB_NO", 1);
-						PendingIntent pSmsLogIntent = PendingIntent.getActivity(
-								context, 3, smsLogIntent,
-								PendingIntent.FLAG_UPDATE_CURRENT);
-						Notification smsNoti = new NotificationCompat.Builder(context)
-								.setContentIntent(pSmsLogIntent)
-								.setContentTitle("Unsecure Wifi network")
-								.setAutoCancel(true)
-								.setSmallIcon(R.drawable.ic_launcher).build();
-						((NotificationManager) context
-								.getSystemService(Context.NOTIFICATION_SERVICE))
-								.notify(6, smsNoti);
-
-					}
-					if (oneProtocol) {
-						Log.w("Seraphimdroid", "Network is RSN");
-						Toast.makeText(context, "Network is RSN", Toast.LENGTH_LONG);
-						System.out.print("Network is RSN");
-
-//						Intent smsLogIntent = new Intent(context, MainActivity.class);
-//						smsLogIntent.putExtra("FRAGMENT_NO", 2);
-//						smsLogIntent.putExtra("TAB_NO", 1);
-//						PendingIntent pSmsLogIntent = PendingIntent.getActivity(
-//								context, 3, smsLogIntent,
-//								PendingIntent.FLAG_UPDATE_CURRENT);
-//						Notification smsNoti = new NotificationCompat.Builder(context)
-//								.setContentIntent(pSmsLogIntent)
-//								.setContentTitle("Secure Wifi network")
-//								.setAutoCancel(true)
-//								.setSmallIcon(R.drawable.ic_launcher).build();
-//						((NotificationManager) context
-//								.getSystemService(Context.NOTIFICATION_SERVICE))
-//								.notify(6, smsNoti);
-
 					}
 				}
 			}
