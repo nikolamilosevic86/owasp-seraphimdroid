@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -54,6 +55,8 @@ public class SettingsCheckAlarmReceiver extends BroadcastReceiver{
                 .setContentText(
                         "Vulnerable Device Settings Detected. Click to Fix")
                 .setSmallIcon(R.drawable.ic_launcher)
+				.setVibrate(new long[]{300, 500, 300})
+				.setLights(Color.RED, 2000, 3000)
                 .setContentIntent(intent).setWhen(0).setAutoCancel(true)
                 .build();
 		// Display Notification

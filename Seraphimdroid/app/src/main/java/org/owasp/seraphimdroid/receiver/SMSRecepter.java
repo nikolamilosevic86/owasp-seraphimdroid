@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -110,6 +111,8 @@ public class SMSRecepter extends BroadcastReceiver {
 						.setContentIntent(pSmsLogIntent)
 						.setContentTitle("Potential Malicious SMS")
 						.setAutoCancel(true)
+						.setVibrate(new long[]{300, 500, 300})
+						.setLights(Color.RED, 2000, 3000)
 						.setSmallIcon(R.drawable.ic_launcher).build();
 				((NotificationManager) context
 						.getSystemService(Context.NOTIFICATION_SERVICE))

@@ -12,6 +12,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -101,6 +102,8 @@ public class GeoFencingService extends Service {
 		builder.setContentText("GeoFencing On")
 				.setContentTitle("Seraphimdroid").setAutoCancel(true)
 				.setContentIntent(pGeoIntent)
+				.setVibrate(new long[]{300, 500, 300})
+				.setLights(Color.YELLOW, 2000, 3000)
 				.setSmallIcon(R.drawable.ic_launcher);
 
 		startForeground(ForeGroundId, builder.build());

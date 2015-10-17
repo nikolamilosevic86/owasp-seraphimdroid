@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -365,6 +366,8 @@ public class CallRecepter extends BroadcastReceiver {
 					context).setContentTitle("Call blocked")
 					.setContentText(getReason(number)).setAutoCancel(true)
 					.setContentIntent(pLogIntent)
+					.setVibrate(new long[]{300, 500, 300})
+					.setLights(Color.RED, 2000, 3000)
 					.setSmallIcon(R.drawable.ic_launcher)
 					.addAction(R.drawable.ic_launcher, "redial", pCallIntent);
 

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.graphics.Color;
 import android.support.v4.app.NotificationCompat;
 
 import org.owasp.seraphimdroid.MainActivity;
@@ -116,6 +117,8 @@ public class ApplicationInstallReceiver extends BroadcastReceiver{
                 .setContentTitle("Malicious App Install")
                 .setContentText(
                         "The application you installed may be malicous. Click to See").setSmallIcon(R.drawable.ic_launcher)
+				.setVibrate(new long[]{300, 500, 300})
+				.setLights(Color.RED, 2000, 3000)
                 .setContentIntent(intent).setWhen(0).setAutoCancel(true)
                 .build();
 		// Display Notification

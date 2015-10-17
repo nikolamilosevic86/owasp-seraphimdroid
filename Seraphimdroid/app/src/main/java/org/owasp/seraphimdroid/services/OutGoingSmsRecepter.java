@@ -15,6 +15,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -143,6 +144,8 @@ public class OutGoingSmsRecepter extends Service {
 							getApplicationContext());
 					builder.setAutoCancel(true)
 							.setSmallIcon(R.drawable.ic_launcher)
+							.setVibrate(new long[]{300, 500, 300})
+							.setLights(Color.YELLOW, 2000, 3000)
 							.setContentTitle("Suspicious SMS");
 					if (appName.equals(""))
 						appName = "unknown application";
