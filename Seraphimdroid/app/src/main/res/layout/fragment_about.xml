@@ -103,7 +103,7 @@
             android:layout_below="@+id/tv_tagline"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:text="Version 2.0"
+            android:text="Version 2.1"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textStyle="bold" />
 

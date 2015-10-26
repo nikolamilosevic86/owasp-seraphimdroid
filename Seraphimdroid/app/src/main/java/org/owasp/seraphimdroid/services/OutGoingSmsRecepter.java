@@ -102,27 +102,27 @@ public class OutGoingSmsRecepter extends Service {
 
 				// Gettings current running task
 				String topPackageName = "";
-				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { 
-				    UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService("usagestats");                       
-				    long time = System.currentTimeMillis(); 
-				    // We get usage stats for the last 10 seconds
-				    List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000*5, time);                                    
-				    if(stats != null) {
-				        SortedMap<Long,UsageStats> mySortedMap = new TreeMap<Long,UsageStats>();
-				        for (UsageStats usageStats : stats) {
-				            mySortedMap.put(usageStats.getLastTimeUsed(),usageStats);
-				        }                    
-				        if(mySortedMap != null && !mySortedMap.isEmpty()) {
-				            topPackageName =  mySortedMap.get(mySortedMap.lastKey()).getPackageName();                                   
-				        }                                       
-				    }
-				}
-				else {
+//				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//				    UsageStatsManager mUsageStatsManager = (UsageStatsManager) getSystemService("usagestats");
+//				    long time = System.currentTimeMillis();
+//				    // We get usage stats for the last 10 seconds
+//				    List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 1000*5, time);
+//				    if(stats != null) {
+//				        SortedMap<Long,UsageStats> mySortedMap = new TreeMap<Long,UsageStats>();
+//				        for (UsageStats usageStats : stats) {
+//				            mySortedMap.put(usageStats.getLastTimeUsed(),usageStats);
+//				        }
+//				        if(mySortedMap != null && !mySortedMap.isEmpty()) {
+//				            topPackageName =  mySortedMap.get(mySortedMap.lastKey()).getPackageName();
+//				        }
+//				    }
+//				}
+//				else {
 					ActivityManager am = (ActivityManager) getApplicationContext()
 							.getSystemService(ACTIVITY_SERVICE);
 					topPackageName = am.getRunningAppProcesses().get(0).processName;
-				}
-				
+				//}
+
 
 				// Check whether the messenger is in foreground or not.
 				if (!SMSAppWhiteList.contains(topPackageName)) {
@@ -131,6 +131,7 @@ public class OutGoingSmsRecepter extends Service {
 					PackageManager pm = getPackageManager();
 					ApplicationInfo appInfo = null;
 					String appName = "";
+					boolean was_exception = false;
 					try {
 						appInfo = pm.getApplicationInfo(
 								topPackageName,
@@ -138,6 +139,7 @@ public class OutGoingSmsRecepter extends Service {
 						appName = (String) appInfo.loadLabel(pm);
 					} catch (NameNotFoundException e) {
 						e.printStackTrace();
+						was_exception = true;
 					}
 
 					NotificationCompat.Builder builder = new NotificationCompat.Builder(
