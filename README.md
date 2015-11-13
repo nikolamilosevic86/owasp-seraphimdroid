@@ -7,7 +7,7 @@ To create, as a community, an open platform for education and protection of Andr
 
 ##Project description
 
-OWASP Seraphimdroid is a privacy and security protection app for Android devices. It enables users to protect their devices against malicious software (viruses, trojans, worms, etc.), phishing SMS, MMS messages, execution of dangerous USSD codes, theft and loosing. Also, it enables user to protect their privacy and to control the usage of applications and services via various kinds of locks.
+OWASP Seraphimdroid is a privacy and security protection app for Android devices. It enables users to protect their devices against malicious software (viruses, trojans, worms, etc.), phishing SMS, MMS messages, execution of dangerous USSD codes, theft and loss. Also, it enables the user to protect their privacy and to control the usage of applications and services via various kinds of locks.
 
 OWASP Seraphimdroid has two aims:
 - To protect user's privacy and secure the device against malicious features that may cost user money
@@ -15,7 +15,7 @@ OWASP Seraphimdroid has two aims:
 
 OWASP Seraphimdroid is free and open source community driven project, supported by OWASP (Open Web Application Security Project) Foundation. Everyone is welcome to participate. If you are interested, please join our mailing list (https://lists.owasp.org/mailman/listinfo/owasp_seraphimdroid_project)
 
-Feel free to contact project leader if you want to participate or contribute to the project 
+Feel free to contact the project leader if you want to participate or contribute to the project 
 
 website: https://www.owasp.org/index.php/OWASP_SeraphimDroid_Project
 
@@ -23,7 +23,7 @@ Google play: https://play.google.com/store/apps/details?id=org.owasp.seraphimdro
 
 
 ##How to set up Eclipse for project.
-###Important note: Project was ported for Android Studio, so the following instruction does not stand anymore. New instruction will be available soon
+###Important note: Project was ported for Android Studio, so the following instructions do not stand anymore. New instructions will be available soon
   Requirement
   1. Android Support Library
   2. Google Play Services
