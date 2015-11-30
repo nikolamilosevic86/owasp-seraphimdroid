@@ -41,7 +41,9 @@
     <string name="click_here_to_change_setting">(Click to Change Setting)</string>
     <string name="debugging_summary">Turning on USB Debuggin can allow for malicious code to run on your phone. It is recommended you turn OFF this feature.</string>
     <string name="unknown_sources_summary">Your phone and personal data are more vulnerable to attack by apps from unknown sources. It is recommended you turn OFF this feature.</string>
-    
+    <string name="encrypted_summary">Your personal data are more secure if they are encrypted. It is recommended you turn ON this feature.</string>
+    <string name="pin_summary">Your phone is more secure if you enable password or security pattern protection. It is recommended you turn ON this feature.</string>
+
     <!-- Optional button to Skip a PreferenceActivity [CHAR LIMIT=20] -->
     <string name="skip_button_label">Skip</string>
     <string name="app_lock_settings_title">App Locker</string>

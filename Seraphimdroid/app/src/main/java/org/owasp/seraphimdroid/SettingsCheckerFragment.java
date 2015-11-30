@@ -1,5 +1,7 @@
 package org.owasp.seraphimdroid;
 
+import android.app.admin.DevicePolicyManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -54,8 +56,60 @@ public class SettingsCheckerFragment extends Fragment {
 				}
 			});
 		}
+
+
+		if(getDeviceEncryptionStatus() != 1) {
+			((ImageView) view.findViewById(R.id.imageView6)).setImageResource(R.drawable.ic_green_tick);
+			((TextView) view.findViewById(R.id.encrypt_click_here)).setVisibility(View.GONE);
+		}
+		else {
+			RelativeLayout usbDebuggingLayout = (RelativeLayout) view.findViewById(R.id.encrypted);
+			usbDebuggingLayout.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					startActivityForResult(new Intent(Settings.ACTION_SECURITY_SETTINGS), 0);
+				}
+			});
+		}
+
+
+		if(Settings.Secure.getInt(getActivity().getContentResolver(), Settings.Secure.LOCK_PATTERN_ENABLED, 0) != 1) {
+			((ImageView) view.findViewById(R.id.imageView7)).setImageResource(R.drawable.ic_green_tick);
+			((TextView) view.findViewById(R.id.pin_click_here)).setVisibility(View.GONE);
+		}
+		else {
+			RelativeLayout usbDebuggingLayout = (RelativeLayout) view.findViewById(R.id.pin);
+			usbDebuggingLayout.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					startActivityForResult(new Intent(android.provider.Settings.ACTION_SECURITY_SETTINGS), 0);
+				}
+			});
+		}
+
 	}
-	
+	/**
+	 * Returns the encryption status of the device. Prior to Honeycomb, whole device encryption was
+	 * not supported by Android, and this method returns ENCRYPTION_STATUS_UNSUPPORTED.
+	 *
+	 * @return One of the following constants from DevicePolicyManager:
+	 *         ENCRYPTION_STATUS_UNSUPPORTED, ENCRYPTION_STATUS_INACTIVE,
+	 *         ENCRYPTION_STATUS_ACTIVATING, or ENCRYPTION_STATUS_ACTIVE.
+	 */
+	private int getDeviceEncryptionStatus() {
+
+		int status = DevicePolicyManager.ENCRYPTION_STATUS_UNSUPPORTED;
+
+			final DevicePolicyManager dpm = (DevicePolicyManager) getActivity().getSystemService(Context.DEVICE_POLICY_SERVICE);
+			if (dpm != null) {
+				status = dpm.getStorageEncryptionStatus();
+			}
+
+
+		return status;
+	}
 	@Override
 	public void onResume() {
 		super.onResume();

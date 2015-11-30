@@ -97,5 +97,100 @@
             android:text="@string/click_here_to_change_setting"/>
         
     </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/encrypted"
+        android:layout_marginTop="15dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:clickable="true">
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/imageView6"
+            android:textSize="16sp"
+            android:text="Encrypted file system"/>
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_height="17dp"
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"
+            android:padding="2dp"
+            android:src="@drawable/ic_red_cross"
+            android:layout_alignBottom="@+id/textView7"/>
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/textView7"
+            android:layout_marginTop="2dp"
+            android:textSize="11sp"
+            android:text="@string/encrypted_summary"/>
+
+        <TextView
+            android:id="@+id/encrypt_click_here"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal"
+            android:layout_below="@+id/textView5"
+            android:layout_marginTop="1dp"
+            android:textSize="11sp"
+            android:text="@string/click_here_to_change_setting"/>
+
+    </RelativeLayout>
+
+
+
+    <RelativeLayout
+        android:id="@+id/pin"
+        android:layout_marginTop="15dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:clickable="true">
+
+        <TextView
+            android:id="@+id/pin7"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/imageView7"
+            android:textSize="16sp"
+            android:text="Pattern security enabled"/>
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_height="17dp"
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"
+            android:padding="2dp"
+            android:src="@drawable/ic_red_cross"
+            android:layout_alignBottom="@+id/pin7"/>
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/pin7"
+            android:layout_marginTop="2dp"
+            android:textSize="11sp"
+            android:text="@string/pin_summary"/>
+
+        <TextView
+            android:id="@+id/pin_click_here"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal"
+            android:layout_below="@+id/textView8"
+            android:layout_marginTop="1dp"
+            android:textSize="11sp"
+            android:text="@string/click_here_to_change_setting"/>
+
+    </RelativeLayout>
     
 </LinearLayout>
