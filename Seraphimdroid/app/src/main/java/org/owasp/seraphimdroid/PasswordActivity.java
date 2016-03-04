@@ -132,7 +132,7 @@ public class PasswordActivity extends Activity implements OnClickListener {
 			layoutOk.setVisibility(View.VISIBLE);
 			btnPass[10].setText("Retry");
 			btnPass[10].setTag("reset");
-			etPassword.setHint("Enter 4 digit PIN");
+			etPassword.setHint("Enter new 4 digit PIN");
 		}
 		
 	}
@@ -245,6 +245,7 @@ public class PasswordActivity extends Activity implements OnClickListener {
 		if (tag.equals("enter")) {
 
 			if (isFirstAttempt) {
+				etPassword.setHint("Confirm PIN");
 				if (etPassword.getText().toString().length() < 4) {
 					String message = "PIN should be atleast 4 digits long.";
 					Toast.makeText(getApplicationContext(), message,
