@@ -1,4 +1,4 @@
-package org.owasp.seraphimdroid.model;
+package org.owasp.seraphimdroid;
 
 public class PermissionData {
 	private String permission;

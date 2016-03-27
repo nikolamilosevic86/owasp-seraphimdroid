@@ -1,4 +1,4 @@
-package org.owasp.seraphimdroid.model;
+package org.owasp.seraphimdroid;
 
 import android.content.Context;
 import android.util.AttributeSet;

@@ -36,7 +36,6 @@ import android.widget.ListView;
 
 import org.owasp.seraphimdroid.adapter.DrawerAdapter;
 import org.owasp.seraphimdroid.database.DatabaseHelper;
-import org.owasp.seraphimdroid.model.DrawerItem;
 import org.owasp.seraphimdroid.receiver.ApplicationInstallReceiver;
 import org.owasp.seraphimdroid.receiver.SettingsCheckAlarmReceiver;
 import org.owasp.seraphimdroid.services.CheckAppLaunchThread;
@@ -73,7 +72,7 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	protected void onResume() {
 		if (!isUnlocked) {
-			Intent pwdIntent = new Intent(this, PasswordActivity.class);
+			Intent pwdIntent = new Intent(this, org.owasp.seraphimdroid.PasswordActivity.class);
 			pwdIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			pwdIntent.putExtra("PACKAGE_NAME", this.getPackageName());
 			startActivity(pwdIntent);
@@ -81,7 +80,8 @@ public class MainActivity extends FragmentActivity {
 			selectFragment(fragmentNo);
 		}
 		else {
-			if(PasswordActivity.lastUnlocked!=null && PasswordActivity.lastUnlocked.equals(getPackageName())==false) {
+			if(org.owasp.seraphimdroid.PasswordActivity.lastUnlocked!=null
+					&& org.owasp.seraphimdroid.PasswordActivity.lastUnlocked.equals(getPackageName())==false) {
 				finish();
 			}
 		}
@@ -284,22 +284,22 @@ public class MainActivity extends FragmentActivity {
 		Fragment fragment = null;
 		switch (position) {
 		case 0:
-			fragment = new PermissionScannerFragment();
+			fragment = new org.owasp.seraphimdroid.PermissionScannerFragment();
 			break;
 		case 1:
-			fragment = new SettingsCheckerFragment();
+			fragment = new org.owasp.seraphimdroid.SettingsCheckerFragment();
 			break;
 		case 2:
-			fragment = new BlockerFragment();
+			fragment = new org.owasp.seraphimdroid.BlockerFragment();
 			break;
 		case 3:
-			fragment = new AppLockFragment();
+			fragment = new org.owasp.seraphimdroid.AppLockFragment();
 			break;
 		case 4:
-			fragment = new ServiceLockFragment();
+			fragment = new org.owasp.seraphimdroid.ServiceLockFragment();
 			break;
 		case 5:
-			fragment = new GeoFencingFragment();
+			fragment = new org.owasp.seraphimdroid.GeoFencingFragment();
 			break;
 		case 6: {
 
@@ -307,7 +307,7 @@ public class MainActivity extends FragmentActivity {
 				FragmentManager fragMan = getSupportFragmentManager();
 				fragMan.beginTransaction().remove(prevSupportFlag).commit();
 			}
-			android.app.Fragment frag = new SettingsFragment();
+			android.app.Fragment frag = new org.owasp.seraphimdroid.SettingsFragment();
 			android.app.FragmentManager fm = getFragmentManager();
 			fm.beginTransaction().replace(R.id.fragment_container, frag)
 					.commit();
@@ -320,7 +320,7 @@ public class MainActivity extends FragmentActivity {
 		}
 			break;
 		case 7:
-			fragment = new AboutFragment();
+			fragment = new org.owasp.seraphimdroid.AboutFragment();
 			break;
 		default:
 			break;

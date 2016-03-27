@@ -37,21 +37,21 @@ public class ServicesLockService extends Service{
 		context = getBaseContext();
 		//Init Wifi listener
 		Cursor cursor = db.rawQuery(
-				"SELECT * FROM services WHERE service_name=\'" + labels[0]
+				"SELECT * FROM org.owasp.seraphimdroid.services WHERE service_name=\'" + labels[0]
 						+ "\'", null);
 		if(cursor.moveToNext()) {
 			registerWifiListener();
 		}
 		//Init Bluetooth listener
 		cursor = db.rawQuery(
-				"SELECT * FROM services WHERE service_name=\'" + labels[1]
+				"SELECT * FROM org.owasp.seraphimdroid.services WHERE service_name=\'" + labels[1]
 						+ "\'", null);
 		if(cursor.moveToNext()) {
 			registerBluetoothListener();
 		}
 		//Init Mobile Data listener
 		cursor = db.rawQuery(
-				"SELECT * FROM services WHERE service_name=\'" + labels[2]
+				"SELECT * FROM org.owasp.seraphimdroid.services WHERE service_name=\'" + labels[2]
 						+ "\'", null);
 		if(cursor.moveToNext()) {
 			registerMobileDataListener();

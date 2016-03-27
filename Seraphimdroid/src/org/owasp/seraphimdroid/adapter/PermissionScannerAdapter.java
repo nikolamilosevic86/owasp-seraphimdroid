@@ -58,7 +58,7 @@ public class PermissionScannerAdapter extends BaseExpandableListAdapter {
 		}
 		try {
 			AssetManager assetManager = context.getAssets();
-			InputStream stream = assetManager.open("SMOWeka366.model");
+			InputStream stream = assetManager.open("SMOWeka366.org.owasp.seraphimdroid.model");
 			svmModel = (SMO) SerializationHelper.read(stream);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

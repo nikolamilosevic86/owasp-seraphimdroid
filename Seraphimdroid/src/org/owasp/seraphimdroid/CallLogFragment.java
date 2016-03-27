@@ -152,7 +152,7 @@ class CallLogAdapter extends CursorAdapter {
 			Cursor c = context.getContentResolver().query(contactUri,
 					projection, null, null, null);
 			if (c.moveToFirst()) {
-				// Get values from the contacts database
+				// Get values from the contacts org.owasp.seraphimdroid.database
 				name = c.getString(c
 						.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
 			}

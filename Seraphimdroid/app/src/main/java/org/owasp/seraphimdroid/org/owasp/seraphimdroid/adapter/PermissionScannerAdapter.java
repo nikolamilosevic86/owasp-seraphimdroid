@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.owasp.seraphimdroid.R;
-import org.owasp.seraphimdroid.model.PermissionData;
+import org.owasp.seraphimdroid.PermissionData;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;

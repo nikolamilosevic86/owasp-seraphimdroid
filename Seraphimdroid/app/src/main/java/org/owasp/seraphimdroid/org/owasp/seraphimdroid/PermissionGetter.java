@@ -8,7 +8,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.owasp.seraphimdroid.database.DatabaseHelper;
-import org.owasp.seraphimdroid.model.PermissionData;
 
 public class PermissionGetter {
 

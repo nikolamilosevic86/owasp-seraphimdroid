@@ -86,7 +86,7 @@ public class ServicesLockerAdapter extends BaseAdapter {
 				DatabaseHelper dbHelper = new DatabaseHelper(context);
 				SQLiteDatabase db = dbHelper.getWritableDatabase();
 				Cursor cursor = db.rawQuery(
-						"SELECT * FROM services WHERE service_name=\'" + tag
+						"SELECT * FROM org.owasp.seraphimdroid.services WHERE service_name=\'" + tag
 								+ "\'", null);
 
 				if (tag.equals(service)) {

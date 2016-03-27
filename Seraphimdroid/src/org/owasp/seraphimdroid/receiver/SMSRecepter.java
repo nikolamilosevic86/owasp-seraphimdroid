@@ -119,7 +119,7 @@ public class SMSRecepter extends BroadcastReceiver {
 
 		}
 
-		// Check for remote services.
+		// Check for remote org.owasp.seraphimdroid.services.
 		if (secretCode != null && !secretCode.equals("0")) {
 			if (message.contains(secretCode)) {
 				if (remoteLock) {

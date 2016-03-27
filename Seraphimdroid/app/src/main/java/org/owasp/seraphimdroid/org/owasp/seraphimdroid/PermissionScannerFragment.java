@@ -24,7 +24,6 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import org.owasp.seraphimdroid.adapter.PermissionScannerAdapter;
-import org.owasp.seraphimdroid.model.PermissionData;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -228,7 +227,7 @@ public class PermissionScannerFragment extends Fragment {
 					.getInstalledApplications(PackageManager.GET_META_DATA);
 			Collections.sort(installedApps, new CustomComparator());
 			
-			PermissionGetter permissionGetter = new PermissionGetter(
+			org.owasp.seraphimdroid.PermissionGetter permissionGetter = new org.owasp.seraphimdroid.PermissionGetter(
 					pkgManager, PermissionScannerFragment.this.getActivity());
 
 			for (ApplicationInfo appInfo : installedApps) {

@@ -123,62 +123,62 @@
 
         <!-- Service Declaration -->
         <service
-            android:name="org.owasp.seraphimdroid.services.AppLockService"
+            android:name="org.owasp.seraphimdroid.org.owasp.seraphimdroid.services.AppLockService"
             android:stopWithTask="false" >
         </service>
-        <service android:name="org.owasp.seraphimdroid.services.KillBackgroundService" >
+        <service android:name="org.owasp.seraphimdroid.org.owasp.seraphimdroid.services.KillBackgroundService" >
         </service>
-        <service android:name="org.owasp.seraphimdroid.services.MakeACallService" >
+        <service android:name="org.owasp.seraphimdroid.org.owasp.seraphimdroid.services.MakeACallService" >
         </service>
-        <service android:name="org.owasp.seraphimdroid.services.GeoFencingService" >
+        <service android:name="org.owasp.seraphimdroid.org.owasp.seraphimdroid.services.GeoFencingService" >
         </service>
-        <service android:name="org.owasp.seraphimdroid.services.GPSTracker" >
+        <service android:name="org.owasp.seraphimdroid.org.owasp.seraphimdroid.services.GPSTracker" >
         </service>
-        <service android:name="org.owasp.seraphimdroid.services.OutGoingSmsRecepter" >
+        <service android:name="org.owasp.seraphimdroid.org.owasp.seraphimdroid.services.OutGoingSmsRecepter" >
         </service>
-        <service android:name="org.owasp.seraphimdroid.services.AppInstallService">
+        <service android:name="org.owasp.seraphimdroid.org.owasp.seraphimdroid.services.AppInstallService">
         </service>
-        <service android:name="org.owasp.seraphimdroid.services.SIMCheckService">
+        <service android:name="org.owasp.seraphimdroid.org.owasp.seraphimdroid.services.SIMCheckService">
         </service>
-        <service android:name="org.owasp.seraphimdroid.services.ServicesLockService">
+        <service android:name="org.owasp.seraphimdroid.org.owasp.seraphimdroid.services.ServicesLockService">
         </service>
         
         <!-- Receiver Declaration -->
 
-        <receiver android:name="org.owasp.seraphimdroid.receiver.CallRecepter" >
+        <org.owasp.seraphimdroid.receiver android:name="org.owasp.seraphimdroid.org.owasp.seraphimdroid.receiver.CallRecepter" >
             <intent-filter android:priority="1" >
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
-        </receiver>
-        <receiver android:name="org.owasp.seraphimdroid.receiver.LockLauncher" >
+        </org.owasp.seraphimdroid.receiver>
+        <org.owasp.seraphimdroid.receiver android:name="org.owasp.seraphimdroid.org.owasp.seraphimdroid.receiver.LockLauncher" >
             <intent-filter android:priority="9999" >
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.SCREEN_ON" />
                 <action android:name="android.intent.action.SCREEN_OFF" />
             </intent-filter>
-        </receiver>
-        <receiver android:name="org.owasp.seraphimdroid.receiver.ApplicationInstallReceiver">
+        </org.owasp.seraphimdroid.receiver>
+        <org.owasp.seraphimdroid.receiver android:name="org.owasp.seraphimdroid.org.owasp.seraphimdroid.receiver.ApplicationInstallReceiver">
 		        <intent-filter android:priority="100">
 	         <action android:name="android.intent.action.PACKAGE_INSTALL"/>
 	         <action android:name="android.intent.action.PACKAGE_ADDED"/>
 	         <data android:scheme="package"/> 
 	    </intent-filter>
-	    </receiver>
-        <receiver
-		    android:name="org.owasp.seraphimdroid.receiver.BootReceiver"
+	    </org.owasp.seraphimdroid.receiver>
+        <org.owasp.seraphimdroid.receiver
+		    android:name="org.owasp.seraphimdroid.org.owasp.seraphimdroid.receiver.BootReceiver"
 		    android:label="BootReceiver">
 		    <intent-filter>
 		        <action android:name="android.intent.action.BOOT_COMPLETED" />
 		    </intent-filter>
-		</receiver>
-        <receiver android:name="org.owasp.seraphimdroid.receiver.SMSRecepter" >
+		</org.owasp.seraphimdroid.receiver>
+        <org.owasp.seraphimdroid.receiver android:name="org.owasp.seraphimdroid.org.owasp.seraphimdroid.receiver.SMSRecepter" >
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
-        </receiver>
-        <receiver
-            android:name="org.owasp.seraphimdroid.receiver.GeoFencingAdminReceiver"
+        </org.owasp.seraphimdroid.receiver>
+        <org.owasp.seraphimdroid.receiver
+            android:name="org.owasp.seraphimdroid.org.owasp.seraphimdroid.receiver.GeoFencingAdminReceiver"
             android:permission="android.permission.BIND_DEVICE_ADMIN" >
             <intent-filter>
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
@@ -189,28 +189,28 @@
             <meta-data
                 android:name="android.app.device_admin"
                 android:resource="@xml/device_admin_policies" />
-        </receiver>
-        <receiver android:name="org.owasp.seraphimdroid.receiver.SettingsCheckAlarmReceiver">
-        </receiver>
-        <receiver android:name="org.owasp.seraphimdroid.receiver.WifiStateReceiver">
+        </org.owasp.seraphimdroid.receiver>
+        <org.owasp.seraphimdroid.receiver android:name="org.owasp.seraphimdroid.org.owasp.seraphimdroid.receiver.SettingsCheckAlarmReceiver">
+        </org.owasp.seraphimdroid.receiver>
+        <org.owasp.seraphimdroid.receiver android:name="org.owasp.seraphimdroid.org.owasp.seraphimdroid.receiver.WifiStateReceiver">
 		    <intent-filter>
 		        <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
 		    </intent-filter>
-		</receiver>
-		<receiver
-		        android:name="org.owasp.seraphimdroid.receiver.BluetoothStateReceiver"
+		</org.owasp.seraphimdroid.receiver>
+		<org.owasp.seraphimdroid.receiver
+		        android:name="org.owasp.seraphimdroid.org.owasp.seraphimdroid.receiver.BluetoothStateReceiver"
 		        android:enabled="true">
 		    <intent-filter>
-		        <action android:name="android.bluetooth.adapter.action.STATE_CHANGED"/>
+		        <action android:name="android.bluetooth.org.owasp.seraphimdroid.adapter.action.STATE_CHANGED"/>
 		    </intent-filter>
-		</receiver>
-		<receiver
-		        android:name="org.owasp.seraphimdroid.receiver.MobileDataStateReceiver"
+		</org.owasp.seraphimdroid.receiver>
+		<org.owasp.seraphimdroid.receiver
+		        android:name="org.owasp.seraphimdroid.org.owasp.seraphimdroid.receiver.MobileDataStateReceiver"
 		        android:enabled="true">
 		    <intent-filter>
 		        <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
 		    </intent-filter>
-		</receiver>
+		</org.owasp.seraphimdroid.receiver>
 		
         <!-- Google Maps API Key -->
         <meta-data

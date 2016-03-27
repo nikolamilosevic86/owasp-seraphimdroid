@@ -11,8 +11,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.CursorAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -22,11 +24,10 @@ import android.widget.TextView;
 
 import org.owasp.seraphimdroid.database.DatabaseHelper;
 import org.owasp.seraphimdroid.receiver.CallRecepter;
-import org.owasp.seraphimdroid.services.MakeACallService;
 
-public class CallLogFragment extends Fragment {
+public class SMSLogFragment extends Fragment {
 
-	private ListView lvCallLogs;
+	private ListView lvSMSLogs;
 	private DatabaseHelper dbHelper;
 	private CursorAdapter adapter;
 
@@ -34,30 +35,21 @@ public class CallLogFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = null;
-		view = inflater.inflate(R.layout.fragment_call_log, container, false);
+		view = inflater.inflate(R.layout.fragment_sms_log, container, false);
 
 		dbHelper = new DatabaseHelper(getActivity());
+		lvSMSLogs = (ListView) view.findViewById(R.id.lv_sms_logs);
+
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-		lvCallLogs = (ListView) view.findViewById(R.id.lv_call_logs);
-		lvCallLogs.setPadding(17, 0, 10, 10);
-
-		// lvCallLogs.setOnItemClickListener(new OnItemClickListener() {
-		//
-		// @Override
-		// public void onItemClick(AdapterView<?> parent, View view,
-		// int position, long id) {
-		// return;
-		// }
-		// });
-
-		String sql = "SELECT * from " + DatabaseHelper.TABLE_CALL_LOGS
+		String sql = "SELECT * from " + DatabaseHelper.TABLE_SMS_LOGS
 				+ " ORDER BY _id DESC";
 		Cursor cursor = db.rawQuery(sql, null);
-		adapter = new CallLogAdapter(getActivity(), cursor, true);
-		lvCallLogs.setAdapter(adapter);
 
-		lvCallLogs.setOnItemClickListener(new OnItemClickListener() {
+		adapter = new SMSLogAdapter(getActivity(), cursor, true);
+		lvSMSLogs.setAdapter(adapter);
+
+		lvSMSLogs.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View view,
@@ -80,24 +72,48 @@ public class CallLogFragment extends Fragment {
 
 		return view;
 	}
+	
+	
 
 	@Override
 	public void onResume() {
-adapter.notifyDataSetInvalidated();
+		adapter.notifyDataSetInvalidated();
 		adapter.notifyDataSetChanged();
 		super.onResume();
 	}
 
+
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		inflater.inflate(R.menu.main, menu);
+		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+//		switch (item.getItemId()) {
+//		case R.id.clear_record:
+//			DatabaseHelper dbHelper = new DatabaseHelper(getActivity());
+//			SQLiteDatabase db = dbHelper.getWritableDatabase();
+//			db.execSQL("DROP TABLE IF EXISTS " + DatabaseHelper.TABLE_SMS_LOGS);
+//			db.execSQL(DatabaseHelper.createSMSTable);
+//			db.close();
+//			dbHelper.close();
+//		}
+		return super.onOptionsItemSelected(item);
+	}
+
 }
 
-class CallLogAdapter extends CursorAdapter {
+class SMSLogAdapter extends CursorAdapter {
 
-	private Context mContext;
+	// private Context mContext;
 
-	public CallLogAdapter(Context context, Cursor c, boolean autoRequery) {
+	public SMSLogAdapter(Context context, Cursor c, boolean autoRequery) {
 		super(context, c, autoRequery);
 		// TODO Auto-generated constructor stub
-		mContext = context;
+		// mContext = context;
 	}
 
 	@Override
@@ -106,16 +122,19 @@ class CallLogAdapter extends CursorAdapter {
 		TextView tvReason = (TextView) convertView.findViewById(R.id.tv_reason);
 		TextView tvTime = (TextView) convertView.findViewById(R.id.tv_time);
 		Button btnRedial = (Button) convertView.findViewById(R.id.btn_redial);
-
 		final String number = cursor.getString(1);
 		String reason = cursor.getString(3);
 		String time = cursor.getString(2);
+		Integer type = cursor.getInt(cursor.getColumnIndex("type"));
+		String content = cursor.getString(cursor.getColumnIndex("content"));
 
 		Bundle extras = new Bundle();
-		extras.putInt("LOG_TYPE", LogDetailActivity.CALL_LOG);
+		extras.putInt("LOG_TYPE", LogDetailActivity.SMS_LOG);
 		extras.putString("NUMBER", number);
 		extras.putString("REASON", reason);
 		extras.putString("TIME", time);
+		extras.putInt("TYPE", type);
+		extras.putString("CONTENT", content);
 		convertView.setTag(extras);
 
 		int width = tvReason.getWidth();
@@ -123,20 +142,12 @@ class CallLogAdapter extends CursorAdapter {
 			if (reason.length() > width)
 				reason = reason.substring(0, width - 5) + "...";
 		} else if (reason != null) {
-			if (reason.length() > 30) {
-				reason = reason.substring(0, 29) + "...";
+			if (reason.length() > 45) {
+				reason = reason.substring(0, 44) + "...";
 			}
 		} else {
 			reason = "Not defined";
 		}
-
-		// if (reason != null) {
-		// if (reason.length() > 30) {
-		// reason = reason.substring(0, 29) + "...";
-		// }
-		// } else {
-		// reason = "Not defined";
-		// }
 
 		String name = null;
 		if (CallRecepter.contactExists(context, number)) {
@@ -152,7 +163,7 @@ class CallLogAdapter extends CursorAdapter {
 			Cursor c = context.getContentResolver().query(contactUri,
 					projection, null, null, null);
 			if (c.moveToFirst()) {
-				// Get values from the contacts database
+				// Get values from the contacts org.owasp.seraphimdroid.database
 				name = c.getString(c
 						.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
 			}
@@ -160,34 +171,13 @@ class CallLogAdapter extends CursorAdapter {
 			c.close();
 		}
 
-		if (name != null && !name.equals(""))
+		if (name != null)
 			tvNumber.setText(name);
 		else
 			tvNumber.setText(number);
 		tvTime.setText(time);
 		tvReason.setText(reason);
-
-		btnRedial.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View view) {
-				// Call the number blocked;
-
-				// Intent callIntent = new Intent(Intent.ACTION_CALL);
-				// callIntent.setData(Uri.parse("tel:" + number));
-				// mContext.startActivity(callIntent);
-				// MainActivity.shouldReceive = false;
-
-				// placeCall(number);
-
-				Intent callServiceIntent = new Intent(mContext,
-						MakeACallService.class);
-				callServiceIntent.putExtra("PHONE_NUMBER", number);
-				callServiceIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				mContext.startService(callServiceIntent);
-			}
-		});
-
+		btnRedial.setVisibility(View.GONE);
 	}
 
 	@Override
@@ -197,5 +187,4 @@ class CallLogAdapter extends CursorAdapter {
 
 		return inflater.inflate(R.layout.log_item, parent, false);
 	}
-
 }

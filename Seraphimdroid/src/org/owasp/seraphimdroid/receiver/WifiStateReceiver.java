@@ -22,7 +22,7 @@ public class WifiStateReceiver extends BroadcastReceiver {
 		DatabaseHelper dbHelper = new DatabaseHelper(context);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		Cursor cursor = db.rawQuery(
-				"SELECT * FROM services WHERE service_name=\'WiFi"
+				"SELECT * FROM org.owasp.seraphimdroid.services WHERE service_name=\'WiFi"
 						+ "\'", null);
 		if(!cursor.moveToNext()) {
 			return;
