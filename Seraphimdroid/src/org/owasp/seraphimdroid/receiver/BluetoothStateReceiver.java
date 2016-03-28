@@ -21,7 +21,7 @@ public class BluetoothStateReceiver extends BroadcastReceiver {
 		DatabaseHelper dbHelper = new DatabaseHelper(context);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		Cursor cursor = db.rawQuery(
-				"SELECT * FROM services WHERE service_name=\'Bluetooth"
+				"SELECT * FROM org.owasp.seraphimdroid.services WHERE service_name=\'Bluetooth"
 						+ "\'", null);
 		if(!cursor.moveToNext()) {
 			return;

@@ -17,7 +17,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public final static String TABLE_SMS_LOGS = "sms_logs";
 	public final static String TABLE_USSD_LOGS = "ussd_logs";
 	public static final String TABLE_LOCKS = "locks";
-	public static final String TABLE_SERVICES_LOCKS = "services";
+	public static final String TABLE_SERVICES_LOCKS = "org/owasp/seraphimdroid/services";
 	public static final String TABLE_PASS = "password";
 	public final static String TABLE_BLACKLIST = "blacklist";
 	public final static String TABLE_BLOCKED_USSD = "block_ussd";
@@ -60,7 +60,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS ussd_logs");
 		db.execSQL("DROP TABLE IF EXISTS sms_logs");
 		db.execSQL("DROP TABLE IF EXISTS locks");
-		db.execSQL("DROP TABLE IF EXISTS services");
+		db.execSQL("DROP TABLE IF EXISTS org.owasp.seraphimdroid.services");
 		db.execSQL("DROP TABLE IF EXISTS blacklist");
 		db.execSQL("DROP TABLE IF EXISTS permissions");
 		db.execSQL("DROP TABLE IF EXISTS block_ussd");
@@ -219,7 +219,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		list.add(new PerData("android.permission.WRITE_SMS", 4, ""));
 		list.add(new PerData("android.permission.WRITE_SOCIAL_STREAM", 3, ""));
 
-		// Writing this to database
+		// Writing this to org.owasp.seraphimdroid.database
 		ContentValues cv = new ContentValues();
 		for (PerData pd : list) {
 			cv.put("permission", pd.permission);

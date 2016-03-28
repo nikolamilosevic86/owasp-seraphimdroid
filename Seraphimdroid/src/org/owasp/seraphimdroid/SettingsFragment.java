@@ -472,7 +472,7 @@ public class SettingsFragment extends PreferenceFragment {
 	private void showSecretCodeDialog(final CheckBoxPreference pref) {
 		// Dialog to create Secret Code.
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setMessage("To access the remote services, you need to have a secret code which will trigger the actions. You haven't had created one yet, please create one now.");
+		builder.setMessage("To access the remote org.owasp.seraphimdroid.services, you need to have a secret code which will trigger the actions. You haven't had created one yet, please create one now.");
 
 		LayoutInflater inflater = (LayoutInflater) getActivity()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

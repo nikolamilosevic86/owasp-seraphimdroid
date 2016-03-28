@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.owasp.seraphimdroid.R;
-import org.owasp.seraphimdroid.model.DrawerItem;
+import org.owasp.seraphimdroid.DrawerItem;
 
 import java.util.List;
 

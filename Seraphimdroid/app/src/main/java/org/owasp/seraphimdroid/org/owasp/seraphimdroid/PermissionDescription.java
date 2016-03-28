@@ -7,8 +7,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.owasp.seraphimdroid.model.PermissionData;
-
 public class PermissionDescription extends Activity {
 
 	private TextView tvPermissionHeader;

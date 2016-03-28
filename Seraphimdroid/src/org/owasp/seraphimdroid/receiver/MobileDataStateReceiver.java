@@ -24,7 +24,7 @@ public class MobileDataStateReceiver extends BroadcastReceiver {
 		DatabaseHelper dbHelper = new DatabaseHelper(context);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		Cursor cursor = db.rawQuery(
-				"SELECT * FROM services WHERE service_name=\'Mobile Network Data"
+				"SELECT * FROM org.owasp.seraphimdroid.services WHERE service_name=\'Mobile Network Data"
 						+ "\'", null);
 		if(!cursor.moveToNext()) {
 			return;
