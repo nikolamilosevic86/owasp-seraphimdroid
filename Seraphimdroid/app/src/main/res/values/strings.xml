@@ -13,6 +13,7 @@
         <item>Applicaton Lock</item>
         <item>Service Lock</item>
         <item>Geo-fencing</item>
+        <item>Any Questions?</item>
         <item>Settings</item>
         <item>About</item>
     </string-array>
@@ -24,6 +25,7 @@
         <item>@drawable/icon_lock</item>
         <item>@drawable/icon_service_lock</item>
         <item>@drawable/icon_geo_fencing</item>
+        <item>@drawable/icon_question</item>
         <item>@drawable/icon_settings</item>
         <item>@drawable/icon_about</item>
     </integer-array>
@@ -110,9 +112,11 @@
     <string name="info_app_lock">The Application Locker will provide you with the ability to lock application. You will be prompt for password if you try to open that app.</string>
     <string name="info_service_lock">The Service Locker will provide you with the ability to lock services. You will be prompt for password if you try to turn on/off that service.</string>
     <string name="info_geo_fencing">Geo fencing let you set a perimeter for your phone. If the phone gets out of the perimeter it will perform actions like locking your phone, wiping you data(Ofcourse only if you choose so) and make an alert sound. You could also ask for location updates if you want.</string>
+    <string name="info_knowledge_api">Wanna know more? Whats going on and how do we work? This Section Contains a lot of Knowledge and Info about this app and it\'s working, Click Away!</string>
     <string name="context_label_text">SMS Content</string>
     <string name="sms_type_label">SMS Type</string>
     <string name="title_activity_wi_fi_info">WiFiInfoActivity</string>
     <string name="WiFiInfoText">The WiFi network you are currently connected to is not secure. This network is useing Wired Equivalent Privacy (WEP), which is no more considered secure. Mathematicians showed as long ago as 2001 that the RC4 key scheduling algorithm underlying the WEP (Wired Equivalent Privacy) protocol was flawed, but attacks on it required the interception of around 4 million packets of data in order to calculate the full WEP security key. Further flaws found in the algorithm have brought the time taken to find the key down to a matter of minutes.  With new findings, it takes just three seconds to extract a 104-bit WEP key from intercepted data using a 1.7-GHz Pentium M processor. The necessary data can be captured in less than a minute, and the attack requires so much less computing power than previous attacks that it could even be performed in real time. It is highly recommended to disconnect from this network and rather find WPA or WPA2 networks.</string>
+    <string name="questions_placeholder">Your questions go here!!</string>
 
 </resources>

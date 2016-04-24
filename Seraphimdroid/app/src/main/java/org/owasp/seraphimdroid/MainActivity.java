@@ -51,7 +51,7 @@ public class MainActivity extends FragmentActivity {
 
 	private AlarmManager alarmMgr;
 	private PendingIntent alarmIntent;
-	
+
 	private DrawerLayout drawerLayout;
 	private ListView drawerList;
 	private ActionBarDrawerToggle drawerToggle;
@@ -63,9 +63,9 @@ public class MainActivity extends FragmentActivity {
 	private DrawerAdapter adapter;
 
 	private boolean isUnlocked = false;
-	
+
 	private Fragment prevSupportFlag = null;
-	
+
 	public static boolean shouldReceive = true;
 
 	private int fragmentNo = 3;
@@ -73,7 +73,7 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	protected void onResume() {
 		if (!isUnlocked) {
-			Intent pwdIntent = new Intent(this, PasswordActivity.class);
+			Intent pwdIntent = new Intent(this, org.owasp.seraphimdroid.PasswordActivity.class);
 			pwdIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			pwdIntent.putExtra("PACKAGE_NAME", this.getPackageName());
 			startActivity(pwdIntent);
@@ -81,7 +81,7 @@ public class MainActivity extends FragmentActivity {
 			selectFragment(fragmentNo);
 		}
 		else {
-			if(PasswordActivity.lastUnlocked!=null && PasswordActivity.lastUnlocked.equals(getPackageName())==false) {
+			if(org.owasp.seraphimdroid.PasswordActivity.lastUnlocked!=null && org.owasp.seraphimdroid.PasswordActivity.lastUnlocked.equals(getPackageName())==false) {
 				finish();
 			}
 		}
@@ -103,34 +103,34 @@ public class MainActivity extends FragmentActivity {
 
 	int UNINSTALL_REQUEST_CODE = 1;
 	private android.app.Fragment prevFrag = null;
-	
-	
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-	
+
 		//Initiate Services and Receivers
 		startService(new Intent(this, OutGoingSmsRecepter.class));
 		startService(new Intent(this, ApplicationInstallReceiver.class));
 		startService(new Intent(this, ServicesLockService.class));
-		
+
 		SharedPreferences defaults = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
-		
+
 		//Alarm Manager for Settings Check
 		alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		Intent intent = new Intent(getBaseContext(), SettingsCheckAlarmReceiver.class);
 		alarmIntent = PendingIntent.getBroadcast(getBaseContext(), 0, intent, 0);
-		
+
 		java.util.Calendar calendar = java.util.Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());
 		calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);
 		calendar.set(java.util.Calendar.MINUTE, 0);
 
 		alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-		        defaults.getInt("settings_interval", 24*60*60*1000), alarmIntent);
-		
+				defaults.getInt("settings_interval", 24*60*60*1000), alarmIntent);
+
 		//Set SIM id if not set
 		TelephonyManager telephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		String hash = null;
@@ -140,14 +140,14 @@ public class MainActivity extends FragmentActivity {
 		if(hash!=null && defaults.contains("sim_1")==false) {
 			defaults.edit().putString("sim_1", hash).commit();
 		}
-		
+
 		//App Uninstall Lock
 		if (android.os.Build.VERSION.SDK_INT >= 21 && !isUsageAccessEnabled()) {
-	    	 defaults.edit().putBoolean("uninstall_locked", false).commit();
-	     }
-	     else {
-	    	 defaults.edit().putBoolean("uninstall_locked", true).commit();
-	     }
+			defaults.edit().putBoolean("uninstall_locked", false).commit();
+		}
+		else {
+			defaults.edit().putBoolean("uninstall_locked", true).commit();
+		}
 		Boolean isUninstallLocked = defaults.getBoolean("uninstall_locked", true);
 		if(isUninstallLocked) {
 			String pkgName = "com.android.packageinstaller";
@@ -155,7 +155,7 @@ public class MainActivity extends FragmentActivity {
 			SQLiteDatabase db = dbHelper.getWritableDatabase();
 			Cursor cursor = db.rawQuery(
 					"SELECT * FROM locks WHERE package_name=\'" + pkgName
-						+ "\'", null);
+							+ "\'", null);
 			if (!cursor.moveToNext()) {
 				ContentValues cv = new ContentValues();
 				cv.put("package_name", pkgName);
@@ -165,8 +165,8 @@ public class MainActivity extends FragmentActivity {
 			db.close();
 			dbHelper.close();
 		}
-		
-		
+
+
 		boolean callsBlocked = defaults.getBoolean("call_blocked_notification",
 				true);
 		defaults.edit().putBoolean("call_blocked_notification", callsBlocked)
@@ -196,7 +196,7 @@ public class MainActivity extends FragmentActivity {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
+									int position, long id) {
 				selectFragment(position);
 			}
 		});
@@ -222,18 +222,18 @@ public class MainActivity extends FragmentActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	    super.onActivityResult(requestCode, resultCode, data);
-	    if (requestCode == UNINSTALL_REQUEST_CODE) {
-	        if (resultCode == RESULT_OK) {
-	            Log.d("TAG", "onActivityResult: user accepted the (un)install");
-	        } else if (resultCode == RESULT_CANCELED) {
-	            Log.d("TAG", "onActivityResult: user canceled the (un)install");
-	        } else if (resultCode == RESULT_FIRST_USER) {
-	            Log.d("TAG", "onActivityResult: failed to (un)install");
-	        }
-	    }
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == UNINSTALL_REQUEST_CODE) {
+			if (resultCode == RESULT_OK) {
+				Log.d("TAG", "onActivityResult: user accepted the (un)install");
+			} else if (resultCode == RESULT_CANCELED) {
+				Log.d("TAG", "onActivityResult: user canceled the (un)install");
+			} else if (resultCode == RESULT_FIRST_USER) {
+				Log.d("TAG", "onActivityResult: failed to (un)install");
+			}
+		}
 	}
-	
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
@@ -242,17 +242,17 @@ public class MainActivity extends FragmentActivity {
 	@TargetApi(Build.VERSION_CODES.KITKAT)
 	private Boolean isUsageAccessEnabled() {
 		try {
-		   PackageManager packageManager = getPackageManager();
-		   ApplicationInfo applicationInfo = packageManager.getApplicationInfo(getPackageName(), 0);
-		   AppOpsManager appOpsManager = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
-		   int mode = appOpsManager.checkOpNoThrow( "android:get_usage_stats", applicationInfo.uid, applicationInfo.packageName);
-		   return (mode == AppOpsManager.MODE_ALLOWED);
+			PackageManager packageManager = getPackageManager();
+			ApplicationInfo applicationInfo = packageManager.getApplicationInfo(getPackageName(), 0);
+			AppOpsManager appOpsManager = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
+			int mode = appOpsManager.checkOpNoThrow( "android:get_usage_stats", applicationInfo.uid, applicationInfo.packageName);
+			return (mode == AppOpsManager.MODE_ALLOWED);
 
 		} catch (PackageManager.NameNotFoundException e) {
-		   return false;
+			return false;
 		}
 	}
-	
+
 	private void populateList() {
 		// populate the list.
 		listItems.add(new DrawerItem(itemNames[0], iconList.getResourceId(0,
@@ -271,7 +271,9 @@ public class MainActivity extends FragmentActivity {
 				R.drawable.ic_launcher)));
 		listItems.add(new DrawerItem(itemNames[7], iconList.getResourceId(7,
 				R.drawable.ic_launcher)));
-		
+		listItems.add(new DrawerItem(itemNames[8], iconList.getResourceId(8,
+				R.drawable.ic_launcher)));
+
 		iconList.recycle();
 	}
 
@@ -283,47 +285,50 @@ public class MainActivity extends FragmentActivity {
 	public void selectFragment(int position) {
 		Fragment fragment = null;
 		switch (position) {
-		case 0:
-			fragment = new PermissionScannerFragment();
-			break;
-		case 1:
-			fragment = new SettingsCheckerFragment();
-			break;
-		case 2:
-			fragment = new BlockerFragment();
-			break;
-		case 3:
-			fragment = new AppLockFragment();
-			break;
-		case 4:
-			fragment = new ServiceLockFragment();
-			break;
-		case 5:
-			fragment = new GeoFencingFragment();
-			break;
-		case 6: {
+			case 0:
+				fragment = new org.owasp.seraphimdroid.PermissionScannerFragment();
+				break;
+			case 1:
+				fragment = new org.owasp.seraphimdroid.SettingsCheckerFragment();
+				break;
+			case 2:
+				fragment = new org.owasp.seraphimdroid.BlockerFragment();
+				break;
+			case 3:
+				fragment = new org.owasp.seraphimdroid.AppLockFragment();
+				break;
+			case 4:
+				fragment = new org.owasp.seraphimdroid.ServiceLockFragment();
+				break;
+			case 5:
+				fragment = new org.owasp.seraphimdroid.GeoFencingFragment();
+				break;
+			case 6:
+				fragment = new org.owasp.seraphimdroid.EducateFragment();
+				break;
+			case 7: {
 
-			if (prevSupportFlag != null) {
-				FragmentManager fragMan = getSupportFragmentManager();
-				fragMan.beginTransaction().remove(prevSupportFlag).commit();
+				if (prevSupportFlag != null) {
+					FragmentManager fragMan = getSupportFragmentManager();
+					fragMan.beginTransaction().remove(prevSupportFlag).commit();
+				}
+				android.app.Fragment frag = new org.owasp.seraphimdroid.SettingsFragment();
+				android.app.FragmentManager fm = getFragmentManager();
+				fm.beginTransaction().replace(R.id.fragment_container, frag)
+						.commit();
+
+				drawerList.setItemChecked(position, true);
+				drawerList.setSelection(position);
+				setTitle(itemNames[position]);
+				drawerLayout.closeDrawer(drawerList);
+				prevFrag = frag;
 			}
-			android.app.Fragment frag = new SettingsFragment();
-			android.app.FragmentManager fm = getFragmentManager();
-			fm.beginTransaction().replace(R.id.fragment_container, frag)
-					.commit();
-
-			drawerList.setItemChecked(position, true);
-			drawerList.setSelection(position);
-			setTitle(itemNames[position]);
-			drawerLayout.closeDrawer(drawerList);
-			prevFrag = frag;
-		}
 			break;
-		case 7:
-			fragment = new AboutFragment();
-			break;
-		default:
-			break;
+			case 8:
+				fragment = new org.owasp.seraphimdroid.AboutFragment();
+				break;
+			default:
+				break;
 		}
 
 		if (fragment != null) {
