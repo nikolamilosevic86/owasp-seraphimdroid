@@ -1,58 +1,133 @@
 package org.owasp.seraphimdroid;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import adapter.ArticleAdapter;
+import model.Article;
 
 
-public class EducateFragment extends Fragment {
+public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private String TAG = this.getClass().getSimpleName();
+    private RecyclerView lstView;
+    private RequestQueue mRequestQueue;
+    private ArrayList<Article> mArrArticle;
+    private ArticleAdapter va;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private JsonArrayRequest jar;
 
-    private String mParam1;
-    private String mParam2;
+    private static final String url = "http://educate-seraphimdroid.rhcloud.com/articles.json";
 
-    private OnFragmentInteractionListener mListener;
-
-    public EducateFragment() {
-        // Required empty public constructor
-    }
-
-    public static EducateFragment newInstance(String param1, String param2) {
-        EducateFragment fragment = new EducateFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_educate, container, false);
+        View view = inflater.inflate(R.layout.fragment_educate, container, false);
+
+        mArrArticle = new ArrayList<>();
+
+        va = new ArticleAdapter(mArrArticle);
+
+        lstView = (RecyclerView) view.findViewById(R.id.recycle_articles);
+
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        lstView.setLayoutManager(linearLayoutManager);
+
+        lstView.setAdapter(va);
+
+        mRequestQueue = Volley.newRequestQueue(getActivity());
+
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+
+        swipeRefreshLayout.setOnRefreshListener(this);
+
+        jar = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+
+                    for (int i = 0; i < response.length(); i++) {
+
+                        JSONObject pjo = (JSONObject) response.get(i);
+                        String id = pjo.getString("id");
+                        String title = pjo.getString("title");
+                        String text = pjo.getString("text");
+                        Article article = new Article();
+                        article.setId(id);
+                        article.setText(text);
+                        article.setTitle(title);
+                        mArrArticle.add(article);
+
+                    }
+
+                    va.notifyDataSetChanged();
+
+                    swipeRefreshLayout.setRefreshing(false);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getActivity(),
+                            "Error: " + e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null) {
+                    Log.i(TAG, error.getMessage());
+                }
+            }
+        });
+
+        swipeRefreshLayout.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        swipeRefreshLayout.setRefreshing(true);
+                                        mRequestQueue.add(jar);
+                                    }
+                                }
+        );
+
+        return view;
+
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    @Override
+    public void onRefresh() {
+        mArrArticle.clear();
+        mRequestQueue.add(jar);
     }
+
+
+}
 
 
 //    TODO: Update this fragment with questions and content from the knowledge API
@@ -73,8 +148,3 @@ public class EducateFragment extends Fragment {
 //        super.onDetach();
 //        mListener = null;
 //    }
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
-    }
-}
