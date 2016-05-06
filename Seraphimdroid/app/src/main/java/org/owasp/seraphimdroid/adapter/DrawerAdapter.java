@@ -52,8 +52,7 @@ public class DrawerAdapter extends BaseAdapter {
 		if (convertView == null) {
 			LayoutInflater inflater = (LayoutInflater) context
 					.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-			convertView = inflater.inflate(R.layout.drawer_row_layout, null,
-					false);
+			convertView = inflater.inflate(R.layout.drawer_row_layout, null, false);
 		}
 
 		TextView txtItemName = (TextView) convertView
@@ -65,10 +64,9 @@ public class DrawerAdapter extends BaseAdapter {
 		ImageView imgInfoIcon = (ImageView) convertView
 				.findViewById(R.id.img_info_btn);
 
-		boolean isInfoVisible = defaults.getBoolean("info_visible_" + position,
-				true);
+		boolean isInfoVisible = defaults.getBoolean("info_visible_" + position, true);
 
-		if (position > 5 || !isInfoVisible) {
+		if (position > 6 || !isInfoVisible) {
 			imgInfoIcon.setVisibility(View.GONE);
 			imgInfoIcon.setClickable(false);
 		}
@@ -97,8 +95,7 @@ public class DrawerAdapter extends BaseAdapter {
 			Integer position = (Integer) view.getTag();
 			switch (position) {
 			case 0:
-				info.setMessage(context
-						.getString(R.string.info_permission_scanner));
+				info.setMessage(context.getString(R.string.info_permission_scanner));
 				break;
 			case 1:
 				info.setMessage(context.getString(R.string.info_settings_scanner));
@@ -115,12 +112,13 @@ public class DrawerAdapter extends BaseAdapter {
 			case 5:
 				info.setMessage(context.getString(R.string.info_geo_fencing));
 				break;
+				case 6:
+					info.setMessage(context.getString(R.string.info_knowledge_api));
+					break;
 			}
-			defaults.edit().putBoolean("info_visible_" + position, false)
-					.commit();
+//			defaults.edit().putBoolean("info_visible_" + position, false).commit();
 			info.create().show();
-			view.setVisibility(View.GONE);
+//			view.setVisibility(View.GONE);
 		}
 	}
-
 }
