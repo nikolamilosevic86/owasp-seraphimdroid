@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import adapter.ArticleAdapter;
 import model.Article;
@@ -78,10 +79,20 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         String id = pjo.getString("id");
                         String title = pjo.getString("title");
                         String text = pjo.getString("text");
+
                         Article article = new Article();
                         article.setId(id);
                         article.setText(text);
                         article.setTitle(title);
+
+                        if (!Objects.equals(pjo.getString("category"), "null")){
+                            JSONObject category = pjo.getJSONObject("category");
+                            article.setCategory(category.getString("name"));
+                        }
+                        else{
+                            article.setCategory("Other");
+                        }
+
                         mArrArticle.add(article);
 
                     }

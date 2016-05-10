@@ -92,9 +92,9 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         public ViewHolder(View itemView) {
             super(itemView);
 
-            tvTitle = (TextView) itemView.findViewById(R.id.title_area);
-            tvText = (TextView) itemView.findViewById(R.id.text_area);
-            tvCategory = (TextView) itemView.findViewById(R.id.category_area);
+            tvTitle = (TextView) itemView.findViewById(R.id.txtTitle);
+            tvText = (TextView) itemView.findViewById(R.id.txtText);
+            tvCategory = (TextView) itemView.findViewById(R.id.txtCategory);
         }
     }
 
@@ -112,15 +112,15 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
-        Article Question = mArrArticle.get(position);
+        Article article = mArrArticle.get(position);
 
         TextView titleView = viewHolder.tvTitle;
         TextView textView = viewHolder.tvText;
         TextView categoryView = viewHolder.tvCategory;
 
-        titleView.setText(Question.getTitle());
-        textView.setText(Question.getText());
-        categoryView.setText(Question.getCategory());
+        titleView.setText(article.getTitle());
+        textView.setText(article.getText());
+        categoryView.setText(article.getCategory());
 
     }
 
