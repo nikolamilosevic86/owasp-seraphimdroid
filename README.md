@@ -15,7 +15,7 @@ OWASP Seraphimdroid has two aims:
 
 OWASP Seraphimdroid is free and open source community driven project, supported by OWASP (Open Web Application Security Project) Foundation. Everyone is welcome to participate. If you are interested, please join our mailing list (https://lists.owasp.org/mailman/listinfo/owasp_seraphimdroid_project)
 
-Feel free to contact the project leader if you want to participate or contribute to the project 
+Feel free to contact the project leader if you want to participate or contribute to the project
 
 website: https://www.owasp.org/index.php/OWASP_SeraphimDroid_Project
 
@@ -51,7 +51,7 @@ Start digging.
 ####API Key
 You need to create a debug API key for google maps to work. Follow the steps [here](https://developers.google.com/maps/documentation/android/start) to get the key.
 
-You need to generate the SHA1 for your eclipse, to do that enter this command 
+You need to generate the SHA1 for your eclipse, to do that enter this command
 
 #####For windows
 keytool -list -alias -keystore "C:\Documents
@@ -62,5 +62,7 @@ android
 keytool -list -alias -keystore "~\.android\debug.keystore" -storepass android -keypass
 android
 
+#### TODO
+This Project is Under Active Development and Stable build is available on the Master Branch. This build will be kept free of errors mostly, but still faces some Minor UI glitches to be Corrected Shortly. Obtaining Responses from the [API](https://github.com/addiittya2006/owasp-educate) deployed at [Openshift](http://educate-seraphimdroid.rhcloud.com).
 
-
+    ❌The Cards are getting Data from the API but are still ugly.

@@ -19,16 +19,14 @@ public class AppLockService extends Service {
 
 	@Override
 	public void onCreate() {
-		// TODO Auto-generated method stub
 		handler = new Handler(getMainLooper());
 		context = getApplicationContext();
-		launchChecker = new CheckAppLaunchThread(handler, context);
+		launchChecker = new org.owasp.seraphimdroid.services.CheckAppLaunchThread(handler, context);
 		super.onCreate();
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		// TODO Auto-generated method stub
 		while (true) {
 			if (!launchChecker.isAlive())
 				launchChecker.start();
@@ -87,7 +85,6 @@ public class AppLockService extends Service {
 //				}
 //
 //			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
 //
