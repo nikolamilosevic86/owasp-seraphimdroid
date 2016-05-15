@@ -1,4 +1,4 @@
-package model;
+package org.owasp.seraphimdroid.model;
 
 /**
  * Created by addiittya on 04/05/16.

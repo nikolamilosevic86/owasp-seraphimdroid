@@ -1,4 +1,4 @@
-package adapter;
+package org.owasp.seraphimdroid.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,10 +8,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.owasp.seraphimdroid.R;
+import org.owasp.seraphimdroid.model.Article;
 
 import java.util.ArrayList;
-
-import model.Article;
 
 /**
  * Created by addiittya on 04/05/16.

@@ -20,12 +20,11 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.owasp.seraphimdroid.adapter.ArticleAdapter;
+import org.owasp.seraphimdroid.model.Article;
 
 import java.util.ArrayList;
 import java.util.Objects;
-
-import adapter.ArticleAdapter;
-import model.Article;
 
 
 public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
