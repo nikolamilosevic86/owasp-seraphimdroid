@@ -20,11 +20,11 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.owasp.seraphimdroid.adapter.ArticleAdapter;
+import org.owasp.seraphimdroid.model.Article;
 
 import java.util.ArrayList;
-
-import adapter.ArticleAdapter;
-import model.Article;
+import java.util.Objects;
 
 
 public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -78,10 +78,20 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         String id = pjo.getString("id");
                         String title = pjo.getString("title");
                         String text = pjo.getString("text");
+
                         Article article = new Article();
                         article.setId(id);
                         article.setText(text);
                         article.setTitle(title);
+
+                        if (!Objects.equals(pjo.getString("category"), "null")){
+                            JSONObject category = pjo.getJSONObject("category");
+                            article.setCategory(category.getString("name"));
+                        }
+                        else{
+                            article.setCategory("Other");
+                        }
+
                         mArrArticle.add(article);
 
                     }

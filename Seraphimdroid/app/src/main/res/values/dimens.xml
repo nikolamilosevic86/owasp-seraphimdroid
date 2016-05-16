@@ -11,4 +11,11 @@
 
     <integer name="preference_fragment_scrollbarStyle">0x02000000</integer> <!-- outsideOverlay -->
 
+    <!--For article feed-->
+    <dimen name="article_item_margin">10dp</dimen>
+    <dimen name="article_item_padding_top">20dp</dimen>
+    <dimen name="article_item_padding_side">15dp</dimen>
+    <dimen name="article_item_category_pad_side">15dp</dimen>
+    <dimen name="article_item_category_pad_top">13dp</dimen>
+
 </resources>
