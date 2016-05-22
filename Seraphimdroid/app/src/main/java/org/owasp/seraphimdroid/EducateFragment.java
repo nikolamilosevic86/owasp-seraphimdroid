@@ -1,5 +1,6 @@
 package org.owasp.seraphimdroid;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -52,11 +53,20 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
         mArrArticle = new ArrayList<>();
 
-        va = new ArticleAdapter(mArrArticle);
+        va = new ArticleAdapter(mArrArticle, new ArticleAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Article item) {
+                Log.d("Item Click", "Wohoo Got Cliked -->" + item.getId());
+                Intent i = new Intent(getActivity(), ArticleActivity.class);
+                i.putExtra("id", item.getId());
+                startActivity(i);
+            }
+        });
 
         lstView = (RecyclerView) view.findViewById(R.id.recycle_articles);
 
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+
         lstView.setLayoutManager(linearLayoutManager);
 
         lstView.setAdapter(va);
