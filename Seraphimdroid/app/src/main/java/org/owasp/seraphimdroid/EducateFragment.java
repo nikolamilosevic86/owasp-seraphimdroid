@@ -38,8 +38,9 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private SwipeRefreshLayout swipeRefreshLayout;
     private JsonArrayRequest jar;
 
-    private static final String url = "http://educate-seraphimdroid.rhcloud.com/articles.json";
+    private static final String BASE_URL = "http://educate-seraphimdroid.rhcloud.com/";
 
+    private static final String url = BASE_URL + "articles.json";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,8 +57,8 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
         va = new ArticleAdapter(mArrArticle, new ArticleAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Article item) {
-                Log.d("Item Click", "Wohoo Got Cliked -->" + item.getId());
-                Intent i = new Intent(getActivity(), ArticleActivity.class);
+//                Intent i = new Intent(getActivity(), ArticleActivity.class);
+                Intent i = new Intent(getActivity(), WebViewActivity.class);
                 i.putExtra("id", item.getId());
                 startActivity(i);
             }

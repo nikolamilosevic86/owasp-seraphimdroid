@@ -1,6 +1,7 @@
 package org.owasp.seraphimdroid;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 public class WiFiInfoActivity extends Activity {
@@ -14,6 +15,9 @@ public class WiFiInfoActivity extends Activity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        finish();
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
     }
 
 //    @Override
