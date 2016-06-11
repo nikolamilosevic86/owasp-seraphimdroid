@@ -8,7 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.owasp.seraphimdroid.PasswordActivity;
-import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.helper.DatabaseHelper;
 
 public class BluetoothStateReceiver extends BroadcastReceiver {
 

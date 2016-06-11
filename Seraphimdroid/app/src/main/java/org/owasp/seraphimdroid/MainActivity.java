@@ -35,7 +35,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import org.owasp.seraphimdroid.adapter.DrawerAdapter;
-import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.helper.DatabaseHelper;
 import org.owasp.seraphimdroid.model.DrawerItem;
 import org.owasp.seraphimdroid.receiver.ApplicationInstallReceiver;
 import org.owasp.seraphimdroid.receiver.SettingsCheckAlarmReceiver;

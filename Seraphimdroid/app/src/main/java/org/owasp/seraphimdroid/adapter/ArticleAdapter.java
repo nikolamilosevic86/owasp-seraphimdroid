@@ -91,20 +91,20 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvTitle;
-        TextView tvText;
+//        TextView tvText;
         TextView tvCategory;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             tvTitle = (TextView) itemView.findViewById(R.id.txtTitle);
-            tvText = (TextView) itemView.findViewById(R.id.txtText);
+//            tvText = (TextView) itemView.findViewById(R.id.txtText);
             tvCategory = (TextView) itemView.findViewById(R.id.txtCategory);
         }
 
         public void bind(final Article item, final OnItemClickListener listener) {
             tvTitle.setText(item.getTitle());
-            tvText.setText(item.getText());
+//            tvText.setText(item.getText());
             tvCategory.setText(item.getCategory());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

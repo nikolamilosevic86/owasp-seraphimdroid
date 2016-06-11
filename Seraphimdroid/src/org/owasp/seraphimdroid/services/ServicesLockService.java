@@ -13,7 +13,7 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.IBinder;
 
-import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.helper.DatabaseHelper;
 import org.owasp.seraphimdroid.receiver.BluetoothStateReceiver;
 import org.owasp.seraphimdroid.receiver.MobileDataStateReceiver;
 import org.owasp.seraphimdroid.receiver.WifiStateReceiver;

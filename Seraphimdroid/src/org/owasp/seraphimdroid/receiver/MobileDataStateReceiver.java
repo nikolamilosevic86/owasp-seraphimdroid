@@ -9,7 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import org.owasp.seraphimdroid.PasswordActivity;
-import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.helper.DatabaseHelper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

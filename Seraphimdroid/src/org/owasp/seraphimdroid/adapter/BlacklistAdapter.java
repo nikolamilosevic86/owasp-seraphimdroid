@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.owasp.seraphimdroid.R;
-import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.helper.DatabaseHelper;
 import org.owasp.seraphimdroid.receiver.CallRecepter;
 
 import java.io.InputStream;

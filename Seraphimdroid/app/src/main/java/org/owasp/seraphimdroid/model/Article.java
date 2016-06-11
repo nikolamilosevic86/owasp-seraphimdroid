@@ -9,8 +9,7 @@ public class Article {
     private String title;
     private String text;
     private String category;
-
-    // TODO Implement Image Upload and add to Articles Model
+    private String cachefile;
 
     public String getCategory() {
         return category;
@@ -44,5 +43,12 @@ public class Article {
         this.title = title;
     }
 
+    public String getCachefile() {
+        return cachefile;
+    }
+
+    public void setCachefile(String cachefile) {
+        this.cachefile = cachefile;
+    }
 
 }

@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import org.owasp.seraphimdroid.adapter.BlacklistAdapter;
-import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.helper.DatabaseHelper;
 
 public class BlacklistActivity extends Activity {
 
