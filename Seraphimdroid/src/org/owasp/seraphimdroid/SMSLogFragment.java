@@ -22,7 +22,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.helper.DatabaseHelper;
 import org.owasp.seraphimdroid.receiver.CallRecepter;
 
 public class SMSLogFragment extends Fragment {

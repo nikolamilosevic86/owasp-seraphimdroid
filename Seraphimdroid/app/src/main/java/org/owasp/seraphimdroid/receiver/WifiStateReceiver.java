@@ -12,18 +12,15 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
-import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
 
-import org.owasp.seraphimdroid.MainActivity;
 import org.owasp.seraphimdroid.PasswordActivity;
 import org.owasp.seraphimdroid.R;
 import org.owasp.seraphimdroid.WiFiInfoActivity;
-import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.helper.DatabaseHelper;
 
 import java.util.BitSet;
 import java.util.List;

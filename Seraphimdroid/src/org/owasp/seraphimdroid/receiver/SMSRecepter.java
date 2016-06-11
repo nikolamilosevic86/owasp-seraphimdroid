@@ -21,7 +21,7 @@ import android.util.Log;
 import org.owasp.seraphimdroid.LogDetailActivity;
 import org.owasp.seraphimdroid.MainActivity;
 import org.owasp.seraphimdroid.R;
-import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.helper.DatabaseHelper;
 import org.owasp.seraphimdroid.services.GPSTracker;
 
 import java.util.ArrayList;
