@@ -25,7 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.helper.DatabaseHelper;
 import org.owasp.seraphimdroid.model.NoImeEditText;
 import org.owasp.seraphimdroid.receiver.BluetoothStateReceiver;
 import org.owasp.seraphimdroid.receiver.MobileDataStateReceiver;

@@ -1,4 +1,4 @@
-package org.owasp.seraphimdroid.database;
+package org.owasp.seraphimdroid.helper;
 
 import android.content.ContentValues;
 import android.content.Context;

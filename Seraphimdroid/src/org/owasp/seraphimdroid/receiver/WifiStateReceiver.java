@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.wifi.WifiManager;
 
 import org.owasp.seraphimdroid.PasswordActivity;
-import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.helper.DatabaseHelper;
 
 public class WifiStateReceiver extends BroadcastReceiver {
 	

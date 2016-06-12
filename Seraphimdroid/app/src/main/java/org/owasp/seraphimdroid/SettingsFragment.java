@@ -41,7 +41,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.helper.DatabaseHelper;
 import org.owasp.seraphimdroid.receiver.GeoFencingAdminReceiver;
 import org.owasp.seraphimdroid.receiver.SettingsCheckAlarmReceiver;
 

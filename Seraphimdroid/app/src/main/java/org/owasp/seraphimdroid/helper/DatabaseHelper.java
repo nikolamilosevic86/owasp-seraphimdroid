@@ -1,9 +1,12 @@
-package org.owasp.seraphimdroid.database;
+package org.owasp.seraphimdroid.helper;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import org.owasp.seraphimdroid.model.Article;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String TABLE_PASS = "password";
 	public final static String TABLE_BLACKLIST = "blacklist";
 	public final static String TABLE_BLOCKED_USSD = "block_ussd";
+	public final static String TABLE_ARTICLES = "articles";
 	public final static String TABLE_PERMISSIONS = "permissions";
 
 	public static final String createCallTable = "CREATE TABLE IF NOT EXISTS call_logs (_id integer primary key autoincrement, phone_number TEXT , time TEXT, reason TEXT) ";
@@ -32,6 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String createBlacklistTable = "CREATE TABLE IF NOT EXISTS blacklist (_id INTEGER PRIMARY KEY AUTOINCREMENT, number TEXT NOT NULL)";
 	public static final String createBlockedUSSDTable = "CREATE TABLE IF NOT EXISTS block_ussd (_id INTEGER PRIMARY KEY AUTOINCREMENT, number TEXT NOT NULL, desc TEXT NOT NULL, type TEXT NOT NULL)";
 	private final String createPermissionTable = "CREATE TABLE IF NOT EXISTS permissions (_id INTEGER PRIMARY KEY AUTOINCREMENT, permission TEXT, weight INTEGER, malicious_use TEXT)";
+	private final String createArticlesTable = "CREATE TABLE IF NOT EXISTS articles ( id INTEGER PRIMARY KEY, title TEXT, category TEXT, cachefile TEXT)";
 
 	public DatabaseHelper(Context context) {
 		super(context, DB_NAME, null, VERSION);
@@ -49,6 +54,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(createBlockedUSSDTable);
 		db.execSQL(createServicesLocksTable);
 		db.execSQL(createPermissionTable);
+		db.execSQL(createArticlesTable);
 
 		populatePermissions(db);
 		populateBlockedUSSDList(db);
@@ -64,7 +70,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS blacklist");
 		db.execSQL("DROP TABLE IF EXISTS permissions");
 		db.execSQL("DROP TABLE IF EXISTS block_ussd");
-		
+		db.execSQL("DROP TABLE IF EXISTS articles");
+
 		this.onCreate(db);
 
 	}
@@ -169,7 +176,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		list.add(new PerData("android.permission.READ_LOGS", 5, ""));
 		list.add(new PerData("android.permission.READ_PHONE_STATE", 1, ""));
 		list.add(new PerData("android.permission.READ_PROFILE", 5, ""));
-		list.add(new PerData("android.permission.READ_SMS", 5, ""));
 		list.add(new PerData("android.permission.READ_SOCIAL_STREAM", 5, ""));
 		list.add(new PerData("android.permission.READ_SYNC_SETTINGS", 2, ""));
 		list.add(new PerData("android.permission.READ_SYNC_STATS", 2, ""));
@@ -228,6 +234,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			db.insert(TABLE_PERMISSIONS, null, cv);
 			cv.clear();
 		}
+		list.add(new PerData("android.permission.READ_SMS", 5, ""));
 	}
 	
 	private class BlockedUSSD {
@@ -250,6 +257,45 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			weight = w;
 			maliciousUse = m;
 		}
+	}
+
+	public void addNewArticles(ArrayList<Article> list) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.execSQL("DROP TABLE IF EXISTS articles");
+		db.execSQL(createArticlesTable);
+
+		ContentValues cv = new ContentValues();
+
+		for (Article ar : list) {
+			cv.put("id", ar.getId());
+			cv.put("title", ar.getTitle());
+			cv.put("category", ar.getCategory());
+			cv.put("cachefile", ar.getCachefile());
+			db.insert(TABLE_ARTICLES, null, cv);
+			cv.clear();
+		}
+		db.close();
+	}
+
+	public ArrayList<Article> getAllArticles() {
+		ArrayList<Article> articlesList = new ArrayList<>();
+		String selectQuery = "SELECT  * FROM " + TABLE_ARTICLES;
+
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, null);
+
+		if (cursor.moveToFirst()) {
+			do {
+				Article article = new Article();
+				article.setId(cursor.getString(0));
+				article.setTitle(cursor.getString(1));
+				article.setCategory(cursor.getString(2));
+				article.setCachefile(cursor.getString(3));
+				articlesList.add(article);
+			} while (cursor.moveToNext());
+		}
+
+		return articlesList;
 	}
 
 }

@@ -14,7 +14,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import org.owasp.seraphimdroid.PasswordActivity;
-import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.helper.DatabaseHelper;
 
 import java.util.List;
 import java.util.SortedMap;

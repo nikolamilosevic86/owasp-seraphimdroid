@@ -25,7 +25,7 @@ import android.widget.ToggleButton;
 
 import org.owasp.seraphimdroid.AppLockFragment;
 import org.owasp.seraphimdroid.R;
-import org.owasp.seraphimdroid.database.DatabaseHelper;
+import org.owasp.seraphimdroid.helper.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
