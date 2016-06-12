@@ -3,6 +3,7 @@ package org.owasp.seraphimdroid;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -55,7 +56,14 @@ public class WebViewActivity extends Activity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
 //                view.loadUrl(url);
-                return false;
+//                return false;
+                if (url != null && url.startsWith("http://")) {
+                    view.getContext().startActivity(
+                            new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                    return true;
+                } else {
+                    return false;
+                }
             }
 
             @Override
@@ -93,18 +101,7 @@ public class WebViewActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-//		super.onBackPressed();
         finish();
     }
-
-//    Another Option depends on the UseCase
-//    @Override
-//    public boolean onKeyDown(final int keyCode, final KeyEvent event) {
-//			if ((keyCode == KeyEvent.KEYCODE_BACK) && mWebView.canGoBack()) {
-//				mWebView.goBack();
-//				return true;
-//			}
-//        return super.onKeyDown(keyCode, event);
-//    }
 
 }
