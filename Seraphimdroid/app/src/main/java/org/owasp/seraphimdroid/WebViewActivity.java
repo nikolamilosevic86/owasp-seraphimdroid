@@ -58,8 +58,7 @@ public class WebViewActivity extends Activity {
 //                view.loadUrl(url);
 //                return false;
                 if (url != null && url.startsWith("http://")) {
-                    view.getContext().startActivity(
-                            new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                    view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
                     return true;
                 } else {
                     return false;
