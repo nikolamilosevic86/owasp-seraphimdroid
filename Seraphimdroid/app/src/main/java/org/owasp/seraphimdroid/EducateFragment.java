@@ -135,6 +135,20 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
                             article.setCategory("Other");
                         }
 
+                        if (!Objects.equals(pjo.getString("tags"), "null")){
+                            JSONArray tags = pjo.getJSONArray("tags");
+                            ArrayList<String> taglist = new ArrayList<>();
+                            for (int j=0; j < tags.length(); j++){
+                                JSONObject tag = tags.getJSONObject(j);
+                                String tag_name = tag.getString("name");
+                                taglist.add(tag_name);
+                            }
+                            article.setTags(taglist);
+                        }
+                        else{
+                            article.setTags(new ArrayList<String>());
+                        }
+
                         mArrArticle.add(article);
 
                     }
