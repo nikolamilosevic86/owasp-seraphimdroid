@@ -17,9 +17,9 @@ import android.net.wifi.WifiManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import org.owasp.seraphimdroid.MainActivity;
 import org.owasp.seraphimdroid.PasswordActivity;
 import org.owasp.seraphimdroid.R;
-import org.owasp.seraphimdroid.WiFiInfoActivity;
 import org.owasp.seraphimdroid.helper.DatabaseHelper;
 
 import java.util.BitSet;
@@ -107,14 +107,35 @@ public class WifiStateReceiver extends BroadcastReceiver {
 //									((NotificationManager) context
 //											.getSystemService(Context.NOTIFICATION_SERVICE))
 //											.notify(6, wifiNoti);
+									Log.w("Seraphimdroid", "Network is WPA");
+									System.out.print("Network is WPA");
+//									Intent wifiLogIntent = new Intent(context, WiFiInfoActivity.class);
+									Intent wifiLogIntent = new Intent(context, MainActivity.class);
+									wifiLogIntent.putExtra("tags", "wifi");
+									wifiLogIntent.putExtra("FRAGMENT_NO", 6);
+									PendingIntent pSmsLogIntent = PendingIntent.getActivity(
+											context, 3, wifiLogIntent,
+											PendingIntent.FLAG_UPDATE_CURRENT);
+									Notification wifiNoti = new NotificationCompat.Builder(context)
+											.setContentIntent(pSmsLogIntent)
+											.setContentTitle("InSecure Wifi network")
+											.setContentText("WPA network is not considered secure")
+											.setAutoCancel(true)
+											.setVibrate(new long[]{300, 500, 300})
+											.setLights(Color.RED, 2000, 3000)
+											.setSmallIcon(R.drawable.ic_launcher).build();
+									((NotificationManager) context
+											.getSystemService(Context.NOTIFICATION_SERVICE))
+											.notify(6, wifiNoti);
 								}
 								else if (Capabilities.contains("WPA")) {
 									//do something
 								}
 								else if (Capabilities.contains("WEP")) {
-									Log.w("Seraphimdroid", "Network is WPA");
-									System.out.print("Network is WPA");
-									Intent wifiLogIntent = new Intent(context, WiFiInfoActivity.class);
+//									Intent wifiLogIntent = new Intent(context, WiFiInfoActivity.class);
+									Intent wifiLogIntent = new Intent(context, MainActivity.class);
+									wifiLogIntent.putExtra("tags", "wifi");
+									wifiLogIntent.putExtra("FRAGMENT_NO", 6);
 									PendingIntent pSmsLogIntent = PendingIntent.getActivity(
 											context, 3, wifiLogIntent,
 											PendingIntent.FLAG_UPDATE_CURRENT);

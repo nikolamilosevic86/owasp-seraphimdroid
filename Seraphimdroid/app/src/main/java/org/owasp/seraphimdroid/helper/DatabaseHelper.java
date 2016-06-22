@@ -272,7 +272,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			cv.put("title", ar.getTitle());
 			cv.put("category", ar.getCategory());
 			cv.put("cachefile", ar.getCachefile());
-			cv.put("tags", ar.getTags().toString());
+			String tags = ar.getTags().toString();
+			cv.put("tags", tags.replace("[", "").replace("]", ""));
 			db.insert(TABLE_ARTICLES, null, cv);
 			cv.clear();
 		}
@@ -297,8 +298,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				articlesList.add(article);
 			} while (cursor.moveToNext());
 		}
-
+		cursor.close();
 		return articlesList;
+	}
+
+	public ArrayList<Article> getArticlesWithTag(String tag){
+		ArrayList<Article> articles = new ArrayList<>();
+
+		String select = "SELECT * FROM " + TABLE_ARTICLES;
+
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery(select, null);
+
+		if (cursor.moveToFirst()) {
+			do {
+				Article article = new Article();
+				article.setId(cursor.getString(0));
+				article.setTitle(cursor.getString(1));
+				article.setCategory(cursor.getString(2));
+				article.setCachefile(cursor.getString(3));
+				article.setTags(new ArrayList<>(Arrays.asList(cursor.getString(4).split("\\s*,\\s*"))));
+				if (article.getTags().contains(tag)){
+					articles.add(article);
+				}
+			} while (cursor.moveToNext());
+		}
+		cursor.close();
+		return articles;
 	}
 
 }

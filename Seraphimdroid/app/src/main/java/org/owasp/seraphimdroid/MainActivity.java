@@ -174,6 +174,9 @@ public class MainActivity extends FragmentActivity {
 
 		try {
 			fragmentNo = getIntent().getIntExtra("FRAGMENT_NO", fragmentNo);
+			if (fragmentNo == 6){
+				selectFragment(6);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
