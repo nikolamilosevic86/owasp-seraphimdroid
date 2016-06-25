@@ -17,9 +17,9 @@ import android.net.wifi.WifiManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import org.owasp.seraphimdroid.MainActivity;
 import org.owasp.seraphimdroid.PasswordActivity;
 import org.owasp.seraphimdroid.R;
-import org.owasp.seraphimdroid.WiFiInfoActivity;
 import org.owasp.seraphimdroid.helper.DatabaseHelper;
 
 import java.util.BitSet;
@@ -90,31 +90,17 @@ public class WifiStateReceiver extends BroadcastReceiver {
 								Log.d ("OWASP Seraphimdroid", network.SSID + " capabilities : " + Capabilities);
 
 								if (Capabilities.contains("WPA2")) {
-//									Log.w("Seraphimdroid", "Network is WPA2");
-//									System.out.print("Network is WPA2");
-//									Intent wifiLogIntent = new Intent(context, WiFiInfoActivity.class);
-//									PendingIntent pSmsLogIntent = PendingIntent.getActivity(
-//											context, 3, wifiLogIntent,
-//											PendingIntent.FLAG_UPDATE_CURRENT);
-//									Notification wifiNoti = new NotificationCompat.Builder(context)
-//											.setContentIntent(pSmsLogIntent)
-//											.setContentTitle("Secure Wifi network")
-//											.setContentText("WPA2 network is considered secure")
-//											.setAutoCancel(true)
-//											.setVibrate(new long[]{300, 500, 300})
-//											.setLights(Color.RED, 2000, 3000)
-//											.setSmallIcon(R.drawable.ic_launcher).build();
-//									((NotificationManager) context
-//											.getSystemService(Context.NOTIFICATION_SERVICE))
-//											.notify(6, wifiNoti);
+									Log.w("Seraphimdroid", "Network is WPA2");
+									System.out.print("Network is WPA2");
 								}
 								else if (Capabilities.contains("WPA")) {
-									//do something
-								}
-								else if (Capabilities.contains("WEP")) {
 									Log.w("Seraphimdroid", "Network is WPA");
 									System.out.print("Network is WPA");
-									Intent wifiLogIntent = new Intent(context, WiFiInfoActivity.class);
+								}
+								else if (Capabilities.contains("WEP")) {
+									Intent wifiLogIntent = new Intent(context, MainActivity.class);
+									wifiLogIntent.putExtra("tags", "wifi");
+									wifiLogIntent.putExtra("FRAGMENT_NO", 6);
 									PendingIntent pSmsLogIntent = PendingIntent.getActivity(
 											context, 3, wifiLogIntent,
 											PendingIntent.FLAG_UPDATE_CURRENT);
@@ -165,9 +151,8 @@ public class WifiStateReceiver extends BroadcastReceiver {
 			default:
 				break;
 		}
-
-
 	}
+
 	private void showLock(final Context context, final String service, final int state) {
 		Intent passwordAct = new Intent(context, PasswordActivity.class);
 		passwordAct.putExtra("PACKAGE_NAME", "");
@@ -177,8 +162,7 @@ public class WifiStateReceiver extends BroadcastReceiver {
 		context.startActivity(passwordAct);
 	}
 
-	public static int bitSetToInt(BitSet bitSet)
-	{
+	public static int bitSetToInt(BitSet bitSet) {
 		int bitInteger = 0;
 		for(int i = 0 ; i < 32; i++)
 			if(bitSet.get(i))
@@ -190,6 +174,4 @@ public class WifiStateReceiver extends BroadcastReceiver {
 		wasOn = status;
 	}
 
-
-	
 }

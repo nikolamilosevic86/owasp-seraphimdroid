@@ -32,19 +32,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-
 public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    private String TAG = this.getClass().getSimpleName();
-    private RecyclerView lstView;
     private RequestQueue mRequestQueue;
     private ArrayList<Article> mArrArticle;
     private ArticleAdapter va;
     private SwipeRefreshLayout swipeRefreshLayout;
     private JsonArrayRequest jar;
+    private String tags;
+    private DatabaseHelper db;
+    private ConnectionHelper ch;
 
     private static final String BASE_URL = "http://educate-seraphimdroid.rhcloud.com/";
-
     private static final String url = BASE_URL + "articles.json";
 
     @Override
@@ -53,20 +52,21 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_educate, container, false);
 
+        db = new DatabaseHelper(getActivity());
+        ch = new ConnectionHelper(getActivity().getApplicationContext());
+
+        Intent i = getActivity().getIntent();
+        tags = i.getStringExtra("tags");
+
         mArrArticle = new ArrayList<>();
-
-        final DatabaseHelper db = new DatabaseHelper(getActivity());
-
-        final ConnectionHelper ch = new ConnectionHelper(getActivity().getApplicationContext());
-
         va = new ArticleAdapter(mArrArticle, new ArticleAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Article item) {
-//                Intent i = new Intent(getActivity(), ArticleActivity.class);
+
                 Intent i = new Intent(getActivity(), WebViewActivity.class);
                 i.putExtra("id", item.getId());
                 if (ch.isConnectingToInternet()) {
@@ -75,7 +75,6 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 } else {
                     FileInputStream fis = null;
                     try {
-//                        fis = new FileInputStream(new File(getActivity().getFilesDir().getAbsolutePath() + File.separator + item.getId() + File.separator + "page.mht"));
                         fis = new FileInputStream(new File(getActivity().getFilesDir().getAbsolutePath() + File.separator + item.getId() + "page.mht"));
                         if (fis.read() == 0) {
                             throw new FileNotFoundException();
@@ -87,26 +86,12 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         e.printStackTrace();
                         Toast.makeText(getActivity(), "Some Error Occurred.", Toast.LENGTH_SHORT).show();
                     }
-//                    i.putExtra("url", "file:///" + getActivity().getFilesDir().getAbsolutePath() + File.separator + item.getId() + File.separator + "page.mht");
                     i.putExtra("url", "file:///" + getActivity().getFilesDir().getAbsolutePath() + File.separator + item.getId() + "page.mht");
                     startActivity(i);
                 }
+
             }
         });
-
-        lstView = (RecyclerView) view.findViewById(R.id.recycle_articles);
-
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-
-        lstView.setLayoutManager(linearLayoutManager);
-
-        lstView.setAdapter(va);
-
-        mRequestQueue = Volley.newRequestQueue(getActivity());
-
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-
-        swipeRefreshLayout.setOnRefreshListener(this);
 
         jar = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
             @Override
@@ -124,7 +109,6 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         article.setId(id);
                         article.setText(text);
                         article.setTitle(title);
-//                        article.setCachefile(getActivity().getFilesDir().getAbsolutePath() + File.separator + id + File.separator + "page.mht");
                         article.setCachefile(getActivity().getFilesDir().getAbsolutePath() + File.separator + id + "page.mht");
 
                         if (!Objects.equals(pjo.getString("category"), "null")){
@@ -135,6 +119,20 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
                             article.setCategory("Other");
                         }
 
+                        if (!Objects.equals(pjo.getString("tags"), "null")){
+                            JSONArray tags = pjo.getJSONArray("tags");
+                            ArrayList<String> taglist = new ArrayList<>();
+                            for (int j=0; j < tags.length(); j++){
+                                JSONObject tag = tags.getJSONObject(j);
+                                String tag_name = tag.getString("name");
+                                taglist.add(tag_name);
+                            }
+                            article.setTags(taglist);
+                        }
+                        else{
+                            article.setTags(new ArrayList<String>());
+                        }
+
                         mArrArticle.add(article);
 
                     }
@@ -143,22 +141,11 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
                     va.notifyDataSetChanged();
 
-//                    FileWriter file = new FileWriter(getActivity().getFilesDir().getAbsolutePath() + File.separator + "saved_list.json");
-//                    file.write(response.toString());
-//                    Log.i(TAG, "onResponse: Written to file");
-//                    FileInputStream fis = new FileInputStream (new File(getActivity().getFilesDir().getAbsolutePath() + File.separator + "saved_list.json"));
-//                    Log.i(TAG, "onResponse: " + fis.read());
-
                     swipeRefreshLayout.setRefreshing(false);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(getActivity(), "Some Error Occurred.", Toast.LENGTH_SHORT).show();
-//                    Toast.makeText(getActivity(),
-//                            "Error: " + e.getMessage(),
-//                            Toast.LENGTH_LONG).show();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
                 }
 
             }
@@ -166,63 +153,47 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
             @Override
             public void onErrorResponse(VolleyError error) {
                 if (error.getMessage() != null) {
-//                    Log.i(TAG, error.getMessage());
-//                    Toast.makeText(getActivity(),
-//                            "Error: " + error.getMessage(),
-//                            Toast.LENGTH_SHORT).show();
                     Toast.makeText(getActivity(), "Please Connect to the internet", Toast.LENGTH_LONG).show();
-
                     mArrArticle.addAll(db.getAllArticles());
-//                    db.getAllArticles();
-
-//                    Log.i(TAG, "onErrorResponse: " + mArrArticle.toString());
-
                     va.notifyDataSetChanged();
-
                     swipeRefreshLayout.setRefreshing(false);
 
                 }
             }
         });
 
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView lstView = (RecyclerView) view.findViewById(R.id.recycle_articles);
+        lstView.setLayoutManager(linearLayoutManager);
+        lstView.setAdapter(va);
+
+        mRequestQueue = Volley.newRequestQueue(getActivity());
+
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.post(new Runnable() {
                                     @Override
                                     public void run() {
                                         swipeRefreshLayout.setRefreshing(true);
-                                        mRequestQueue.add(jar);
+//                                        Log.i("Hello", "run: " + tags);
+                                        if (tags != null){
+                                            mArrArticle.addAll(db.getArticlesWithTag(tags));
+                                            va.notifyDataSetChanged();
+                                            swipeRefreshLayout.setRefreshing(false);
+                                        } else {
+                                            mRequestQueue.add(jar);
+                                        }
                                     }
-                                }
-        );
+                                });
 
         return view;
-
     }
 
     @Override
     public void onRefresh() {
         mArrArticle.clear();
         mRequestQueue.add(jar);
+        tags=null;
     }
 
-
 }
-
-
-//    TODO: Update this fragment with questions and content from the knowledge API
-
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }

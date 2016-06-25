@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import org.owasp.seraphimdroid.model.Article;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -36,7 +37,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String createBlacklistTable = "CREATE TABLE IF NOT EXISTS blacklist (_id INTEGER PRIMARY KEY AUTOINCREMENT, number TEXT NOT NULL)";
 	public static final String createBlockedUSSDTable = "CREATE TABLE IF NOT EXISTS block_ussd (_id INTEGER PRIMARY KEY AUTOINCREMENT, number TEXT NOT NULL, desc TEXT NOT NULL, type TEXT NOT NULL)";
 	private final String createPermissionTable = "CREATE TABLE IF NOT EXISTS permissions (_id INTEGER PRIMARY KEY AUTOINCREMENT, permission TEXT, weight INTEGER, malicious_use TEXT)";
-	private final String createArticlesTable = "CREATE TABLE IF NOT EXISTS articles ( id INTEGER PRIMARY KEY, title TEXT, category TEXT, cachefile TEXT)";
+	private final String createArticlesTable = "CREATE TABLE IF NOT EXISTS articles ( id INTEGER PRIMARY KEY, title TEXT, category TEXT, cachefile TEXT, tags TEXT)";
 
 	public DatabaseHelper(Context context) {
 		super(context, DB_NAME, null, VERSION);
@@ -271,6 +272,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			cv.put("title", ar.getTitle());
 			cv.put("category", ar.getCategory());
 			cv.put("cachefile", ar.getCachefile());
+			String tags = ar.getTags().toString();
+			cv.put("tags", tags.replace("[", "").replace("]", ""));
 			db.insert(TABLE_ARTICLES, null, cv);
 			cv.clear();
 		}
@@ -291,11 +294,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				article.setTitle(cursor.getString(1));
 				article.setCategory(cursor.getString(2));
 				article.setCachefile(cursor.getString(3));
+				article.setTags(new ArrayList<>(Arrays.asList(cursor.getString(4).split("\\s*,\\s*"))));
 				articlesList.add(article);
 			} while (cursor.moveToNext());
 		}
-
+		cursor.close();
 		return articlesList;
+	}
+
+	public ArrayList<Article> getArticlesWithTag(String tag){
+		ArrayList<Article> articles = new ArrayList<>();
+
+		String select = "SELECT * FROM " + TABLE_ARTICLES;
+
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery(select, null);
+
+		if (cursor.moveToFirst()) {
+			do {
+				Article article = new Article();
+				article.setId(cursor.getString(0));
+				article.setTitle(cursor.getString(1));
+				article.setCategory(cursor.getString(2));
+				article.setCachefile(cursor.getString(3));
+				article.setTags(new ArrayList<>(Arrays.asList(cursor.getString(4).split("\\s*,\\s*"))));
+				if (article.getTags().contains(tag)){
+					articles.add(article);
+				}
+			} while (cursor.moveToNext());
+		}
+		cursor.close();
+		return articles;
 	}
 
 }

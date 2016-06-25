@@ -120,7 +120,7 @@ public class MainActivity extends FragmentActivity {
 
 		//Alarm Manager for Settings Check
 		alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-		Intent intent = new Intent(getBaseContext(), SettingsCheckAlarmReceiver.class);
+		final Intent intent = new Intent(getBaseContext(), SettingsCheckAlarmReceiver.class);
 		alarmIntent = PendingIntent.getBroadcast(getBaseContext(), 0, intent, 0);
 
 		java.util.Calendar calendar = java.util.Calendar.getInstance();
@@ -197,7 +197,12 @@ public class MainActivity extends FragmentActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 									int position, long id) {
-				selectFragment(position);
+				if (position == 6){
+					getIntent().removeExtra("tags");
+					selectFragment(6);
+				} else {
+					selectFragment(position);
+				}
 			}
 		});
 

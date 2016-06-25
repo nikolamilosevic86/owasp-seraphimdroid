@@ -1,5 +1,7 @@
 package org.owasp.seraphimdroid.model;
 
+import java.util.ArrayList;
+
 /**
  * Created by addiittya on 04/05/16.
  */
@@ -10,6 +12,15 @@ public class Article {
     private String text;
     private String category;
     private String cachefile;
+    private ArrayList<String> tags;
+
+    public ArrayList<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(ArrayList<String> tags) {
+        this.tags = tags;
+    }
 
     public String getCategory() {
         return category;
