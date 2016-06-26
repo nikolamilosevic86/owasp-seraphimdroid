@@ -157,13 +157,29 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     mArrArticle.addAll(db.getAllArticles());
                     va.notifyDataSetChanged();
                     swipeRefreshLayout.setRefreshing(false);
-
                 }
             }
         });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         RecyclerView lstView = (RecyclerView) view.findViewById(R.id.recycle_articles);
+
+//        lstView.setOnScrollListener(new RecyclerView.OnScrollListener(){
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                int topRowVerticalPosition =
+//                        (recyclerView == null || recyclerView.getChildCount() == 0) ? 0 : recyclerView.getChildAt(0).getTop();
+//                swipeRefreshLayout.setEnabled(topRowVerticalPosition >= 0);
+//
+//            }
+//
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//            }
+//        });
+
+
         lstView.setLayoutManager(linearLayoutManager);
         lstView.setAdapter(va);
 
@@ -192,6 +208,74 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
     @Override
     public void onRefresh() {
         mArrArticle.clear();
+        va.notifyDataSetChanged();
+        jar = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+
+                    for (int i = 0; i < response.length(); i++) {
+
+                        JSONObject pjo = (JSONObject) response.get(i);
+                        String id = pjo.getString("id");
+                        String title = pjo.getString("title");
+                        String text = pjo.getString("text");
+
+                        Article article = new Article();
+                        article.setId(id);
+                        article.setText(text);
+                        article.setTitle(title);
+                        article.setCachefile(getActivity().getFilesDir().getAbsolutePath() + File.separator + id + "page.mht");
+
+                        if (!Objects.equals(pjo.getString("category"), "null")){
+                            JSONObject category = pjo.getJSONObject("category");
+                            article.setCategory(category.getString("name"));
+                        }
+                        else{
+                            article.setCategory("Other");
+                        }
+
+                        if (!Objects.equals(pjo.getString("tags"), "null")){
+                            JSONArray tags = pjo.getJSONArray("tags");
+                            ArrayList<String> taglist = new ArrayList<>();
+                            for (int j=0; j < tags.length(); j++){
+                                JSONObject tag = tags.getJSONObject(j);
+                                String tag_name = tag.getString("name");
+                                taglist.add(tag_name);
+                            }
+                            article.setTags(taglist);
+                        }
+                        else{
+                            article.setTags(new ArrayList<String>());
+                        }
+
+                        mArrArticle.add(article);
+
+                    }
+
+                    db.addNewArticles(mArrArticle);
+
+                    va.notifyDataSetChanged();
+
+                    swipeRefreshLayout.setRefreshing(false);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getActivity(), "Some Error Occurred.", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null) {
+                    Toast.makeText(getActivity(), "Please Connect to the internet", Toast.LENGTH_LONG).show();
+                    mArrArticle.addAll(db.getAllArticles());
+                    va.notifyDataSetChanged();
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        });
         mRequestQueue.add(jar);
         tags=null;
     }
