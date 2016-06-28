@@ -6,7 +6,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -48,6 +52,7 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
     }
 
@@ -71,6 +76,7 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 i.putExtra("id", item.getId());
                 if (ch.isConnectingToInternet()) {
                     i.putExtra("url", BASE_URL + "articles/" + item.getId());
+                    i.putExtra("header", "Article from " + item.getCategory() +  " Category");
                     startActivity(i);
                 } else {
                     FileInputStream fis = null;
@@ -87,6 +93,7 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         Toast.makeText(getActivity(), "Some Error Occurred.", Toast.LENGTH_SHORT).show();
                     }
                     i.putExtra("url", "file:///" + getActivity().getFilesDir().getAbsolutePath() + File.separator + item.getId() + "page.mht");
+                    i.putExtra("header", "Article from " + item.getCategory() + " Category");
                     startActivity(i);
                 }
 
@@ -203,6 +210,22 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
                                 });
 
         return view;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.feedback_educate:
+                Log.d("Feedback", "onOptionsItemSelected: Feedback selected");
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_educate, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override

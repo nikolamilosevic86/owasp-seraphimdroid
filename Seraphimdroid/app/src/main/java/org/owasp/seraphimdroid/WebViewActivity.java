@@ -25,13 +25,14 @@ public class WebViewActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         this.getWindow().requestFeature(Window.FEATURE_PROGRESS);
-
         setContentView(R.layout.activity_webview);
-
         getWindow().setFeatureInt(Window.FEATURE_PROGRESS, Window.PROGRESS_VISIBILITY_ON);
 
-        final Intent i = getIntent();
+
+        final Intent intent = getIntent();
 //        url = BASE_URL + "articles/" + i.getStringExtra("id");
+
+        getActionBar().setTitle(intent.getStringExtra("header"));
 
         mWebView = (WebView) findViewById(R.id.wv);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -83,9 +84,9 @@ public class WebViewActivity extends Activity {
                 super.onPageFinished(view, url);
 
 //                mWebView.saveWebArchive(getCacheDir().getAbsolutePath() + File.separator + i.getStringExtra("id") + File.separator + "page.mht");
-                mWebView.saveWebArchive(getFilesDir().getAbsolutePath() + File.separator + i.getStringExtra("id") + "page.mht");
+                mWebView.saveWebArchive(getFilesDir().getAbsolutePath() + File.separator + intent.getStringExtra("id") + "page.mht");
                 Log.i("hello", "onPageFinished: page saved");
-                Log.i("hello", "onPageFinished: " + getCacheDir().getAbsolutePath() + File.separator + i.getStringExtra("id") + "page.mht");
+                Log.i("hello", "onPageFinished: " + getCacheDir().getAbsolutePath() + File.separator + intent.getStringExtra("id") + "page.mht");
 
                 if (mProgressBar.getVisibility() == View.VISIBLE)
                     mProgressBar.setVisibility(View.GONE);
@@ -94,7 +95,7 @@ public class WebViewActivity extends Activity {
 
         });
 
-        mWebView.loadUrl(i.getStringExtra("url"));
+        mWebView.loadUrl(intent.getStringExtra("url"));
 
     }
 

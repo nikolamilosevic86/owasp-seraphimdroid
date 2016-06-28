@@ -9,7 +9,7 @@ public class WiFiInfoActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wi_fi_info);
+        setContentView(R.layout.activity_wifi_info);
     }
 
     @Override
@@ -22,7 +22,7 @@ public class WiFiInfoActivity extends Activity {
 
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_wi_fi_info, menu);
+//        getMenuInflater().inflate(R.menu.menu_wifi_info, menu);
 //        return true;
 //    }
 //
