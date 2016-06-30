@@ -46,16 +46,19 @@ public class FeedbackListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         if (inflater == null)
-            inflater = (LayoutInflater) activity
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null)
             convertView = inflater.inflate(R.layout.feedback_item, null);
 
-        TextView serial = (TextView) convertView.findViewById(R.id.question);
-        TextView title = (TextView) convertView.findViewById(R.id.title);
+        TextView question = (TextView) convertView.findViewById(R.id.question);
+        TextView description = (TextView) convertView.findViewById(R.id.description);
 
-        serial.setText(movieList.get(position).getTitle());
-        title.setText(movieList.get(position).getDescription());
+        question.setText(movieList.get(position).getTitle());
+        if(movieList.get(position).getDescription().equals("null")){
+            description.setText("");
+        }else{
+            description.setText(movieList.get(position).getDescription());
+        }
 
         return convertView;
     }

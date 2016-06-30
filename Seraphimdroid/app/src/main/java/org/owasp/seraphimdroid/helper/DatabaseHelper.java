@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import org.owasp.seraphimdroid.model.Article;
+import org.owasp.seraphimdroid.model.Feedback;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public final static String TABLE_BLACKLIST = "blacklist";
 	public final static String TABLE_BLOCKED_USSD = "block_ussd";
 	public final static String TABLE_ARTICLES = "articles";
+	public final static String TABLE_FEEDBACK = "feedback";
 	public final static String TABLE_PERMISSIONS = "permissions";
 
 	public static final String createCallTable = "CREATE TABLE IF NOT EXISTS call_logs (_id integer primary key autoincrement, phone_number TEXT , time TEXT, reason TEXT) ";
@@ -38,6 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String createBlockedUSSDTable = "CREATE TABLE IF NOT EXISTS block_ussd (_id INTEGER PRIMARY KEY AUTOINCREMENT, number TEXT NOT NULL, desc TEXT NOT NULL, type TEXT NOT NULL)";
 	private final String createPermissionTable = "CREATE TABLE IF NOT EXISTS permissions (_id INTEGER PRIMARY KEY AUTOINCREMENT, permission TEXT, weight INTEGER, malicious_use TEXT)";
 	private final String createArticlesTable = "CREATE TABLE IF NOT EXISTS articles ( id INTEGER PRIMARY KEY, title TEXT, category TEXT, cachefile TEXT, tags TEXT)";
+	private final String createFeedbackTable = "CREATE TABLE IF NOT EXISTS feedback (  question TEXT, description TEXT, upvotes INTEGER )";
 
 	public DatabaseHelper(Context context) {
 		super(context, DB_NAME, null, VERSION);
@@ -56,6 +59,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(createServicesLocksTable);
 		db.execSQL(createPermissionTable);
 		db.execSQL(createArticlesTable);
+		db.execSQL(createFeedbackTable);
 
 		populatePermissions(db);
 		populateBlockedUSSDList(db);
@@ -72,6 +76,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS permissions");
 		db.execSQL("DROP TABLE IF EXISTS block_ussd");
 		db.execSQL("DROP TABLE IF EXISTS articles");
+		db.execSQL("DROP TABLE IF EXISTS feedback");
 
 		this.onCreate(db);
 
@@ -278,6 +283,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			cv.clear();
 		}
 		db.close();
+	}
+
+	public void addNewFeedback(ArrayList<Feedback> list) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.execSQL("DROP TABLE IF EXISTS feedback");
+		db.execSQL(createFeedbackTable);
+
+		ContentValues cv = new ContentValues();
+
+		for (Feedback fb : list) {
+			cv.put("question", fb.getTitle());
+			cv.put("description", fb.getDescription());
+			cv.put("upvotes", fb.getUpvotes());
+			db.insert(TABLE_FEEDBACK, null, cv);
+			cv.clear();
+		}
+		db.close();
+	}
+
+	public ArrayList<Feedback> getAllFeedback() {
+		ArrayList<Feedback> feedbacks = new ArrayList<>();
+		String selectQuery = "SELECT  * FROM " + TABLE_FEEDBACK;
+
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, null);
+
+		if (cursor.moveToFirst()) {
+			do {
+				Feedback fb = new Feedback();
+				fb.setTitle(cursor.getString(0));
+				fb.setDescription(cursor.getString(1));
+				fb.setUpvotes(Integer.parseInt(cursor.getString(2)));
+				feedbacks.add(fb);
+			} while (cursor.moveToNext());
+		}
+		cursor.close();
+		return feedbacks;
 	}
 
 	public ArrayList<Article> getAllArticles() {

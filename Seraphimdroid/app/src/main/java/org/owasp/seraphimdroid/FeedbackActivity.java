@@ -23,10 +23,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.owasp.seraphimdroid.adapter.FeedbackListAdapter;
 import org.owasp.seraphimdroid.helper.ConnectionHelper;
+import org.owasp.seraphimdroid.helper.DatabaseHelper;
 import org.owasp.seraphimdroid.model.Feedback;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class FeedbackActivity extends Activity implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener{
 
@@ -35,23 +35,19 @@ public class FeedbackActivity extends Activity implements SwipeRefreshLayout.OnR
     private String BASE_URL = "http://educate-seraphimdroid.rhcloud.com/";
     private String addurl = BASE_URL + "questions.json";
 
-    private RequestQueue mRequestQueue;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private ListView listView;
     private FeedbackListAdapter adapter;
-    private List<Feedback> feedbackList;
+    private ArrayList<Feedback> feedbackList;
 
-    public static final String KEY_FEEDBACK = "username";
     private EditText editTextFeedback;
-    private Button sendButton;
+    private DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
 
-
-        listView = (ListView) findViewById(R.id.feedback_list);
+        ListView listView = (ListView) findViewById(R.id.feedback_list);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_feedback);
 
         feedbackList = new ArrayList<>();
@@ -59,7 +55,7 @@ public class FeedbackActivity extends Activity implements SwipeRefreshLayout.OnR
         listView.setAdapter(adapter);
 
         swipeRefreshLayout.setOnRefreshListener(this);
-
+        db = new DatabaseHelper(this);
 
         swipeRefreshLayout.post(new Runnable() {
             @Override
@@ -70,7 +66,7 @@ public class FeedbackActivity extends Activity implements SwipeRefreshLayout.OnR
         });
 
         editTextFeedback = (EditText) findViewById(R.id.editTextFeedback);
-        sendButton = (Button) findViewById(R.id.fbutton);
+        Button sendButton = (Button) findViewById(R.id.fbutton);
         sendButton.setOnClickListener(this);
 
     }
@@ -80,11 +76,7 @@ public class FeedbackActivity extends Activity implements SwipeRefreshLayout.OnR
         final String body = "{ \"title\" : \"" + feedback + "\" }";
 
         JSONObject header = new JSONObject();
-        try{
-            header.put("Content-Type", "application/json");
-        } catch (JSONException e){
-            e.printStackTrace();
-        }
+        try{ header.put("Content-Type", "application/json"); } catch (JSONException e){}
 
         JsonObjectRequest addfb = new JsonObjectRequest(Request.Method.POST, addurl, header,
                 new Response.Listener<JSONObject>() {
@@ -106,7 +98,6 @@ public class FeedbackActivity extends Activity implements SwipeRefreshLayout.OnR
                                     fetchFeedback();
                                 }
                             });
-
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -115,19 +106,11 @@ public class FeedbackActivity extends Activity implements SwipeRefreshLayout.OnR
                 Toast.makeText(FeedbackActivity.this,error.toString(),Toast.LENGTH_LONG).show();
             }
         }) {
-//            @Override
-//            protected Map<String,String> getParams() {
-//                Map<String, String> params = new HashMap<>();
-//                params.put(KEY_FEEDBACK, feedback);
-//                return params;
-//            }
-
             @Override
             public byte[] getBody() {
                 return body.getBytes();
             }
         };
-
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(addfb);
     }
@@ -140,20 +123,16 @@ public class FeedbackActivity extends Activity implements SwipeRefreshLayout.OnR
     }
 
     private void fetchFeedback() {
-
         swipeRefreshLayout.setRefreshing(true);
-
         String url = BASE_URL + "questions.json";
-
         JsonArrayRequest jar = new JsonArrayRequest(url,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-
                         if (response.length() > 0) {
-
                             for (int i = 0; i < response.length(); i++) {
                                 try {
+
                                     JSONObject feedbackObj = response.getJSONObject(i);
 
                                     String title = feedbackObj.getString("title");
@@ -161,13 +140,14 @@ public class FeedbackActivity extends Activity implements SwipeRefreshLayout.OnR
                                     int upvotes = feedbackObj.getInt("upvotes");
 
                                     Feedback fb = new Feedback(title, description, upvotes);
-
                                     feedbackList.add(fb);
 
                                 } catch (JSONException e) {
                                     Log.e(TAG, "JSON Parsing error: " + e.getMessage());
+                                    Toast.makeText(FeedbackActivity.this, "Some Error Occured", Toast.LENGTH_SHORT).show();
                                 }
                             }
+                            db.addNewFeedback(feedbackList);
                             adapter.notifyDataSetChanged();
                         }
                         swipeRefreshLayout.setRefreshing(false);
@@ -176,19 +156,15 @@ public class FeedbackActivity extends Activity implements SwipeRefreshLayout.OnR
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "Server Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(), "You are Offline", Toast.LENGTH_LONG).show();
 
-                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-
-                // stopping swipe refresh
+                feedbackList.addAll(db.getAllFeedback());
+                adapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-
-        // Adding request to request queue
-        mRequestQueue = Volley.newRequestQueue(this);
-        mRequestQueue.add(jar);
-
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(jar);
     }
 
     @Override
@@ -200,4 +176,10 @@ public class FeedbackActivity extends Activity implements SwipeRefreshLayout.OnR
             Toast.makeText(FeedbackActivity.this, "You are offline", Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
 }

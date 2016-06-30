@@ -9,10 +9,14 @@ public class Feedback {
     private String description;
     private int upvotes;
 
+    public Feedback() {
+    }
+
     public Feedback(String title, String description, int upvotes) {
         this.title = title;
         this.description = description;
         this.upvotes = upvotes;
+
     }
 
     public int getUpvotes() {
