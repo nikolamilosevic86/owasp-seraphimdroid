@@ -10,10 +10,10 @@
         <item>Permission Scanner</item>
         <item>Settings Checker</item>
         <item>Blocker Logs</item>
-        <item>Applicaton Lock</item>
+        <item>Application Lock</item>
         <item>Service Lock</item>
         <item>Geo-fencing</item>
-        <item>Any Questions?</item>
+        <item>Knowledge Base</item>
         <item>Settings</item>
         <item>About</item>
     </string-array>
@@ -25,7 +25,7 @@
         <item>@drawable/icon_lock</item>
         <item>@drawable/icon_service_lock</item>
         <item>@drawable/icon_geo_fencing</item>
-        <item>@drawable/icon_question</item>
+        <item>@drawable/icon_kbase</item>
         <item>@drawable/icon_settings</item>
         <item>@drawable/icon_about</item>
     </integer-array>
@@ -112,7 +112,7 @@
     <string name="info_app_lock">The Application Locker will provide you with the ability to lock application. You will be prompt for password if you try to open that app.</string>
     <string name="info_service_lock">The Service Locker will provide you with the ability to lock services. You will be prompt for password if you try to turn on/off that service.</string>
     <string name="info_geo_fencing">Geo fencing let you set a perimeter for your phone. If the phone gets out of the perimeter it will perform actions like locking your phone, wiping you data(Ofcourse only if you choose so) and make an alert sound. You could also ask for location updates if you want.</string>
-    <string name="info_knowledge_api">Wanna know more? Whats going on and how do we work? This Section Contains a lot of Knowledge and Info about this app and it\'s working, Click Away!</string>
+    <string name="info_knowledge_api">This Section contains some Articles from the Seraphimdroid Knowledge Base for educating an Android user of this application containing articles based on Secure Web and Android Practices.</string>
     <string name="context_label_text">SMS Content</string>
     <string name="sms_type_label">SMS Type</string>
     <string name="title_activity_wi_fi_info">WiFiInfoActivity</string>

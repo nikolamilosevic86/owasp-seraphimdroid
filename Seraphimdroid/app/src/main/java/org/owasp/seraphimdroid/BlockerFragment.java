@@ -7,6 +7,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabHost;
@@ -55,7 +57,6 @@ public class BlockerFragment extends Fragment implements OnPageChangeListener,
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		setHasOptionsMenu(true);
 		super.onCreate(savedInstanceState);
 
@@ -100,13 +101,13 @@ public class BlockerFragment extends Fragment implements OnPageChangeListener,
 //		return super.onOptionsItemSelected(item);
 //	}
 //
-//	@Override
-//	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//
-//		inflater.inflate(R.menu.main, menu);
-//
-//		super.onCreateOptionsMenu(menu, inflater);
-//	}
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+		inflater.inflate(R.menu.menu_blocker, menu);
+
+		super.onCreateOptionsMenu(menu, inflater);
+	}
 
 	private void initTabs() {
 		AddTab(getActivity(), tabHost, tabHost.newTabSpec("call_log")
