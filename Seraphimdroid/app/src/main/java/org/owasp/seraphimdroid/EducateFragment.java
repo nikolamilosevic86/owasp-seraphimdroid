@@ -217,6 +217,8 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
         switch (item.getItemId()) {
             case R.id.feedback_educate:
                 Log.d("Feedback", "onOptionsItemSelected: Feedback selected");
+                Intent i = new Intent(getActivity(), FeedbackActivity.class);
+                startActivity(i);
                 break;
         }
         return super.onOptionsItemSelected(item);

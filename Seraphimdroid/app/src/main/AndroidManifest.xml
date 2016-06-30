@@ -227,12 +227,11 @@
             android:name=".WiFiInfoActivity"
             android:label="@string/title_activity_wi_fi_info">
         </activity>
-
         <activity
             android:name=".WebViewActivity"
             android:label="@string/title_activity_web_view">
         </activity>
-
+        <activity android:name=".FeedbackActivity"/>
     </application>
 
 </manifest>
