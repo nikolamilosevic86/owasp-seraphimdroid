@@ -92,16 +92,22 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
         TextView tvTitle;
         TextView tvCategory;
+        TextView tvText;
+        TextView tvTags;
 
         public ViewHolder(View itemView) {
             super(itemView);
             tvTitle = (TextView) itemView.findViewById(R.id.txtTitle);
             tvCategory = (TextView) itemView.findViewById(R.id.txtCategory);
+            tvText = (TextView) itemView.findViewById(R.id.txtText);
+            tvTags = (TextView) itemView.findViewById(R.id.txtTags);
         }
 
         public void bind(final Article item, final OnItemClickListener listener) {
             tvTitle.setText(item.getTitle());
             tvCategory.setText(item.getCategory());
+            tvTags.setText(item.getTags().toString());
+            tvText.setText(item.getText());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
