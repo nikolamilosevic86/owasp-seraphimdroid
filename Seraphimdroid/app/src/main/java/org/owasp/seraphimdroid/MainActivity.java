@@ -33,8 +33,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.owasp.seraphimdroid.adapter.DrawerAdapter;
+import org.owasp.seraphimdroid.helper.ConnectionHelper;
 import org.owasp.seraphimdroid.helper.DatabaseHelper;
 import org.owasp.seraphimdroid.model.DrawerItem;
 import org.owasp.seraphimdroid.receiver.ApplicationInstallReceiver;
@@ -44,6 +56,8 @@ import org.owasp.seraphimdroid.services.OutGoingSmsRecepter;
 import org.owasp.seraphimdroid.services.ServicesLockService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends FragmentActivity {
 
@@ -287,28 +301,105 @@ public class MainActivity extends FragmentActivity {
 		getActionBar().setTitle(title);
 	}
 
+	private void recordUsage(int id) {
+		ConnectionHelper ch = new ConnectionHelper(getApplicationContext());
+		DatabaseHelper db = new DatabaseHelper(this);
+		if(ch.isConnectingToInternet()){
+			sendUsage(id);
+		}else{
+			db.addFeatureUsage(id);
+		}
+	}
+
+	private void sendUsage(final int id){
+		final String addurl = "http://educate-seraphimdroid.rhcloud.com/features/"+Integer.toString(id)+"/use.json";
+		final DatabaseHelper db = new DatabaseHelper(this);
+		int usage = db.getFeatureUsage(id);
+		JSONObject header = new JSONObject();
+		try {
+			header.put("Content-Type", "application/json");
+		} catch (JSONException e) {
+			Log.d("", "sendUsage: Hellno");
+		}
+		if (usage > 0) {
+			final String body = "{ \"many\" : " + usage + " }";
+			JsonObjectRequest addManyUsage = new JsonObjectRequest(Request.Method.PUT, addurl, header,
+					new Response.Listener<JSONObject>() {
+						String resp;
+						@Override
+						public void onResponse(JSONObject response) {
+							try { resp = response.getString("status"); } catch (JSONException e) { Toast.makeText(MainActivity.this, "Some Error Occured.", Toast.LENGTH_SHORT).show(); }
+							if (resp != null && resp.equals("ok")) {
+								Log.i("Usage", "onResponse: Analyzed");
+								db.removeFeatureUsage(id);
+							}
+						}
+					}, new Response.ErrorListener() {
+				@Override
+				public void onErrorResponse(VolleyError error) {
+					Log.d("TAG", "onErrorResponse: "+"Error Response");
+				}
+			}) {
+				@Override
+				public byte[] getBody() {
+					return body.getBytes();
+				}
+			};
+			RequestQueue requestQueue = Volley.newRequestQueue(this);
+			requestQueue.add(addManyUsage);
+		} else {
+			JsonObjectRequest addUsage = new JsonObjectRequest(Request.Method.PUT, addurl, header,
+					new Response.Listener<JSONObject>() {
+						String resp;
+						@Override
+						public void onResponse(JSONObject response) {
+							try { resp = response.getString("status"); } catch (JSONException e) { Toast.makeText(MainActivity.this, "Some Error Occured.", Toast.LENGTH_SHORT).show(); }
+							if (resp != null && resp.equals("ok")) {
+								Log.i("Usage", "onResponse: Analyzed");
+							}
+						}
+					}, new Response.ErrorListener() {
+				@Override
+				public void onErrorResponse(VolleyError error) {
+					Log.d("TAG", "onErrorResponse: "+"Error Response");
+				}
+			});
+
+			RequestQueue requestQueue = Volley.newRequestQueue(this);
+			requestQueue.add(addUsage);
+		}
+	}
+
+
 	public void selectFragment(int position) {
 		Fragment fragment = null;
 		switch (position) {
 			case 0:
+				recordUsage(1);
 				fragment = new org.owasp.seraphimdroid.PermissionScannerFragment();
 				break;
 			case 1:
+				recordUsage(2);
 				fragment = new org.owasp.seraphimdroid.SettingsCheckerFragment();
 				break;
 			case 2:
+				recordUsage(3);
 				fragment = new org.owasp.seraphimdroid.BlockerFragment();
 				break;
 			case 3:
+				recordUsage(4);
 				fragment = new org.owasp.seraphimdroid.AppLockFragment();
 				break;
 			case 4:
+				recordUsage(5);
 				fragment = new org.owasp.seraphimdroid.ServiceLockFragment();
 				break;
 			case 5:
+				recordUsage(6);
 				fragment = new org.owasp.seraphimdroid.GeoFencingFragment();
 				break;
 			case 6:
+				recordUsage(7);
 				fragment = new org.owasp.seraphimdroid.EducateFragment();
 				break;
 			case 7: {
