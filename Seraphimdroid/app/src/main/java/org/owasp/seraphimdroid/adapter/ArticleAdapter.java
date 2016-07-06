@@ -106,7 +106,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         public void bind(final Article item, final OnItemClickListener listener) {
             tvTitle.setText(item.getTitle());
             tvCategory.setText(item.getCategory());
-            tvTags.setText(item.getTags().toString());
+            tvTags.setText("Tagged with: " + item.getTags().toString().replace("[", "").replace("]", ""));
+//            tvTags.setText(String.format(R.string.article_tags, item.getTags().toString().replace("[", "").replace("]", "")));
             tvText.setText(item.getText());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

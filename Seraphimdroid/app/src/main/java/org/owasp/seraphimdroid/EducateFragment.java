@@ -1,11 +1,14 @@
 package org.owasp.seraphimdroid;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.ArrayMap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,10 +18,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -34,6 +39,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Objects;
 
 public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -46,6 +52,7 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private String tags;
     private DatabaseHelper db;
     private ConnectionHelper ch;
+    private SharedPreferences mSharedPreferences;
 
     private static final String BASE_URL = "http://educate-seraphimdroid.rhcloud.com/";
     private static final String url = BASE_URL + "articles.json";
@@ -66,6 +73,8 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
         Intent i = getActivity().getIntent();
         tags = i.getStringExtra("tags");
+        mSharedPreferences = getActivity().getSharedPreferences("article_reads", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = mSharedPreferences.edit();
 
         mArrArticle = new ArrayList<>();
         va = new ArticleAdapter(mArrArticle, new ArticleAdapter.OnItemClickListener() {
@@ -77,9 +86,17 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 if (ch.isConnectingToInternet()) {
                     i.putExtra("url", BASE_URL + "articles/" + item.getId());
                     i.putExtra("header", "Article from " + item.getCategory() +  " Category");
+//                    ArrayList<Article> arr = db.getOfflineReadArticles();
+                    ArrayList<Article> arr = getOfflineReadArticles();
+                    if (!arr.isEmpty()) {
+                        for (Article article: arr){
+                            uploadOfflineStats(Integer.parseInt(article.getId()));
+                        }
+//                        markUploaded(arr);
+                    }
                     startActivity(i);
                 } else {
-                    FileInputStream fis = null;
+                    FileInputStream fis;
                     try {
                         fis = new FileInputStream(new File(getActivity().getFilesDir().getAbsolutePath() + File.separator + item.getId() + "page.mht"));
                         if (fis.read() == 0) {
@@ -94,6 +111,7 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     }
                     i.putExtra("url", "file:///" + getActivity().getFilesDir().getAbsolutePath() + File.separator + item.getId() + "page.mht");
                     i.putExtra("header", "Article from " + item.getCategory() + " Category");
+                    addOfflineRead(Integer.parseInt(item.getId()));
                     startActivity(i);
                 }
 
@@ -195,19 +213,18 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        swipeRefreshLayout.setRefreshing(true);
-//                                        Log.i("Hello", "run: " + tags);
-                                        if (tags != null){
-                                            mArrArticle.addAll(db.getArticlesWithTag(tags));
-                                            va.notifyDataSetChanged();
-                                            swipeRefreshLayout.setRefreshing(false);
-                                        } else {
-                                            mRequestQueue.add(jar);
-                                        }
-                                    }
-                                });
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(true);
+                if (tags != null){
+                    mArrArticle.addAll(db.getArticlesWithTag(tags));
+                    va.notifyDataSetChanged();
+                    swipeRefreshLayout.setRefreshing(false);
+                } else {
+                    mRequestQueue.add(jar);
+                }
+            }
+        });
 
         return view;
     }
@@ -238,7 +255,6 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
             @Override
             public void onResponse(JSONArray response) {
                 try {
-
                     for (int i = 0; i < response.length(); i++) {
 
                         JSONObject pjo = (JSONObject) response.get(i);
@@ -273,9 +289,7 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         else{
                             article.setTags(new ArrayList<String>());
                         }
-
                         mArrArticle.add(article);
-
                     }
 
                     db.addNewArticles(mArrArticle);
@@ -303,6 +317,73 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
         });
         mRequestQueue.add(jar);
         tags=null;
+    }
+
+    public void uploadOfflineStats(final int id) {
+        final String addurl = "http://educate-seraphimdroid.rhcloud.com/articles/"+Integer.toString(id)+".json";
+        int reads = getOfflineReads(id);
+        final Map<String, String> mHeaders = new ArrayMap<>();
+        mHeaders.put("many", Integer.toString(reads));
+
+        JsonObjectRequest addUsage = new JsonObjectRequest(Request.Method.GET, addurl, null,
+                new Response.Listener<JSONObject>() {
+                    int resp;
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            resp = response.getInt("id");
+                        } catch (JSONException e) {
+                            Toast.makeText(getActivity(), "Some Error Occured.", Toast.LENGTH_SHORT).show();
+                        }
+                        if (resp != 0) {
+//                            Log.i("Usage", "onResponse: Analyzed");
+                            markUploaded(id);
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("TAG", "onErrorResponse: "+"Error Response");
+            }
+        }) {
+            public Map<String, String> getHeaders() {
+                return mHeaders;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue.add(addUsage);
+    }
+
+    private ArrayList<Article> getOfflineReadArticles() {
+        ArrayList<Article> articlesList = new ArrayList<>();
+//        String selectQuery = "SELECT  * FROM " + TABLE_ARTICLES;
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        articlesList = db.getAllArticles();
+        for(Article article: db.getAllArticles()){
+            if(getOfflineReads(Integer.parseInt(article.getId())) != 0){
+                articlesList.add(article);
+            }
+        }
+
+        return articlesList;
+    }
+
+    public void addOfflineRead(int id) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        int new_val = getOfflineReads(id)+1;
+        editor.putInt("article"+id, new_val);
+        editor.apply();
+    }
+
+    public int getOfflineReads(int id) {
+        return mSharedPreferences.getInt("article"+id, 0);
+    }
+
+    private void markUploaded(int id) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putInt("article"+id, 0);
+        editor.apply();
     }
 
 }

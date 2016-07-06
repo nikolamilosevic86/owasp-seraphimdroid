@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -33,8 +34,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.owasp.seraphimdroid.adapter.DrawerAdapter;
+import org.owasp.seraphimdroid.helper.ConnectionHelper;
 import org.owasp.seraphimdroid.helper.DatabaseHelper;
 import org.owasp.seraphimdroid.model.DrawerItem;
 import org.owasp.seraphimdroid.receiver.ApplicationInstallReceiver;
@@ -44,6 +57,8 @@ import org.owasp.seraphimdroid.services.OutGoingSmsRecepter;
 import org.owasp.seraphimdroid.services.ServicesLockService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends FragmentActivity {
 
@@ -95,7 +110,7 @@ public class MainActivity extends FragmentActivity {
 		Handler handler = new Handler(this.getMainLooper());
 		CheckAppLaunchThread launchChecker = new CheckAppLaunchThread(handler,
 				getApplicationContext());
-		if (launchChecker.isAlive() == false) {
+		if (!launchChecker.isAlive()) {
 			launchChecker.start();
 		}
 
@@ -138,15 +153,15 @@ public class MainActivity extends FragmentActivity {
 			hash = telephony.getSimSerialNumber() + telephony.getNetworkOperator() + telephony.getNetworkCountryIso();
 		}
 		if(hash!=null && defaults.contains("sim_1")==false) {
-			defaults.edit().putString("sim_1", hash).commit();
+			defaults.edit().putString("sim_1", hash).apply();
 		}
 
 		//App Uninstall Lock
 		if (android.os.Build.VERSION.SDK_INT >= 21 && !isUsageAccessEnabled()) {
-			defaults.edit().putBoolean("uninstall_locked", false).commit();
+			defaults.edit().putBoolean("uninstall_locked", false).apply();
 		}
 		else {
-			defaults.edit().putBoolean("uninstall_locked", true).commit();
+			defaults.edit().putBoolean("uninstall_locked", true).apply();
 		}
 		Boolean isUninstallLocked = defaults.getBoolean("uninstall_locked", true);
 		if(isUninstallLocked) {
@@ -170,7 +185,7 @@ public class MainActivity extends FragmentActivity {
 		boolean callsBlocked = defaults.getBoolean("call_blocked_notification",
 				true);
 		defaults.edit().putBoolean("call_blocked_notification", callsBlocked)
-				.commit();
+				.apply();
 
 		try {
 			fragmentNo = getIntent().getIntExtra("FRAGMENT_NO", fragmentNo);
@@ -184,7 +199,7 @@ public class MainActivity extends FragmentActivity {
 		drawerList = (ListView) findViewById(R.id.drawer_list);
 
 		itemNames = getResources().getStringArray(R.array.item_names);
-		listItems = new ArrayList<DrawerItem>();
+		listItems = new ArrayList<>();
 		iconList = getResources().obtainTypedArray(R.array.drawer_icons);
 
 		populateList();
@@ -287,28 +302,106 @@ public class MainActivity extends FragmentActivity {
 		getActionBar().setTitle(title);
 	}
 
+	private void recordUsage(int id) {
+		ConnectionHelper ch = new ConnectionHelper(getApplicationContext());
+		DatabaseHelper db = new DatabaseHelper(this);
+		if(ch.isConnectingToInternet()){
+			sendUsage(id);
+		}else{
+			db.addFeatureUsage(id);
+		}
+	}
+
+	private void sendUsage(final int id){
+		final String addurl = "http://educate-seraphimdroid.rhcloud.com/features/"+Integer.toString(id)+"/use.json";
+		final DatabaseHelper db = new DatabaseHelper(this);
+		int usage = db.getFeatureUsage(id);
+		JSONObject header = new JSONObject();
+		try {
+			header.put("Content-Type", "application/json");
+		} catch (JSONException e) {
+			Log.d("", "sendUsage: Hellno");
+		}
+		if (usage > 0) {
+			final String body = "{ \"many\" : " + usage + " }";
+			JsonObjectRequest addManyUsage = new JsonObjectRequest(Request.Method.PUT, addurl, header,
+					new Response.Listener<JSONObject>() {
+						String resp;
+						@Override
+						public void onResponse(JSONObject response) {
+							try { resp = response.getString("status"); } catch (JSONException e) { Toast.makeText(MainActivity.this, "Some Error Occured.", Toast.LENGTH_SHORT).show(); }
+							if (resp != null && resp.equals("ok")) {
+								Log.i("Usage", "onResponse: Analyzed");
+								db.removeFeatureUsage(id);
+							}
+						}
+					}, new Response.ErrorListener() {
+				@Override
+				public void onErrorResponse(VolleyError error) {
+					Log.d("TAG", "onErrorResponse: "+"Error Response");
+				}
+			}) {
+				@NonNull
+				@Override
+				public byte[] getBody() {
+					return body.getBytes();
+				}
+			};
+			RequestQueue requestQueue = Volley.newRequestQueue(this);
+			requestQueue.add(addManyUsage);
+		} else {
+			JsonObjectRequest addUsage = new JsonObjectRequest(Request.Method.PUT, addurl, header,
+					new Response.Listener<JSONObject>() {
+						String resp;
+						@Override
+						public void onResponse(JSONObject response) {
+							try { resp = response.getString("status"); } catch (JSONException e) { Toast.makeText(MainActivity.this, "Some Error Occured.", Toast.LENGTH_SHORT).show(); }
+							if (resp != null && resp.equals("ok")) {
+								Log.i("Usage", "onResponse: Analyzed");
+							}
+						}
+					}, new Response.ErrorListener() {
+				@Override
+				public void onErrorResponse(VolleyError error) {
+					Log.d("TAG", "onErrorResponse: "+"Error Response");
+				}
+			});
+
+			RequestQueue requestQueue = Volley.newRequestQueue(this);
+			requestQueue.add(addUsage);
+		}
+	}
+
+
 	public void selectFragment(int position) {
 		Fragment fragment = null;
 		switch (position) {
 			case 0:
+				recordUsage(1);
 				fragment = new org.owasp.seraphimdroid.PermissionScannerFragment();
 				break;
 			case 1:
+				recordUsage(2);
 				fragment = new org.owasp.seraphimdroid.SettingsCheckerFragment();
 				break;
 			case 2:
+				recordUsage(3);
 				fragment = new org.owasp.seraphimdroid.BlockerFragment();
 				break;
 			case 3:
+				recordUsage(4);
 				fragment = new org.owasp.seraphimdroid.AppLockFragment();
 				break;
 			case 4:
+				recordUsage(5);
 				fragment = new org.owasp.seraphimdroid.ServiceLockFragment();
 				break;
 			case 5:
+				recordUsage(6);
 				fragment = new org.owasp.seraphimdroid.GeoFencingFragment();
 				break;
 			case 6:
+				recordUsage(7);
 				fragment = new org.owasp.seraphimdroid.EducateFragment();
 				break;
 			case 7: {
@@ -358,10 +451,7 @@ public class MainActivity extends FragmentActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (drawerToggle.onOptionsItemSelected(item)) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
+		return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
 	}
 
 	@Override

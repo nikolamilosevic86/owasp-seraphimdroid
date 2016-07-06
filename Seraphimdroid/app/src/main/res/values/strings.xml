@@ -117,7 +117,7 @@
     <string name="sms_type_label">SMS Type</string>
     <string name="title_activity_wi_fi_info">WiFiInfoActivity</string>
     <string name="WiFiInfoText">The WiFi network you are currently connected to is not secure. This network is useing Wired Equivalent Privacy (WEP), which is no more considered secure. Mathematicians showed as long ago as 2001 that the RC4 key scheduling algorithm underlying the WEP (Wired Equivalent Privacy) protocol was flawed, but attacks on it required the interception of around 4 million packets of data in order to calculate the full WEP security key. Further flaws found in the algorithm have brought the time taken to find the key down to a matter of minutes.  With new findings, it takes just three seconds to extract a 104-bit WEP key from intercepted data using a 1.7-GHz Pentium M processor. The necessary data can be captured in less than a minute, and the attack requires so much less computing power than previous attacks that it could even be performed in real time. It is highly recommended to disconnect from this network and rather find WPA or WPA2 networks.</string>
-    <string name="questions_placeholder">Your questions go here!!</string>
+    <string name="article_tags">Tags: %1$s</string>
     <string name="title_activity_web_view">WebViewActivity</string>
 
 </resources>

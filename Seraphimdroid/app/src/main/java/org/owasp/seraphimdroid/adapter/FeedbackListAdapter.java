@@ -20,21 +20,21 @@ import java.util.List;
 public class FeedbackListAdapter extends BaseAdapter {
     private Activity activity;
     private LayoutInflater inflater;
-    private List<Feedback> movieList;
+    private List<Feedback> fbList;
 
     public FeedbackListAdapter(Activity activity, List<Feedback> movieList) {
         this.activity = activity;
-        this.movieList = movieList;
+        this.fbList = movieList;
     }
 
     @Override
     public int getCount() {
-        return movieList.size();
+        return fbList.size();
     }
 
     @Override
     public Object getItem(int location) {
-        return movieList.get(location);
+        return fbList.get(location);
     }
 
     @Override
@@ -53,11 +53,11 @@ public class FeedbackListAdapter extends BaseAdapter {
         TextView question = (TextView) convertView.findViewById(R.id.question);
         TextView description = (TextView) convertView.findViewById(R.id.description);
 
-        question.setText(movieList.get(position).getTitle());
-        if(movieList.get(position).getDescription().equals("null")){
+        question.setText(fbList.get(position).getTitle());
+        if(fbList.get(position).getDescription().equals("null")){
             description.setText("");
         }else{
-            description.setText(movieList.get(position).getDescription());
+            description.setText(fbList.get(position).getDescription());
         }
 
         return convertView;
