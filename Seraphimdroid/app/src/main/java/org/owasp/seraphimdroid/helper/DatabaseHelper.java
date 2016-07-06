@@ -39,9 +39,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String createServicesLocksTable = "CREATE TABLE IF NOT EXISTS services (_id INTEGER primary key autoincrement, service_name TEXT)";
 	public static final String createBlacklistTable = "CREATE TABLE IF NOT EXISTS blacklist (_id INTEGER PRIMARY KEY AUTOINCREMENT, number TEXT NOT NULL)";
 	public static final String createBlockedUSSDTable = "CREATE TABLE IF NOT EXISTS block_ussd (_id INTEGER PRIMARY KEY AUTOINCREMENT, number TEXT NOT NULL, desc TEXT NOT NULL, type TEXT NOT NULL)";
-	private final String createPermissionTable = "CREATE TABLE IF NOT EXISTS permissions (_id INTEGER PRIMARY KEY AUTOINCREMENT, permission TEXT, weight INTEGER, malicious_use TEXT)";
-	private final String createArticlesTable = "CREATE TABLE IF NOT EXISTS articles ( id INTEGER PRIMARY KEY, title TEXT, category TEXT, cachefile TEXT, tags TEXT)";
-	private final String createFeedbackTable = "CREATE TABLE IF NOT EXISTS feedback (  question TEXT, description TEXT, upvotes INTEGER )";
+	private static final String createPermissionTable = "CREATE TABLE IF NOT EXISTS permissions (_id INTEGER PRIMARY KEY AUTOINCREMENT, permission TEXT, weight INTEGER, malicious_use TEXT)";
+	private static final String createArticlesTable = "CREATE TABLE IF NOT EXISTS articles ( id INTEGER PRIMARY KEY, title TEXT, category TEXT, cachefile TEXT, tags TEXT, reads INTEGER)";
+	private static final String createFeedbackTable = "CREATE TABLE IF NOT EXISTS feedback (  question TEXT, description TEXT, upvotes INTEGER )";
 	private static final String createUsageTable = "CREATE TABLE IF NOT EXISTS usage ( id INTEGER, title TEXT, uses INTEGER )";
 
 	public DatabaseHelper(Context context) {
@@ -120,7 +120,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	private void populateBlockedUSSDList(SQLiteDatabase db) {
-		List<BlockedUSSD> list = new ArrayList<BlockedUSSD>();
+		List<BlockedUSSD> list = new ArrayList<>();
 		list.add(new BlockedUSSD("*#7780%23", "Factory Reset","default"));
 		list.add(new BlockedUSSD("*2767*3855#", "Full Factory Reset","default"));
 		list.add(new BlockedUSSD("*2767*3855%23", "Full Factory Reset","default"));
@@ -138,7 +138,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 	
 	private void populatePermissions(SQLiteDatabase db) {
-		List<PerData> list = new ArrayList<PerData>();
+		List<PerData> list = new ArrayList<>();
 
 		list.add(new PerData("android.permission.ACCESS_COARSE_LOCATION", 1, ""));
 		list.add(new PerData("android.permission.ACCESS_FINE_LOCATION", 2, ""));

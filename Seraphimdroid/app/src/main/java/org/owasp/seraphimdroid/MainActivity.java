@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -109,7 +110,7 @@ public class MainActivity extends FragmentActivity {
 		Handler handler = new Handler(this.getMainLooper());
 		CheckAppLaunchThread launchChecker = new CheckAppLaunchThread(handler,
 				getApplicationContext());
-		if (launchChecker.isAlive() == false) {
+		if (!launchChecker.isAlive()) {
 			launchChecker.start();
 		}
 
@@ -152,15 +153,15 @@ public class MainActivity extends FragmentActivity {
 			hash = telephony.getSimSerialNumber() + telephony.getNetworkOperator() + telephony.getNetworkCountryIso();
 		}
 		if(hash!=null && defaults.contains("sim_1")==false) {
-			defaults.edit().putString("sim_1", hash).commit();
+			defaults.edit().putString("sim_1", hash).apply();
 		}
 
 		//App Uninstall Lock
 		if (android.os.Build.VERSION.SDK_INT >= 21 && !isUsageAccessEnabled()) {
-			defaults.edit().putBoolean("uninstall_locked", false).commit();
+			defaults.edit().putBoolean("uninstall_locked", false).apply();
 		}
 		else {
-			defaults.edit().putBoolean("uninstall_locked", true).commit();
+			defaults.edit().putBoolean("uninstall_locked", true).apply();
 		}
 		Boolean isUninstallLocked = defaults.getBoolean("uninstall_locked", true);
 		if(isUninstallLocked) {
@@ -184,7 +185,7 @@ public class MainActivity extends FragmentActivity {
 		boolean callsBlocked = defaults.getBoolean("call_blocked_notification",
 				true);
 		defaults.edit().putBoolean("call_blocked_notification", callsBlocked)
-				.commit();
+				.apply();
 
 		try {
 			fragmentNo = getIntent().getIntExtra("FRAGMENT_NO", fragmentNo);
@@ -198,7 +199,7 @@ public class MainActivity extends FragmentActivity {
 		drawerList = (ListView) findViewById(R.id.drawer_list);
 
 		itemNames = getResources().getStringArray(R.array.item_names);
-		listItems = new ArrayList<DrawerItem>();
+		listItems = new ArrayList<>();
 		iconList = getResources().obtainTypedArray(R.array.drawer_icons);
 
 		populateList();
@@ -340,6 +341,7 @@ public class MainActivity extends FragmentActivity {
 					Log.d("TAG", "onErrorResponse: "+"Error Response");
 				}
 			}) {
+				@NonNull
 				@Override
 				public byte[] getBody() {
 					return body.getBytes();
@@ -449,10 +451,7 @@ public class MainActivity extends FragmentActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (drawerToggle.onOptionsItemSelected(item)) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
+		return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
 	}
 
 	@Override
