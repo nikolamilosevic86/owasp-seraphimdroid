@@ -76,7 +76,7 @@ public class FeedbackActivity extends Activity implements SwipeRefreshLayout.OnR
         final String body = "{ \"title\" : \"" + feedback + "\" }";
 
         JSONObject header = new JSONObject();
-        try{ header.put("Content-Type", "application/json"); } catch (JSONException e){}
+        try{ header.put("Content-Type", "application/json"); } catch (JSONException ignored){}
 
         JsonObjectRequest addfb = new JsonObjectRequest(Request.Method.POST, addurl, header,
                 new Response.Listener<JSONObject>() {

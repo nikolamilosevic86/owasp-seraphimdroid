@@ -405,7 +405,6 @@ public class MainActivity extends FragmentActivity {
 				fragment = new org.owasp.seraphimdroid.EducateFragment();
 				break;
 			case 7: {
-
 				if (prevSupportFlag != null) {
 					FragmentManager fragMan = getSupportFragmentManager();
 					fragMan.beginTransaction().remove(prevSupportFlag).commit();

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.util.Log;
@@ -12,8 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.owasp.seraphimdroid.R;
 import org.owasp.seraphimdroid.model.PermissionData;
@@ -42,17 +43,17 @@ public class PermissionScannerAdapter extends BaseExpandableListAdapter {
 	int[] appClassificationColors;
 	String TAG = "PermissionsAdapter";
 	HashMap<String, Integer> map;
-	
-	
+
+
 	public PermissionScannerAdapter(Context context, List<String> grpHeaders,
-			HashMap<String, List<PermissionData>> childs) {
+									HashMap<String, List<PermissionData>> childs) {
 		Log.d(TAG, "Created");
 		this.context = context;
 		this.groupHeaders = grpHeaders;
 		this.childItems = childs;
 		this.packageManager = context.getPackageManager();
 		this.appClassificationColors = new int[groupHeaders.size()];
-		map = new HashMap<String, Integer>();
+		map = new HashMap<>();
 		for(int i=0; i<permissions.length; i++) {
 			map.put(permissions[i], i);
 		}
@@ -65,10 +66,10 @@ public class PermissionScannerAdapter extends BaseExpandableListAdapter {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		for(int i=0; i<groupHeaders.size(); i++) {
 			classifyPermissions(i);
-		}	
+		}
 	}
 
 	@Override
@@ -83,7 +84,7 @@ public class PermissionScannerAdapter extends BaseExpandableListAdapter {
 
 	@Override
 	public View getChildView(int groupPosition, int childPosition,
-			boolean isLastChild, View convertView, ViewGroup parent) {
+							 boolean isLastChild, View convertView, ViewGroup parent) {
 
 		if (convertView == null) {
 			LayoutInflater inflater = (LayoutInflater) context
@@ -109,7 +110,6 @@ public class PermissionScannerAdapter extends BaseExpandableListAdapter {
 		if (childItems.get(groupHeaders.get(groupPos)) != null) {
 			return childItems.get(groupHeaders.get(groupPos)).size();
 		}
-
 		return 0;
 	}
 
@@ -129,15 +129,46 @@ public class PermissionScannerAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
+	public int getGroupType(int groupPos) {
+		return super.getGroupType(groupPos);
+	}
+
+	@Override
+	public int getGroupTypeCount() {
+		return super.getGroupTypeCount();
+	}
+
+	@Override
 	public View getGroupView(int groupPosition, boolean isExpanded,
-			View convertView, ViewGroup parent) {
+							 View convertView, ViewGroup parent) {
+
+		ImageButton reportButton = null;
 
 		if (convertView == null) {
 			LayoutInflater inflater = (LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			convertView = inflater.inflate(R.layout.permission_scanner_group,
 					null);
+
+			reportButton = (ImageButton) convertView.findViewById(R.id.report_button);
+			reportButton.setFocusable(false);
+			reportButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					Toast.makeText(view.getContext(), "Button Pressed", Toast.LENGTH_SHORT).show();
+				}
+			});
 		}
+//		else {
+//		reportButton = (ImageButton) convertView.findViewById(R.id.report_button);
+//		reportButton.setFocusable(false);
+//		reportButton.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View view) {
+//				Toast.makeText(view.getContext(), "Button Pressed", Toast.LENGTH_SHORT).show();
+//			}
+//		});
+//		}
 
 		// LinearLayout groupView =
 		// (LinearLayout)convertView.findViewById(R.id.group_view);
@@ -153,24 +184,22 @@ public class PermissionScannerAdapter extends BaseExpandableListAdapter {
 		TextView indicator = (TextView) convertView
 				.findViewById(R.id.safety_indicator);
 
+
+
 		String pkgName = (String) getGroup(groupPosition);
 
 		int color = getColor(groupPosition);
+		indicator.setBackgroundColor(color);
+//		if (color == Color.RED) {
+//			reportButton.setVisibility(View.VISIBLE);
+//		}
 
 		try {
 			ApplicationInfo appInfo = packageManager.getApplicationInfo(
 					pkgName, PackageManager.GET_META_DATA);
-
 			imgIcon.setImageDrawable(appInfo.loadIcon(packageManager));
-
 			tvGroupTitle.setText(appInfo.loadLabel(packageManager));
-			
-			indicator.setBackgroundColor(color);
-
-		} catch (NameNotFoundException e) {
-			// TODO Auto-generated catch block
-//			e.printStackTrace();
-		}
+		} catch (PackageManager.NameNotFoundException ignored) {}
 
 		return convertView;
 	}
@@ -188,20 +217,20 @@ public class PermissionScannerAdapter extends BaseExpandableListAdapter {
 	private void classifyPermissions(int groupPos) {
 		List<PermissionData> permissionList = childItems.get(groupHeaders
 				.get(groupPos));
-		
+
 		FastVector fvWekaAttributes = new FastVector(permissions.length+1);
-		
+
 		FastVector fvClassVal = new FastVector(2);
 		fvClassVal.addElement("goodware");
 		fvClassVal.addElement("malware");
 		Attribute ClassAttribute  = new Attribute("class", fvClassVal);
 		fvWekaAttributes.addElement(ClassAttribute);
-		
+
 		for(int i=0; i<permissions.length; i++) {
 			Attribute permission = new Attribute(permissions[i], 0);
 			fvWekaAttributes.addElement(permission);
 		}
-		
+
 		Instances Instances = new Instances("Rel", fvWekaAttributes, 0);
 
 		Instance iExample = new Instance(permissions.length+1);
@@ -214,7 +243,7 @@ public class PermissionScannerAdapter extends BaseExpandableListAdapter {
 
 		Instances.add(iExample);
 		Instances.setClassIndex(0);
-		
+
 		StringToWordVector filter = new StringToWordVector();
 		try {
 			filter.setInputFormat(Instances);
@@ -231,14 +260,14 @@ public class PermissionScannerAdapter extends BaseExpandableListAdapter {
 		}
 		appClassificationColors[groupPos] = Color.GREEN;
 	}
-	
+
 	private int getColor(int groupPos) {
 		return appClassificationColors[groupPos];
 	}
-	
+
 	String[] permissions = {
 			"ACCESS_COARSE_LOCATION","ACCESS_COARSE_UPDATES","ACCESS_FINE_LOCATION","ACCESS_FM_RECEIVER","ACCESS_LOCATION_EXTRA_COMMANDS","ACCESS_MOCK_LOCATION","ACCESS_NETWORK_STATE","ACCESS_WIFI_STATE","ACCESS_WIMAX_STATE","AUTHENTICATE_ACCOUNTS","BATTERY_STATS","BIND_ACCESSIBILITY_SERVICE","BIND_APPWIDGET","BIND_DEVICE_ADMIN","BIND_INPUT_METHOD","BIND_REMOTEVIEWS","BIND_WALLPAPER","BLUETOOTH","BLUETOOTH_ADMIN","BROADCAST_SMS","BROADCAST_STICKY","BROADCAST_WAP_PUSH","CALL_PHONE","CALL_PRIVILEGED","CAMERA","CHANGE_COMPONENT_ENABLED_STATE","CHANGE_CONFIGURATION","CHANGE_NETWORK_STATE","CHANGE_WIFI_MULTICAST_STATE","CHANGE_WIFI_STATE","CHANGE_WIMAX_STATE","DEVICE_POWER","DISABLE_KEYGUARD","EXPAND_STATUS_BAR","FLASHLIGHT","FM_RADIO_RECEIVER","FM_RADIO_TRANSMITTER","GET_ACCOUNTS","GET_PACKAGE_SIZE","GET_TASKS","GLOBAL_SEARCH","HARDWARE_TEST","INSTALL_PACKAGES","INTERACT_ACROSS_USERS","INTERACT_ACROSS_USERS_FULL","INTERNET","KILL_BACKGROUND_PROCESSES","MANAGE_ACCOUNTS","MANAGE_USB","MODIFY_AUDIO_SETTINGS","MODIFY_PHONE_STATE","MOUNT_UNMOUNT_FILESYSTEMS","NETWORK","NFC","PERSISTENT_ACTIVITY","PROCESS_OUTGOING_CALLS","RAISED_THREAD_PRIORITY","READ_CALENDAR","READ_CALL_LOG","READ_CONTACTS","READ_EXTERNAL_STORAGE","READ_LOGS","READ_PHONE_STATE","READ_PROFILE","READ_SECURE_SETTINGS","READ_SMS","READ_SYNC_SETTINGS","READ_SYNC_STATS","READ_TASKS","READ_USER_DICTIONARY","RECEIVE_BOOT_COMPLETED","RECEIVE_MMS","RECEIVE_SMS","RECORD_AUDIO","RESTART_PACKAGES","SEND_SMS","SET_ACTIVITY_WATCHER","SET_DEBUG_APP","SET_ORIENTATION","SET_PREFERRED_APPLICATIONS","SET_WALLPAPER","SET_WALLPAPER_HINTS","STORAGE","SYSTEM_ALERT_WINDOW","SYSTEM_TOOLS","UPDATE_DEVICE_STATS","USEFMRADIO","USES_POLICY_FORCE_LOCK","USE_CREDENTIALS","VIBRATE","WAKE_LOCK","WRITE_APN_SETTINGS","WRITE_CALENDAR","WRITE_CALL_LOG","WRITE_CONTACTS","WRITE_EXTERNAL_STORAGE","WRITE_PROFILE","WRITE_SECURE_SETTINGS","WRITE_SETTINGS","WRITE_SMS","WRITE_SYNC_SETTINGS","WRITE_TASKS","WRITE_USER_DICTIONARY","ACCESS_CACHE_FILESYSTEM","ACCESS_GPS","ACCESS_LOCATION","ADD_SYSTEM_SERVICE","BACKUP","CLEAR_APP_CACHE","CLEAR_APP_USER_DATA","DELETE_CACHE_FILES","DELETE_PACKAGES","DIAGNOSTIC","INTERNAL_SYSTEM_WINDOW","PERMISSION_NAME","PROCESS_CALL","PROCESS_INCOMING_CALLS","READ_OWNER_DATA","REBOOT","RECEIVE_WAP_PUSH","REORDER_TASKS","SET_ALWAYS_FINISH","SET_PROCESS_LIMIT","STATUS_BAR","WRITE_SECURE"
 	};
-	
-	
+
+
 }

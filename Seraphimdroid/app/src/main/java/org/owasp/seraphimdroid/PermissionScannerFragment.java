@@ -34,7 +34,7 @@ import java.util.List;
 
 public class PermissionScannerFragment extends Fragment {
 
-	private static final String TAG = "PermissionScannerFragment";
+	private static final String TAG = "PermissionScanner";
 
 	private ExpandableListView lvPermissionList;
 
@@ -96,7 +96,6 @@ public class PermissionScannerFragment extends Fragment {
 								appName + " uses no permission",
 								Toast.LENGTH_LONG).show();
 					} catch (NameNotFoundException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 
@@ -166,8 +165,8 @@ public class PermissionScannerFragment extends Fragment {
 		// isDataChanged = true;
 
 		// Initializing Containers.
-		appList = new ArrayList<String>();
-		childPermissions = new HashMap<String, List<PermissionData>>();
+		appList = new ArrayList<>();
+		childPermissions = new HashMap<>();
 		// appList.clear();
 		// childPermissions.clear();
 	}
@@ -196,8 +195,7 @@ public class PermissionScannerFragment extends Fragment {
 	}
 
 	private boolean isSystemPackage(PackageInfo packageInfo) {
-		return ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) ? true
-				: false;
+		return ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) ? true : false;
 	}
 
 	private class CustomComparator implements Comparator<ApplicationInfo> {
@@ -238,7 +236,7 @@ public class PermissionScannerFragment extends Fragment {
 					pkgInfo = pkgManager.getPackageInfo(appInfo.packageName,
 							PackageManager.GET_PERMISSIONS);
 
-					List<PermissionData> reqPermissions = new ArrayList<PermissionData>();
+					List<PermissionData> reqPermissions = new ArrayList<>();
 
 					if (!isSystemPackage(pkgInfo)
 							&& !(pkgInfo.applicationInfo.loadLabel(pkgManager)
