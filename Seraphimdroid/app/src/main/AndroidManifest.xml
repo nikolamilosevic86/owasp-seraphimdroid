@@ -232,6 +232,7 @@
             android:label="@string/title_activity_web_view">
         </activity>
         <activity android:name=".FeedbackActivity"/>
+        <activity android:name=".ReportActivity"/>
     </application>
 
 </manifest>

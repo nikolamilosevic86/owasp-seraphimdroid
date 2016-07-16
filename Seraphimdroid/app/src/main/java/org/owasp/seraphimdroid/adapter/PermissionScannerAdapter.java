@@ -11,10 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.owasp.seraphimdroid.R;
 import org.owasp.seraphimdroid.model.PermissionData;
@@ -142,33 +140,31 @@ public class PermissionScannerAdapter extends BaseExpandableListAdapter {
 	public View getGroupView(int groupPosition, boolean isExpanded,
 							 View convertView, ViewGroup parent) {
 
-		ImageButton reportButton = null;
+//		ImageButton reportButton = null;
 
 		if (convertView == null) {
 			LayoutInflater inflater = (LayoutInflater) context
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			convertView = inflater.inflate(R.layout.permission_scanner_group,
-					null);
-
-			reportButton = (ImageButton) convertView.findViewById(R.id.report_button);
-			reportButton.setFocusable(false);
-			reportButton.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					Toast.makeText(view.getContext(), "Button Pressed", Toast.LENGTH_SHORT).show();
-				}
-			});
+			convertView = inflater.inflate(R.layout.permission_scanner_group, null);
+//			reportButton = (ImageButton) convertView.findViewById(R.id.report_button);
+//			reportButton.setFocusable(false);
+//			reportButton.setOnClickListener(new View.OnClickListener() {
+//				@Override
+//				public void onClick(View view) {
+//					Toast.makeText(view.getContext(), "Button Pressed", Toast.LENGTH_SHORT).show();
+//				}
+//			});
 		}
-//		else {
-//		reportButton = (ImageButton) convertView.findViewById(R.id.report_button);
-//		reportButton.setFocusable(false);
-//		reportButton.setOnClickListener(new View.OnClickListener() {
-//			@Override
-//			public void onClick(View view) {
-//				Toast.makeText(view.getContext(), "Button Pressed", Toast.LENGTH_SHORT).show();
-//			}
-//		});
-//		}
+		else {
+//			reportButton = (ImageButton) convertView.findViewById(R.id.report_button);
+//			reportButton.setFocusable(false);
+//			reportButton.setOnClickListener(new View.OnClickListener() {
+//				@Override
+//				public void onClick(View view) {
+//					Toast.makeText(view.getContext(), "Button Pressed", Toast.LENGTH_SHORT).show();
+//				}
+//			});
+		}
 
 		// LinearLayout groupView =
 		// (LinearLayout)convertView.findViewById(R.id.group_view);
@@ -184,6 +180,15 @@ public class PermissionScannerAdapter extends BaseExpandableListAdapter {
 		TextView indicator = (TextView) convertView
 				.findViewById(R.id.safety_indicator);
 
+
+//		reportButton = (ImageButton) convertView.findViewById(R.id.report_button);
+//		reportButton.setFocusable(false);
+//		reportButton.setOnClickListener(new View.OnClickListener() {
+//			@Override
+//			public void onClick(View view) {
+//				Toast.makeText(view.getContext(), "Button Pressed", Toast.LENGTH_SHORT).show();
+//			}
+//		});
 
 
 		String pkgName = (String) getGroup(groupPosition);

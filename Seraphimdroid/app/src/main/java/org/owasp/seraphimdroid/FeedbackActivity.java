@@ -4,9 +4,10 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -47,6 +48,10 @@ public class FeedbackActivity extends Activity implements SwipeRefreshLayout.OnR
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
 
+        getActionBar().setTitle("Feedback for Articles");
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+
         ListView listView = (ListView) findViewById(R.id.feedback_list);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_feedback);
 
@@ -66,13 +71,17 @@ public class FeedbackActivity extends Activity implements SwipeRefreshLayout.OnR
         });
 
         editTextFeedback = (EditText) findViewById(R.id.editTextFeedback);
-        Button sendButton = (Button) findViewById(R.id.fbutton);
+        ImageButton sendButton = (ImageButton) findViewById(R.id.fbutton);
         sendButton.setOnClickListener(this);
 
     }
 
     private void sendFeedback(){
         final String feedback = editTextFeedback.getText().toString().trim();
+        if (editTextFeedback.getText().toString().matches("")) {
+            Toast.makeText(this, "You did not enter a Feedback", Toast.LENGTH_SHORT).show();
+            return;
+        }
         final String body = "{ \"title\" : \"" + feedback + "\" }";
 
         JSONObject header = new JSONObject();
@@ -90,6 +99,7 @@ public class FeedbackActivity extends Activity implements SwipeRefreshLayout.OnR
                         }
                         if(resp != null && resp.equals("success")){
                             Toast.makeText(FeedbackActivity.this, "Feedback Posted.", Toast.LENGTH_SHORT).show();
+                            editTextFeedback.setText("");
                             swipeRefreshLayout.post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -175,6 +185,16 @@ public class FeedbackActivity extends Activity implements SwipeRefreshLayout.OnR
         } else {
             Toast.makeText(FeedbackActivity.this, "You are offline", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
