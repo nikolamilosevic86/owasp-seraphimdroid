@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.owasp.seraphimdroid.MainActivity;
 import org.owasp.seraphimdroid.R;
 import org.owasp.seraphimdroid.model.DrawerItem;
 
@@ -86,38 +88,50 @@ public class DrawerAdapter extends BaseAdapter {
 			AlertDialog.Builder info = new AlertDialog.Builder(context);
 			info.setTitle("Information");
 			info.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-
 				@Override
 				public void onClick(DialogInterface dialog, int arg1) {
 					dialog.dismiss();
 				}
 			});
+
 			Integer position = (Integer) view.getTag();
+			Intent infoIntent = new Intent(context, MainActivity.class);
+			infoIntent.putExtra("FRAGMENT_NO", 6);
+
 			switch (position) {
-			case 0:
-				info.setMessage(context.getString(R.string.info_permission_scanner));
-				break;
-			case 1:
-				info.setMessage(context.getString(R.string.info_settings_scanner));
-				break;
-			case 2:
-				info.setMessage(context.getString(R.string.info_blocked_logs));
-				break;
-			case 3:
-				info.setMessage(context.getString(R.string.info_app_lock));
-				break;
-			case 4:
-				info.setMessage(context.getString(R.string.info_service_lock));
-				break;
-			case 5:
-				info.setMessage(context.getString(R.string.info_geo_fencing));
-				break;
+				case 0:
+					infoIntent.putExtra("tags", "permissions");
+//					info.setMessage(context.getString(R.string.info_permission_scanner));
+					break;
+				case 1:
+					infoIntent.putExtra("tags", "android");
+//					info.setMessage(context.getString(R.string.info_settings_scanner));
+					break;
+				case 2:
+					infoIntent.putExtra("tags", "android-logs");
+//					info.setMessage(context.getString(R.string.info_blocked_logs));
+					break;
+				case 3:
+					info.setMessage(context.getString(R.string.info_app_lock));
+					break;
+				case 4:
+					infoIntent.putExtra("tags", "services");
+//					info.setMessage(context.getString(R.string.info_service_lock));
+					break;
+				case 5:
+					infoIntent.putExtra("tags", "geo-fencing");
+//					info.setMessage(context.getString(R.string.info_geo_fencing));
+					break;
 				case 6:
 					info.setMessage(context.getString(R.string.info_knowledge_api));
 					break;
 			}
 //			defaults.edit().putBoolean("info_visible_" + position, false).commit();
-			info.create().show();
+			if(position == 3 || position == 6) {
+				info.create().show();
+			} else {
+				context.startActivity(infoIntent);
+			}
 //			view.setVisibility(View.GONE);
 		}
 	}

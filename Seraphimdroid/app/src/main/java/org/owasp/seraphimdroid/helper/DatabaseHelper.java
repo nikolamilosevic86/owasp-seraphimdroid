@@ -16,7 +16,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
 	private final static String DB_NAME = "APP_DATABASE";
-	private final static int VERSION = 1;
+	private final static int VERSION = 2;
 
 	public final static String TABLE_CALL_LOGS = "call_logs";
 	public final static String TABLE_SMS_LOGS = "sms_logs";
@@ -46,7 +46,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	public DatabaseHelper(Context context) {
 		super(context, DB_NAME, null, VERSION);
-
 	}
 
 	@Override
@@ -71,17 +70,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		db.execSQL("DROP TABLE IF EXISTS call_logs");
-		db.execSQL("DROP TABLE IF EXISTS ussd_logs");
-		db.execSQL("DROP TABLE IF EXISTS sms_logs");
-		db.execSQL("DROP TABLE IF EXISTS locks");
-		db.execSQL("DROP TABLE IF EXISTS services");
-		db.execSQL("DROP TABLE IF EXISTS blacklist");
-		db.execSQL("DROP TABLE IF EXISTS permissions");
-		db.execSQL("DROP TABLE IF EXISTS block_ussd");
-		db.execSQL("DROP TABLE IF EXISTS articles");
-		db.execSQL("DROP TABLE IF EXISTS feedback");
-		db.execSQL("DROP TABLE IF EXISTS usage");
+
+		switch(oldVersion) {
+			case 1:
+				db.execSQL("DROP TABLE IF EXISTS call_logs");
+				db.execSQL("DROP TABLE IF EXISTS ussd_logs");
+				db.execSQL("DROP TABLE IF EXISTS sms_logs");
+				db.execSQL("DROP TABLE IF EXISTS locks");
+				db.execSQL("DROP TABLE IF EXISTS services");
+				db.execSQL("DROP TABLE IF EXISTS blacklist");
+				db.execSQL("DROP TABLE IF EXISTS permissions");
+				db.execSQL("DROP TABLE IF EXISTS block_ussd");
+			case 2:
+				db.execSQL("DROP TABLE IF EXISTS articles");
+				db.execSQL("DROP TABLE IF EXISTS feedback");
+				db.execSQL("DROP TABLE IF EXISTS usage");
+		}
 
 		this.onCreate(db);
 	}

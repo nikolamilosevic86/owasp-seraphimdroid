@@ -1,12 +1,16 @@
 package org.owasp.seraphimdroid;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,7 +38,7 @@ import java.util.List;
 
 public class PermissionScannerFragment extends Fragment {
 
-	private static final String TAG = "PermissionScannerFragment";
+	private static final String TAG = "PermissionScanner";
 
 	private ExpandableListView lvPermissionList;
 
@@ -47,8 +51,8 @@ public class PermissionScannerFragment extends Fragment {
 	private HashMap<String, List<PermissionData>> childPermissions;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(final LayoutInflater inflater, ViewGroup container,
+							 Bundle savedInstanceState) {
 
 		View view = inflater.inflate(R.layout.fragment_permission_scanner,
 				container, false);
@@ -68,7 +72,7 @@ public class PermissionScannerFragment extends Fragment {
 
 			@Override
 			public boolean onChildClick(ExpandableListView list,
-					View clickedView, int groupPos, int childPos, long childId) {
+										View clickedView, int groupPos, int childPos, long childId) {
 
 				Log.d(TAG, "Starting Permission Description");
 
@@ -96,7 +100,6 @@ public class PermissionScannerFragment extends Fragment {
 								appName + " uses no permission",
 								Toast.LENGTH_LONG).show();
 					} catch (NameNotFoundException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 
@@ -110,33 +113,90 @@ public class PermissionScannerFragment extends Fragment {
 
 					@Override
 					public boolean onItemLongClick(AdapterView<?> parent,
-							View item, int postion, long id) {
+												   View item, int postion, long id) {
 
 						if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
 							return true;
 						}
 
-						String pkgName = appList.get(postion);
+						final String pkgName = appList.get(postion);
+						ColorDrawable cd = (ColorDrawable) item.findViewById(R.id.safety_indicator).getBackground();
+						int colorCode = cd.getColor();
 
-						Uri packageUri = Uri.parse("package:" + pkgName);
-						Intent uninstallIntent = new Intent(
-								Intent.ACTION_DELETE, packageUri);
+						final boolean mal_flag;
+						mal_flag = colorCode == Color.RED;
+//						Uri packageUri = Uri.parse("package:" + pkgName);
+//						Intent uninstallIntent = new Intent(
+//								Intent.ACTION_DELETE, packageUri);
+//
+//						startActivity(uninstallIntent);
+//						String AppName = pkgName;
+//						try {
+//							AppName = pkgManager
+//									.getApplicationInfo(pkgName,
+//											PackageManager.GET_META_DATA)
+//									.loadLabel(pkgManager).toString();
+//						} catch (NameNotFoundException ne) {
+//							ne.printStackTrace();
+//						}
+//
+//						Toast.makeText(
+//								PermissionScannerFragment.this.getActivity(),
+//								"Uninstalling: " + AppName, Toast.LENGTH_LONG)
+//								.show();
 
-						startActivity(uninstallIntent);
-						String AppName = pkgName;
-						try {
-							AppName = pkgManager
-									.getApplicationInfo(pkgName,
-											PackageManager.GET_META_DATA)
-									.loadLabel(pkgManager).toString();
-						} catch (NameNotFoundException ne) {
-							ne.printStackTrace();
-						}
+						AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-						Toast.makeText(
-								PermissionScannerFragment.this.getActivity(),
-								"Uninstalling: " + AppName, Toast.LENGTH_LONG)
-								.show();
+						builder.setCancelable(true);
+						builder.setTitle(pkgName);
+
+						builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialogInterface, int i) {
+								dialogInterface.dismiss();
+							}
+						});
+
+						builder.setPositiveButton("Report", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								Intent fb_intent = new Intent(getActivity(), ReportActivity.class);
+								fb_intent.putExtra("report", true);
+								fb_intent.putExtra("package", pkgName);
+								fb_intent.putExtra("malicious", mal_flag);
+								startActivity(fb_intent);
+							}
+						});
+
+						builder.setNegativeButton("Uninstall", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialogInterface, int i) {
+								Uri packageUri = Uri.parse("package:" + pkgName);
+
+								Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageUri);
+
+								startActivity(uninstallIntent);
+								String AppName = pkgName;
+								try {
+									AppName = pkgManager
+											.getApplicationInfo(pkgName,
+													PackageManager.GET_META_DATA)
+											.loadLabel(pkgManager).toString();
+								} catch (NameNotFoundException ne) {
+									ne.printStackTrace();
+								}
+
+								Toast.makeText(
+										PermissionScannerFragment.this.getActivity(),
+										"Uninstalling: " + AppName, Toast.LENGTH_LONG)
+										.show();
+							}
+						});
+
+						builder.setMessage("Selecting the Report Action will Report the App to us with your feedback. and selecting uninstall will uninstall the app.");
+
+						AlertDialog alertDialog = builder.create();
+						alertDialog.show();
 
 						return true;
 					}
@@ -166,8 +226,8 @@ public class PermissionScannerFragment extends Fragment {
 		// isDataChanged = true;
 
 		// Initializing Containers.
-		appList = new ArrayList<String>();
-		childPermissions = new HashMap<String, List<PermissionData>>();
+		appList = new ArrayList<>();
+		childPermissions = new HashMap<>();
 		// appList.clear();
 		// childPermissions.clear();
 	}
@@ -196,22 +256,21 @@ public class PermissionScannerFragment extends Fragment {
 	}
 
 	private boolean isSystemPackage(PackageInfo packageInfo) {
-		return ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) ? true
-				: false;
+		return ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) ? true : false;
 	}
 
 	private class CustomComparator implements Comparator<ApplicationInfo> {
-	    @Override
-	    public int compare(ApplicationInfo l, ApplicationInfo r) {
-	        return pkgManager.getApplicationLabel(l).toString().compareToIgnoreCase(pkgManager.getApplicationLabel(r).toString());
-	    }
+		@Override
+		public int compare(ApplicationInfo l, ApplicationInfo r) {
+			return pkgManager.getApplicationLabel(l).toString().compareToIgnoreCase(pkgManager.getApplicationLabel(r).toString());
+		}
 	}
-	
+
 	private class AsyncListGenerator extends AsyncTask<Void, Void, Void> {
 
 		ProgressDialog loading = new ProgressDialog(getActivity());
 		PermissionScannerAdapter adapter;
-		
+
 		@Override
 		protected void onPreExecute() {
 			loading.setTitle("Scanning Permissions");
@@ -227,7 +286,7 @@ public class PermissionScannerFragment extends Fragment {
 			List<ApplicationInfo> installedApps = pkgManager
 					.getInstalledApplications(PackageManager.GET_META_DATA);
 			Collections.sort(installedApps, new CustomComparator());
-			
+
 			PermissionGetter permissionGetter = new PermissionGetter(
 					pkgManager, PermissionScannerFragment.this.getActivity());
 
@@ -238,12 +297,12 @@ public class PermissionScannerFragment extends Fragment {
 					pkgInfo = pkgManager.getPackageInfo(appInfo.packageName,
 							PackageManager.GET_PERMISSIONS);
 
-					List<PermissionData> reqPermissions = new ArrayList<PermissionData>();
+					List<PermissionData> reqPermissions = new ArrayList<>();
 
 					if (!isSystemPackage(pkgInfo)
 							&& !(pkgInfo.applicationInfo.loadLabel(pkgManager)
-									.equals(getResources().getString(
-											R.string.app_name)))) {
+							.equals(getResources().getString(
+									R.string.app_name)))) {
 
 						appList.add(pkgInfo.packageName);
 

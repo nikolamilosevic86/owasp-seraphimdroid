@@ -34,16 +34,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
-            android:ems="10"
             android:layout_weight="1"
-            android:id="@+id/editTextFeedback"/>
+            android:id="@+id/editTextFeedback"
+            android:singleLine="false"
+            android:lines="4"
+            android:hint="Here you can provide feedback on existing articles, or suggest new articles."/>
 
-        <Button
+        <ImageButton
+            android:background="@drawable/ic_send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Send"
             android:id="@+id/fbutton"
-            android:layout_gravity="end"/>
+            android:layout_gravity="end"
+            android:gravity="center_vertical"/>
 
     </LinearLayout>
 

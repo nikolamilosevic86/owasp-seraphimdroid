@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.webkit.WebView;
@@ -33,11 +34,54 @@ public class WebViewActivity extends Activity {
 //        url = BASE_URL + "articles/" + i.getStringExtra("id");
 
         getActionBar().setTitle(intent.getStringExtra("header"));
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
 
         mWebView = (WebView) findViewById(R.id.wv);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
 //        main_layout = (RelativeLayout) findViewById(R.id.main_layout);
+
+//        title = drawerTitle = getTitle();
+//        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        drawerList = (ListView) findViewById(R.id.drawer_list);
+//
+//        itemNames = getResources().getStringArray(R.array.item_names);
+//        listItems = new ArrayList<>();
+//        iconList = getResources().obtainTypedArray(R.array.drawer_icons);
+//
+//        MainActivity.populateList();
+//
+//        adapter = new DrawerAdapter(this, listItems);
+//        drawerList.setAdapter(adapter);
+//
+//        drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view,
+//                                    int position, long id) {
+//                if (position == 6){
+//                    getIntent().removeExtra("tags");
+//                    MainActivity.selectFragment(6);
+//                } else {
+//                    MainActivity.selectFragment(position);
+//                }
+//            }
+//        });
+//
+//        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+//                R.drawable.ic_drawer, android.R.string.ok, android.R.string.ok) {
+//            public void onDrawerClosed(View view) {
+//                getActionBar().setTitle(title);
+//                invalidateOptionsMenu();
+//            }
+//
+//            public void onDrawerOpened(View drawerView) {
+//                getActionBar().setTitle(drawerTitle);
+//                invalidateOptionsMenu();
+//            }
+//        };
+//        drawerLayout.setDrawerListener(drawerToggle);
 
         mWebView.setFocusable(true);
         mWebView.setFocusableInTouchMode(true);
@@ -97,6 +141,16 @@ public class WebViewActivity extends Activity {
 
         mWebView.loadUrl(intent.getStringExtra("url"));
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

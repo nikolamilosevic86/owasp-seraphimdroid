@@ -91,9 +91,13 @@ public class MainActivity extends FragmentActivity {
 			Intent pwdIntent = new Intent(this, org.owasp.seraphimdroid.PasswordActivity.class);
 			pwdIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			pwdIntent.putExtra("PACKAGE_NAME", this.getPackageName());
-			startActivity(pwdIntent);
-			isUnlocked = true;
-			selectFragment(fragmentNo);
+			if(fragmentNo == 6){
+				selectFragment(fragmentNo);
+			} else {
+				startActivity(pwdIntent);
+				isUnlocked = true;
+				selectFragment(fragmentNo);
+			}
 		}
 		else {
 			if(org.owasp.seraphimdroid.PasswordActivity.lastUnlocked!=null && org.owasp.seraphimdroid.PasswordActivity.lastUnlocked.equals(getPackageName())==false) {
@@ -101,7 +105,6 @@ public class MainActivity extends FragmentActivity {
 			}
 		}
 		super.onResume();
-
 	}
 
 	@Override
@@ -405,7 +408,6 @@ public class MainActivity extends FragmentActivity {
 				fragment = new org.owasp.seraphimdroid.EducateFragment();
 				break;
 			case 7: {
-
 				if (prevSupportFlag != null) {
 					FragmentManager fragMan = getSupportFragmentManager();
 					fragMan.beginTransaction().remove(prevSupportFlag).commit();
