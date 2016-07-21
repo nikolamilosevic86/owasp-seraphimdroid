@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -127,10 +126,7 @@ public class WebViewActivity extends Activity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
 
-//                mWebView.saveWebArchive(getCacheDir().getAbsolutePath() + File.separator + i.getStringExtra("id") + File.separator + "page.mht");
                 mWebView.saveWebArchive(getFilesDir().getAbsolutePath() + File.separator + intent.getStringExtra("id") + "page.mht");
-                Log.i("hello", "onPageFinished: page saved");
-                Log.i("hello", "onPageFinished: " + getCacheDir().getAbsolutePath() + File.separator + intent.getStringExtra("id") + "page.mht");
 
                 if (mProgressBar.getVisibility() == View.VISIBLE)
                     mProgressBar.setVisibility(View.GONE);
