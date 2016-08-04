@@ -120,13 +120,11 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View ArticleView = inflater.inflate(R.layout.article_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(ArticleView);
         return viewHolder;
-
     }
 
     @Override

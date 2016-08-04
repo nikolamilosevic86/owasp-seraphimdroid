@@ -16,7 +16,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
 	private final static String DB_NAME = "APP_DATABASE";
-	private final static int VERSION = 2;
+	private final static int VERSION = 3;
 
 	public final static String TABLE_CALL_LOGS = "call_logs";
 	public final static String TABLE_SMS_LOGS = "sms_logs";
@@ -40,7 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String createBlacklistTable = "CREATE TABLE IF NOT EXISTS blacklist (_id INTEGER PRIMARY KEY AUTOINCREMENT, number TEXT NOT NULL)";
 	public static final String createBlockedUSSDTable = "CREATE TABLE IF NOT EXISTS block_ussd (_id INTEGER PRIMARY KEY AUTOINCREMENT, number TEXT NOT NULL, desc TEXT NOT NULL, type TEXT NOT NULL)";
 	private static final String createPermissionTable = "CREATE TABLE IF NOT EXISTS permissions (_id INTEGER PRIMARY KEY AUTOINCREMENT, permission TEXT, weight INTEGER, malicious_use TEXT)";
-	private static final String createArticlesTable = "CREATE TABLE IF NOT EXISTS articles ( id INTEGER PRIMARY KEY, title TEXT, category TEXT, cachefile TEXT, tags TEXT, reads INTEGER)";
+	private static final String createArticlesTable = "CREATE TABLE IF NOT EXISTS articles ( id INTEGER PRIMARY KEY, title TEXT, text TEXT, category TEXT, cachefile TEXT, tags TEXT)";
 	private static final String createFeedbackTable = "CREATE TABLE IF NOT EXISTS feedback (  question TEXT, description TEXT, upvotes INTEGER )";
 	private static final String createUsageTable = "CREATE TABLE IF NOT EXISTS usage ( id INTEGER, title TEXT, uses INTEGER )";
 
@@ -85,6 +85,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				db.execSQL("DROP TABLE IF EXISTS articles");
 				db.execSQL("DROP TABLE IF EXISTS feedback");
 				db.execSQL("DROP TABLE IF EXISTS usage");
+			case 3:
+				db.execSQL("DROP TABLE IF EXISTS articles");
 		}
 
 		this.onCreate(db);
@@ -392,6 +394,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		for (Article ar : list) {
 			cv.put("id", ar.getId());
 			cv.put("title", ar.getTitle());
+			cv.put("text", ar.getText());
 			cv.put("category", ar.getCategory());
 			cv.put("cachefile", ar.getCachefile());
 			String tags = ar.getTags().toString();
@@ -413,9 +416,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				Article article = new Article();
 				article.setId(cursor.getString(0));
 				article.setTitle(cursor.getString(1));
-				article.setCategory(cursor.getString(2));
-				article.setCachefile(cursor.getString(3));
-				article.setTags(new ArrayList<>(Arrays.asList(cursor.getString(4).split("\\s*,\\s*"))));
+				article.setText(cursor.getString(2));
+				article.setCategory(cursor.getString(3));
+				article.setCachefile(cursor.getString(4));
+				article.setTags(new ArrayList<>(Arrays.asList(cursor.getString(5).split("\\s*,\\s*"))));
 				articlesList.add(article);
 			} while (cursor.moveToNext());
 		}
@@ -434,9 +438,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				Article article = new Article();
 				article.setId(cursor.getString(0));
 				article.setTitle(cursor.getString(1));
-				article.setCategory(cursor.getString(2));
-				article.setCachefile(cursor.getString(3));
-				article.setTags(new ArrayList<>(Arrays.asList(cursor.getString(4).split("\\s*,\\s*"))));
+				article.setText(cursor.getString(2));
+				article.setCategory(cursor.getString(3));
+				article.setCachefile(cursor.getString(4));
+				article.setTags(new ArrayList<>(Arrays.asList(cursor.getString(5).split("\\s*,\\s*"))));
 				if (article.getTags().contains(tag)){
 					articles.add(article);
 				}
