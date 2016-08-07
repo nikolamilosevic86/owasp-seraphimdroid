@@ -57,3 +57,4 @@ After Setting up Studio, Follow these:
 This Project is Under Active Development and Stable build is available on the [Master](https://github.com/nikolamilosevic86/owasp-seraphimdroid/tree/master).
 This [build](https://github.com/nikolamilosevic86/owasp-seraphimdroid/tree/gsoc) will be kept free of errors mostly, but may still face some minor glitches.
 The Knowledge Base is currently under development as a sister project and the results are fetched from the [API](https://github.com/addiittya2006/owasp-educate) deployed at [Openshift](http://educate-seraphimdroid.rhcloud.com).
+All the Information related to that is available on [this Wiki](https://github.com/addiittya2006/owasp-educate/wiki).

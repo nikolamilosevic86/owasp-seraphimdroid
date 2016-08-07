@@ -107,7 +107,6 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             tvTitle.setText(item.getTitle());
             tvCategory.setText(item.getCategory());
             tvTags.setText("Tagged with: " + item.getTags().toString().replace("[", "").replace("]", ""));
-//            tvTags.setText(String.format(R.string.article_tags, item.getTags().toString().replace("[", "").replace("]", "")));
             tvText.setText(item.getText());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -121,13 +120,11 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View ArticleView = inflater.inflate(R.layout.article_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(ArticleView);
         return viewHolder;
-
     }
 
     @Override
