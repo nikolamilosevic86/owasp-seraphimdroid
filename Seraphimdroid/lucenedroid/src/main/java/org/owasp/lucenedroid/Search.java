@@ -1,28 +1,4 @@
-package org.lukhnos.lucenestudy;
-
-/**
- * Copyright (c) 2015 Lukhnos Liu
- *
- * Licensed under the MIT License.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
+package org.owasp.lucenedroid;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.DirectoryReader;
@@ -30,21 +6,25 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.*;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.Sort;
+import org.apache.lucene.search.SortField;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-
-import java.io.IOException;
 import org.lukhnos.portmobile.file.Path;
 import org.lukhnos.portmobile.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
-public class Searcher implements AutoCloseable {
+import java.io.IOException;
+import java.util.ArrayList;
+
+public class Search implements AutoCloseable {
   final Analyzer analyzer;
   final IndexReader indexReader;
 
-  public Searcher(String indexRoot) throws IOException {
+  public Search(String indexRoot) throws IOException {
     Path indexRootPath = Paths.get(indexRoot);
     analyzer = Indexer.getAnalyzer();
     Directory mainIndexDir = FSDirectory.open(Indexer.getMainIndexPath(indexRootPath));
@@ -115,7 +95,7 @@ public class Searcher implements AutoCloseable {
       topDocsLen = topDocs.scoreDocs.length;
     }
 
-    HighlightingHelper highlightingHelper = new HighlightingHelper(query, analyzer);
+//    HighlightingHelper highlightingHelper = new HighlightingHelper(query, analyzer);
 
     ArrayList<Article> docs = new ArrayList<>();
     for (int i = 0; i < topDocsLen; i++) {
@@ -124,7 +104,7 @@ public class Searcher implements AutoCloseable {
       docs.add(doc);
     }
 
-    return new SearchResult(topDocs.totalHits, docs, nextSearchAfterDoc, query, sort, highlightingHelper);
+    return new SearchResult(topDocs.totalHits, docs, nextSearchAfterDoc, query, sort);
   }
 
   public enum SortBy {

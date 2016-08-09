@@ -1,4 +1,4 @@
-package org.lukhnos.lucenestudy;
+package org.owasp.lucenedroid;
 
 /**
  * Copyright (c) 2015 Lukhnos Liu
@@ -27,24 +27,21 @@ package org.lukhnos.lucenestudy;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.IntField;
-import org.apache.lucene.document.NumericDocValuesField;
 import org.apache.lucene.document.SortedDocValuesField;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.BytesRef;
 
 import java.io.IOException;
+
 import org.lukhnos.portmobile.file.Path;
 import org.lukhnos.portmobile.file.Paths;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Indexer for the document index. This class also defines the "schema" of the document index: It
@@ -226,7 +223,6 @@ public class Indexer implements AutoCloseable {
         tagsField.setStringValue(doc.tags.toString());
         luceneDoc.add(tagsField);
       }
-
 
       indexWriter.addDocument(luceneDoc);
     }

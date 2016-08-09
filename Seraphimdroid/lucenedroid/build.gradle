@@ -32,14 +32,14 @@ repositories {
   flatDir { dirs 'libs' }
 }
 
-//buildscript {
-//    repositories {
-//        flatDir dirs: '/Users/lukhnos/opt/proguard5.2.1/lib'
-//    }
-//    dependencies {
-//        classpath ':proguard:'
-//    }
-//}
+buildscript {
+    repositories {
+        flatDir dirs: 'libs'
+    }
+    dependencies {
+        classpath ':proguard:'
+    }
+}
 
 dependencies {
   compile 'org.apache.lucene:lucene-core:5.3.0-mobile-2'
@@ -75,7 +75,7 @@ jar {
   }
 
   manifest {
-    attributes "Main-Class": "org.lukhnos.lucenestudy.Study"
+    attributes "Main-Class": "org.owasp.lucenedroid.Lucene"
   }
 
   from(configurations.runtime.collect{ it.isDirectory() ? it : zipTree(it) }) {

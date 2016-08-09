@@ -34,9 +34,9 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.lukhnos.lucenestudy.SearchResult;
-import org.lukhnos.lucenestudy.Searcher;
-import org.lukhnos.lucenestudy.Study;
+import org.owasp.lucenedroid.Lucene;
+import org.owasp.lucenedroid.SearchResult;
+import org.owasp.lucenedroid.Search;
 import org.owasp.seraphimdroid.adapter.ArticleAdapter;
 import org.owasp.seraphimdroid.helper.ConnectionHelper;
 import org.owasp.seraphimdroid.helper.DatabaseHelper;
@@ -272,7 +272,7 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
             @Override
             public boolean onQueryTextSubmit(String s) {
                 try {
-                    Searcher searcher = new Searcher(getIndexRootDir().getAbsolutePath());
+                    Search searcher = new Search(getIndexRootDir().getAbsolutePath());
                     SearchResult result = searcher.search(s, 20);
                     ArrayList<Article> results = Result.fromSearchResult(result);
                     searcher.close();
@@ -321,7 +321,7 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
             protected Boolean doInBackground(Void... voids) {
                 try {
                     InputStream is = getActivity().getAssets().open("articles-index.json");
-                    Study.importData(is, getIndexRootDir().getAbsolutePath(), true);
+                    Lucene.importData(is, getIndexRootDir().getAbsolutePath(), false);
                     return true;
                 } catch (Exception e) {
                     return false;
@@ -349,7 +349,7 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     static class Result {
         final SearchResult searchResult;
-//        final org.lukhnos.lucenestudy.Article article;
+//        final org.owasp.lucenedroid.Article article;
         final Article article;
 //        final String title;
 
@@ -360,7 +360,7 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
         static ArrayList<Article> fromSearchResult(SearchResult searchResult) {
             ArrayList<Article> results = new ArrayList<>();
-            for (org.lukhnos.lucenestudy.Article doc : searchResult.documents) {
+            for (org.owasp.lucenedroid.Article doc : searchResult.documents) {
                 results.add(new Article(doc.getId(), doc.getTitle(), doc.getText(), doc.getCategory(), doc.getTags()));
             }
             return results;

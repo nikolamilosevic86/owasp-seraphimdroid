@@ -1,1 +1,1 @@
-include ':app', ':lucenestudy'
+include ':app', ':lucenedroid'

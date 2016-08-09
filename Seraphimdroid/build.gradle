@@ -10,7 +10,7 @@ buildscript {
 
 allprojects {
     repositories {
-        flatDir { dirs "$rootDir/lucenestudy/libs" }
+        flatDir { dirs "$rootDir/lucenedroid/libs" }
         jcenter()
     }
 }

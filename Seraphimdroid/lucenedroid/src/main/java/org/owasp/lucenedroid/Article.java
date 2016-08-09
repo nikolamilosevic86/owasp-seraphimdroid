@@ -1,4 +1,4 @@
-package org.lukhnos.lucenestudy;
+package org.owasp.lucenedroid;
 
 import java.util.ArrayList;
 import java.util.Arrays;

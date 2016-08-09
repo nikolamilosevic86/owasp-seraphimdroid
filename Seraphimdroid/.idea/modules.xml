@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Seraphimdroid.iml" filepath="$PROJECT_DIR$/Seraphimdroid.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/lucenestudy/lucenestudy.iml" filepath="$PROJECT_DIR$/lucenestudy/lucenestudy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lucenedroid/lucenedroid.iml" filepath="$PROJECT_DIR$/lucenedroid/lucenedroid.iml" />
     </modules>
   </component>
 </project>

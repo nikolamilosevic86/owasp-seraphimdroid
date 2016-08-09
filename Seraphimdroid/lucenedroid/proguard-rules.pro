@@ -16,7 +16,7 @@
 
 -keepattributes Signature,Exceptions
 
-# -keep public class org.lukhnos.lucenestudy.Study {
+# -keep public class org.owasp.lucenedroid.Study {
 #    *** main(***);
 # }
 

@@ -1,28 +1,4 @@
-package org.lukhnos.lucenestudy;
-
-/**
- * Copyright (c) 2015 Lukhnos Liu
- *
- * Licensed under the MIT License.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
+package org.owasp.lucenedroid;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -32,9 +8,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
 
-public class Study {
+public class Lucene {
   public static void main(String args[]) throws Exception {
     if (args.length < 3) {
       showHelpAndExit();
@@ -45,14 +20,14 @@ public class Study {
       index(args[1], args[2]);
     } else if (args[0].equalsIgnoreCase("search")) {
       search(args[1], args[2]);
-    } else if (args[0].equalsIgnoreCase("suggest")) {
-      suggest(args[1], args[2]);
+//    } else if (args[0].equalsIgnoreCase("suggest")) {
+//      suggest(args[1], args[2]);
     }
 
   }
 
   static void showHelpAndExit() {
-    System.err.println("Usage: Study [index|search|suggest] arguments...");
+    System.err.println("Usage: Lucene [index|search|suggest] arguments...");
     System.err.println("    index <source JSON> <index path>");
     System.err.println("    search <index path> <query>");
     System.err.println("    suggest <index path> <keyword(s)>");
@@ -123,15 +98,15 @@ public class Study {
     indexer.addDocuments(docs);
     indexer.close();
 
-    if (withSuggestion) {
-      Suggester.rebuild(indexPath);
-    }
+//    if (withSuggestion) {
+//      Suggester.rebuild(indexPath);
+//    }
 
     return docs.size();
   }
 
   static void search(String indexPath, String query) throws Exception {
-    Searcher searcher = new Searcher(indexPath);
+    Search searcher = new Search(indexPath);
     SearchResult result = searcher.search(query, null, 10);
 
     for (Article doc : result.documents) {
@@ -146,12 +121,12 @@ public class Study {
     searcher.close();
   }
 
-  static void suggest(String indexPath, String query) throws Exception {
-    Suggester suggester = new Suggester(indexPath);
-    List<String> suggestions = suggester.suggest(query);
-    for (String text : suggestions) {
-      System.out.println("Suggestion: " + text);
-    }
-    suggester.close();
-  }
+//  static void suggest(String indexPath, String query) throws Exception {
+//    Suggester suggester = new Suggester(indexPath);
+//    List<String> suggestions = suggester.suggest(query);
+//    for (String text : suggestions) {
+//      System.out.println("Suggestion: " + text);
+//    }
+//    suggester.close();
+//  }
 }
