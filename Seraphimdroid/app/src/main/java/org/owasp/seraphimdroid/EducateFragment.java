@@ -1,10 +1,13 @@
 package org.owasp.seraphimdroid;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -26,9 +30,13 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.lukhnos.lucenestudy.SearchResult;
+import org.lukhnos.lucenestudy.Searcher;
+import org.lukhnos.lucenestudy.Study;
 import org.owasp.seraphimdroid.adapter.ArticleAdapter;
 import org.owasp.seraphimdroid.helper.ConnectionHelper;
 import org.owasp.seraphimdroid.helper.DatabaseHelper;
@@ -38,6 +46,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
@@ -64,6 +73,12 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        rebuildIndexIfNotExists();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_educate, container, false);
@@ -83,6 +98,7 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
                 Intent i = new Intent(getActivity(), WebViewActivity.class);
                 i.putExtra("id", item.getId());
+                Log.d(">>>>>>>>>", "onItemClick: "+item.getId());
                 if (ch.isConnectingToInternet()) {
                     i.putExtra("url", BASE_URL + "articles/" + item.getId());
                     i.putExtra("header", "Article from " + item.getCategory() +  " Category");
@@ -244,7 +260,112 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_educate, menu);
+
+        MenuItem item = menu.findItem(R.id.action_search);
+        final SearchView searchView = new SearchView(getActivity().getActionBar().getThemedContext());
+        MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+        MenuItemCompat.setActionView(item, searchView);
+
+
+//        final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+//        searchView.setQueryHint(getString(R.string.search_hint));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                try {
+                    Searcher searcher = new Searcher(getIndexRootDir().getAbsolutePath());
+                    SearchResult result = searcher.search(s, 20);
+                    ArrayList<Article> results = Result.fromSearchResult(result);
+                    searcher.close();
+
+//                    itemsAdapter.clear();
+//                    itemsAdapter.addAll(results);
+//                    itemsAdapter.notifyDataSetChanged();
+
+//                    if (results.size() == 0) {
+//                        setStatus(getString(R.string.query_no_results_msg));
+//                    } else {
+//                        setStatus(null);
+//                    }
+                    mArrArticle.clear();
+                    mArrArticle.addAll(results);
+                    va.notifyDataSetChanged();
+
+                    searchView.clearFocus();
+                } catch (ParseException e) {
+                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
+
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    File getIndexRootDir() {
+        return new File(getActivity().getCacheDir(), "index");
+    }
+
+    void rebuildIndex() {
+        final ProgressDialog dialog = ProgressDialog.show(getActivity(), "Building Index", "Please Wait..", true);
+        new AsyncTask<Void, Void, Boolean>() {
+            @Override
+            protected Boolean doInBackground(Void... voids) {
+                try {
+                    InputStream is = getActivity().getAssets().open("articles-index.json");
+                    Study.importData(is, getIndexRootDir().getAbsolutePath(), true);
+                    return true;
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Boolean result) {
+                dialog.dismiss();
+
+                if (result) {
+                    Toast.makeText(getActivity(), "Index Built", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Failed to build Index", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.execute();
+    }
+
+    void rebuildIndexIfNotExists() {
+        if (!getIndexRootDir().exists()) {
+            rebuildIndex();
+        }
+    }
+
+    static class Result {
+        final SearchResult searchResult;
+//        final org.lukhnos.lucenestudy.Article article;
+        final Article article;
+//        final String title;
+
+        Result(SearchResult searchResult, Article article) {
+            this.searchResult = searchResult;
+            this.article = article;
+        }
+
+        static ArrayList<Article> fromSearchResult(SearchResult searchResult) {
+            ArrayList<Article> results = new ArrayList<>();
+            for (org.lukhnos.lucenestudy.Article doc : searchResult.documents) {
+                results.add(new Article(doc.id, doc.title, doc.text, doc.category, doc.tags));
+            }
+            return results;
+        }
     }
 
     @Override
