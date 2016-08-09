@@ -98,7 +98,6 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
                 Intent i = new Intent(getActivity(), WebViewActivity.class);
                 i.putExtra("id", item.getId());
-                Log.d(">>>>>>>>>", "onItemClick: "+item.getId());
                 if (ch.isConnectingToInternet()) {
                     i.putExtra("url", BASE_URL + "articles/" + item.getId());
                     i.putExtra("header", "Article from " + item.getCategory() +  " Category");
@@ -362,7 +361,7 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
         static ArrayList<Article> fromSearchResult(SearchResult searchResult) {
             ArrayList<Article> results = new ArrayList<>();
             for (org.lukhnos.lucenestudy.Article doc : searchResult.documents) {
-                results.add(new Article(doc.id, doc.title, doc.text, doc.category, doc.tags));
+                results.add(new Article(doc.getId(), doc.getTitle(), doc.getText(), doc.getCategory(), doc.getTags()));
             }
             return results;
         }

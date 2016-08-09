@@ -156,6 +156,7 @@ public class Indexer implements AutoCloseable {
 
   public void addDocuments(ArrayList<Article> docs) throws IOException {
     // Reuse doc and field instances. See http://wiki.apache.org/lucene-java/ImproveIndexingSpeed
+    Field idField = new TextField(ID_FIELD_NAME, "", Field.Store.YES);
     Field titleField = new TextField(TITLE_FIELD_NAME, "", Field.Store.YES);
     Field titleDocsValueField = new SortedDocValuesField(TITLE_FIELD_NAME, new BytesRef(0));
 //    Field yearField = new IntField(YEAR_FIELD_NAME, 0, Field.Store.YES);
@@ -205,6 +206,11 @@ public class Indexer implements AutoCloseable {
 //        sourceField.setStringValue(doc.source);
 //        luceneDoc.add(sourceField);
 //      }
+
+      if (doc.id != null && !doc.id.isEmpty()) {
+        idField.setStringValue(doc.id);
+        luceneDoc.add(idField);
+      }
 
       if (doc.text != null && !doc.text.isEmpty()) {
         textField.setStringValue(doc.text);
