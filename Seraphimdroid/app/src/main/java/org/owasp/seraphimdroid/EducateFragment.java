@@ -1,6 +1,5 @@
 package org.owasp.seraphimdroid;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -35,8 +34,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.owasp.lucenedroid.Lucene;
-import org.owasp.lucenedroid.SearchResult;
 import org.owasp.lucenedroid.Search;
+import org.owasp.lucenedroid.SearchResult;
 import org.owasp.seraphimdroid.adapter.ArticleAdapter;
 import org.owasp.seraphimdroid.helper.ConnectionHelper;
 import org.owasp.seraphimdroid.helper.DatabaseHelper;
@@ -47,6 +46,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
@@ -73,12 +73,6 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        rebuildIndexIfNotExists();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_educate, container, false);
@@ -89,7 +83,6 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
         Intent i = getActivity().getIntent();
         tags = i.getStringExtra("tags");
         mSharedPreferences = getActivity().getSharedPreferences("article_reads", Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = mSharedPreferences.edit();
 
         mArrArticle = new ArrayList<>();
         va = new ArticleAdapter(mArrArticle, new ArticleAdapter.OnItemClickListener() {
@@ -101,7 +94,6 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 if (ch.isConnectingToInternet()) {
                     i.putExtra("url", BASE_URL + "articles/" + item.getId());
                     i.putExtra("header", "Article from " + item.getCategory() +  " Category");
-//                    ArrayList<Article> arr = db.getOfflineReadArticles();
                     ArrayList<Article> arr = getOfflineReadArticles();
                     if (!arr.isEmpty()) {
                         for (Article article: arr){
@@ -133,77 +125,12 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
         });
 
-        jar = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                try {
-
-                    for (int i = 0; i < response.length(); i++) {
-
-                        JSONObject pjo = (JSONObject) response.get(i);
-                        String id = pjo.getString("id");
-                        String title = pjo.getString("title");
-                        String text = pjo.getString("text");
-
-                        Article article = new Article();
-                        article.setId(id);
-                        article.setText(text);
-                        article.setTitle(title);
-                        article.setCachefile(getActivity().getFilesDir().getAbsolutePath() + File.separator + id + "page.mht");
-
-                        if (!Objects.equals(pjo.getString("category"), "null")){
-                            JSONObject category = pjo.getJSONObject("category");
-                            article.setCategory(category.getString("name"));
-                        }
-                        else{
-                            article.setCategory("Other");
-                        }
-
-                        if (!Objects.equals(pjo.getString("tags"), "null")){
-                            JSONArray tags = pjo.getJSONArray("tags");
-                            ArrayList<String> taglist = new ArrayList<>();
-                            for (int j=0; j < tags.length(); j++){
-                                JSONObject tag = tags.getJSONObject(j);
-                                String tag_name = tag.getString("name");
-                                taglist.add(tag_name);
-                            }
-                            article.setTags(taglist);
-                        }
-                        else{
-                            article.setTags(new ArrayList<String>());
-                        }
-
-                        mArrArticle.add(article);
-
-                    }
-
-                    db.addNewArticles(mArrArticle);
-
-                    va.notifyDataSetChanged();
-
-                    swipeRefreshLayout.setRefreshing(false);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getActivity(), "Some Error Occurred.", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if (error.getMessage() != null) {
-                    Toast.makeText(getActivity(), "Please Connect to the internet", Toast.LENGTH_LONG).show();
-                    mArrArticle.addAll(db.getAllArticles());
-                    va.notifyDataSetChanged();
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            }
-        });
+//      JsonArrayRequest was here
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         RecyclerView lstView = (RecyclerView) view.findViewById(R.id.recycle_articles);
 
+//        TODO RecylerView Management Bug
 //        lstView.setOnScrollListener(new RecyclerView.OnScrollListener(){
 //            @Override
 //            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -236,7 +163,7 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     va.notifyDataSetChanged();
                     swipeRefreshLayout.setRefreshing(false);
                 } else {
-                    mRequestQueue.add(jar);
+                    rebuildIndex();
                 }
             }
         });
@@ -265,9 +192,6 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
         MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
         MenuItemCompat.setActionView(item, searchView);
 
-
-//        final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-//        searchView.setQueryHint(getString(R.string.search_hint));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -277,15 +201,6 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     ArrayList<Article> results = Result.fromSearchResult(result);
                     searcher.close();
 
-//                    itemsAdapter.clear();
-//                    itemsAdapter.addAll(results);
-//                    itemsAdapter.notifyDataSetChanged();
-
-//                    if (results.size() == 0) {
-//                        setStatus(getString(R.string.query_no_results_msg));
-//                    } else {
-//                        setStatus(null);
-//                    }
                     mArrArticle.clear();
                     mArrArticle.addAll(results);
                     va.notifyDataSetChanged();
@@ -315,12 +230,87 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     void rebuildIndex() {
-        final ProgressDialog dialog = ProgressDialog.show(getActivity(), "Building Index", "Please Wait..", true);
+//        final ProgressDialog dialog = ProgressDialog.show(getActivity(), "Building Index", "Please Wait..", true);
+        swipeRefreshLayout.setRefreshing(true);
         new AsyncTask<Void, Void, Boolean>() {
             @Override
             protected Boolean doInBackground(Void... voids) {
                 try {
-                    InputStream is = getActivity().getAssets().open("articles-index.json");
+//                    InputStream is = getActivity().getFilesDir().
+
+                    jar = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                OutputStream outputStream = getActivity().openFileOutput("articles-index.json", Context.MODE_APPEND);
+                                outputStream.write(response.toString().getBytes());
+                                outputStream.close();
+                                for (int i = 0; i < response.length(); i++) {
+
+                                    JSONObject pjo = (JSONObject) response.get(i);
+                                    String id = pjo.getString("id");
+                                    String title = pjo.getString("title");
+                                    String text = pjo.getString("text");
+
+                                    Article article = new Article();
+                                    article.setId(id);
+                                    article.setText(text);
+                                    article.setTitle(title);
+                                    article.setCachefile(getActivity().getFilesDir().getAbsolutePath() + File.separator + id + "page.mht");
+
+                                    if (!Objects.equals(pjo.getString("category"), "null")){
+                                        JSONObject category = pjo.getJSONObject("category");
+                                        article.setCategory(category.getString("name"));
+                                    }
+                                    else{
+                                        article.setCategory("Other");
+                                    }
+
+                                    if (!Objects.equals(pjo.getString("tags"), "null")){
+                                        JSONArray tags = pjo.getJSONArray("tags");
+                                        ArrayList<String> taglist = new ArrayList<>();
+                                        for (int j=0; j < tags.length(); j++){
+                                            JSONObject tag = tags.getJSONObject(j);
+                                            String tag_name = tag.getString("name");
+                                            taglist.add(tag_name);
+                                        }
+                                        article.setTags(taglist);
+                                    }
+                                    else{
+                                        article.setTags(new ArrayList<String>());
+                                    }
+                                    mArrArticle.add(article);
+                                }
+
+                                db.addNewArticles(mArrArticle);
+
+                                va.notifyDataSetChanged();
+
+                                swipeRefreshLayout.setRefreshing(false);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Toast.makeText(getActivity(), "Some Error Occurred.", Toast.LENGTH_SHORT).show();
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            if (error.getMessage() != null) {
+                                Toast.makeText(getActivity(), "Please Connect to the internet", Toast.LENGTH_LONG).show();
+                                mArrArticle.addAll(db.getAllArticles());
+                                va.notifyDataSetChanged();
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                        }
+                    });
+                    mRequestQueue.add(jar);
+                    InputStream is = getActivity().openFileInput("articles-index.json");
                     Lucene.importData(is, getIndexRootDir().getAbsolutePath(), false);
                     return true;
                 } catch (Exception e) {
@@ -330,28 +320,27 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
             @Override
             protected void onPostExecute(Boolean result) {
-                dialog.dismiss();
+//                dialog.dismiss();
+                swipeRefreshLayout.setRefreshing(false);
 
-                if (result) {
-                    Toast.makeText(getActivity(), "Index Built", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getActivity(), "Failed to build Index", Toast.LENGTH_SHORT).show();
-                }
+//                if (result) {
+//                    Toast.makeText(getActivity(), "Index Built", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(getActivity(), "Failed to build Index", Toast.LENGTH_SHORT).show();
+//                }
             }
         }.execute();
     }
 
-    void rebuildIndexIfNotExists() {
-        if (!getIndexRootDir().exists()) {
-            rebuildIndex();
-        }
-    }
+//    void rebuildIndexIfNotExists() {
+//        if (!getIndexRootDir().exists()) {
+//            rebuildIndex();
+//        }
+//    }
 
     static class Result {
         final SearchResult searchResult;
-//        final org.owasp.lucenedroid.Article article;
         final Article article;
-//        final String title;
 
         Result(SearchResult searchResult, Article article) {
             this.searchResult = searchResult;
@@ -371,71 +360,7 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public void onRefresh() {
         mArrArticle.clear();
         va.notifyDataSetChanged();
-        jar = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                try {
-                    for (int i = 0; i < response.length(); i++) {
-
-                        JSONObject pjo = (JSONObject) response.get(i);
-                        String id = pjo.getString("id");
-                        String title = pjo.getString("title");
-                        String text = pjo.getString("text");
-
-                        Article article = new Article();
-                        article.setId(id);
-                        article.setText(text);
-                        article.setTitle(title);
-                        article.setCachefile(getActivity().getFilesDir().getAbsolutePath() + File.separator + id + "page.mht");
-
-                        if (!Objects.equals(pjo.getString("category"), "null")){
-                            JSONObject category = pjo.getJSONObject("category");
-                            article.setCategory(category.getString("name"));
-                        }
-                        else{
-                            article.setCategory("Other");
-                        }
-
-                        if (!Objects.equals(pjo.getString("tags"), "null")){
-                            JSONArray tags = pjo.getJSONArray("tags");
-                            ArrayList<String> taglist = new ArrayList<>();
-                            for (int j=0; j < tags.length(); j++){
-                                JSONObject tag = tags.getJSONObject(j);
-                                String tag_name = tag.getString("name");
-                                taglist.add(tag_name);
-                            }
-                            article.setTags(taglist);
-                        }
-                        else{
-                            article.setTags(new ArrayList<String>());
-                        }
-                        mArrArticle.add(article);
-                    }
-
-                    db.addNewArticles(mArrArticle);
-
-                    va.notifyDataSetChanged();
-
-                    swipeRefreshLayout.setRefreshing(false);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getActivity(), "Some Error Occurred.", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if (error.getMessage() != null) {
-                    Toast.makeText(getActivity(), "Please Connect to the internet", Toast.LENGTH_LONG).show();
-                    mArrArticle.addAll(db.getAllArticles());
-                    va.notifyDataSetChanged();
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            }
-        });
-        mRequestQueue.add(jar);
+        rebuildIndex();
         tags=null;
     }
 
@@ -477,9 +402,6 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     private ArrayList<Article> getOfflineReadArticles() {
         ArrayList<Article> articlesList = new ArrayList<>();
-//        String selectQuery = "SELECT  * FROM " + TABLE_ARTICLES;
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        articlesList = db.getAllArticles();
         for(Article article: db.getAllArticles()){
             if(getOfflineReads(Integer.parseInt(article.getId())) != 0){
                 articlesList.add(article);
