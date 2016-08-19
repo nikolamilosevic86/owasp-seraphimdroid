@@ -1,18 +1,19 @@
-package org.owasp.seraphimdroid.model;
+package org.owasp.lucenedroid;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by addiittya on 04/05/16.
  */
 
 public class Article {
-    private String id;
-    private String title;
-    private String text;
-    private String category;
-    private String cachefile;
-    private ArrayList<String> tags;
+    public String id;
+    public String title;
+    public String text;
+    public String category;
+    public String cachefile;
+    public ArrayList<String> tags;
 
     public ArrayList<String> getTags() {
         return tags;
@@ -62,13 +63,27 @@ public class Article {
         this.cachefile = cachefile;
     }
 
-    public Article() {}
-
-    public Article(String id, String title, String text, String category, ArrayList<String> tags) {
+    public Article(String id, String title, String text, String category, String tags) {
         this.id = id;
         this.title = title;
         this.text = text;
         this.category = category;
-        this.tags = tags;
+        this.setTags(new ArrayList<>(Arrays.asList(tags.split("\\s*,\\s*"))));
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("(")
+                .append(title)
+                .append(", ")
+                .append(text)
+                .append(", ")
+                .append(category)
+                .append(", ")
+                .append(tags.toString())
+                .append(")");
+        return builder.toString();
+    }
+
 }

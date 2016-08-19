@@ -1,0 +1,221 @@
+[
+  {
+    "id": 3,
+    "title": "Open WiFi",
+    "text": "Open WiFi can be nice feature of many public spaces. However open WiFi is insecure, since other users of the network may route traffic through their device and monitor the traffic. By doing that they will be able to steal sessions and perform man in the middle attacks. All accounts mobile device is bound to (Facebook, Twitter, mobile banking, email) can be compromised. In order to overcome this, user should either not use open WiFi networks or use together with VPN (Virtual Private Network). VPN will encrypt traffic, making it hard or impossible to steal sessions or perform man in the middle attack.",
+    "category": {
+      "id": 2,
+      "name": "Security",
+      "created_at": "2016-06-11T09:54:07.000Z",
+      "updated_at": "2016-06-19T06:17:08.000Z",
+      "description": "Articles on User Security"
+    },
+    "pictures": [],
+    "tags": [
+      {
+        "id": 1,
+        "name": "wifi",
+        "created_at": "2016-06-19T01:31:51.000Z",
+        "updated_at": "2016-06-19T01:31:51.000Z"
+      },
+      {
+        "id": 2,
+        "name": "security",
+        "created_at": "2016-06-19T01:31:51.000Z",
+        "updated_at": "2016-06-19T01:31:51.000Z"
+      }
+    ],
+    "url": "http://educate-seraphimdroid.rhcloud.com/articles/3.json"
+  },
+  {
+    "id": 4,
+    "title": "Password protection",
+    "text": "Device should be locked using a password, pass phrase, pattern or by fingerprint if the device allows it. We recommend always and for all possible accounts to use strong passwords that are at least 8 characters long, contain both letters and numbers, letters are both lower and upper case and there is some special character. If device allows setting up maximum number of guesses before the device is wiped, this setting should be enabled. Passwords will prevent, adversaries who are able to temporary or permanently obtain the access to your device, to access your personal and private data on the device.",
+    "category": {
+      "id": 1,
+      "name": "General",
+      "created_at": "2016-05-22T12:59:38.000Z",
+      "updated_at": "2016-06-19T06:05:47.000Z",
+      "description": "General Articles"
+    },
+    "pictures": [],
+    "tags": [
+      {
+        "id": 2,
+        "name": "security",
+        "created_at": "2016-06-19T01:31:51.000Z",
+        "updated_at": "2016-06-19T01:31:51.000Z"
+      },
+      {
+        "id": 3,
+        "name": "password",
+        "created_at": "2016-06-19T01:32:13.000Z",
+        "updated_at": "2016-06-19T01:32:13.000Z"
+      }
+    ],
+    "url": "http://educate-seraphimdroid.rhcloud.com/articles/4.json"
+  },
+  {
+    "id": 5,
+    "title": "Device encryption",
+    "text": "The content of the device is recommended to be encrypted. Encryption saves privacy and security of the most vital data stored on your device. Passwords can prevent direct access to the data on the device, however, they can be bypassed if the adversary has certain tools. Encryption prevents access to the raw data, even when the password is bypassed. Adversary would never be able to access private data on the device if it is encrypted.",
+    "category": {
+      "id": 2,
+      "name": "Security",
+      "created_at": "2016-06-11T09:54:07.000Z",
+      "updated_at": "2016-06-19T06:17:08.000Z",
+      "description": "Articles on User Security"
+    },
+    "pictures": [],
+    "tags": [
+      {
+        "id": 4,
+        "name": "android",
+        "created_at": "2016-06-19T01:33:46.000Z",
+        "updated_at": "2016-06-19T01:33:46.000Z"
+      },
+      {
+        "id": 2,
+        "name": "security",
+        "created_at": "2016-06-19T01:31:51.000Z",
+        "updated_at": "2016-06-19T01:31:51.000Z"
+      }
+    ],
+    "url": "http://educate-seraphimdroid.rhcloud.com/articles/5.json"
+  },
+  {
+    "id": 6,
+    "title": "Storing personal data",
+    "text": "Information such as account passwords, bank account numbers, sort numbers, credit cards numbers, security codes and pins should never be stored in a document (Word, free text document, apps such as Evernote), because some of these files can be accessed by other applications installed on the phone or they can be easily accessed if adversary obtains temporary or permanent access to the device. If you need to store such information on the phone, the files need to be password protected and encrypted. ",
+    "category": {
+      "id": 1,
+      "name": "General",
+      "created_at": "2016-05-22T12:59:38.000Z",
+      "updated_at": "2016-06-19T06:05:47.000Z",
+      "description": "General Articles"
+    },
+    "pictures": [],
+    "tags": [
+      {
+        "id": 5,
+        "name": "data security",
+        "created_at": "2016-06-19T01:41:06.000Z",
+        "updated_at": "2016-06-19T01:41:06.000Z"
+      },
+      {
+        "id": 4,
+        "name": "android",
+        "created_at": "2016-06-19T01:33:46.000Z",
+        "updated_at": "2016-06-19T01:33:46.000Z"
+      }
+    ],
+    "url": "http://educate-seraphimdroid.rhcloud.com/articles/6.json"
+  },
+  {
+    "id": 7,
+    "title": "Android Permissions",
+    "text": "Users must grant required permissions to applications to be installed. During install-time, users must care about applications requiring more permissions than they should have, according to the user needs. Attackers insert more permissions to exploit combinations of one or many in order to install a malicious behaviour. If you do not want an application to access your sensitive data, refuse to grant permissions related to these resources.",
+    "category": {
+      "id": 3,
+      "name": "Android Security",
+      "created_at": "2016-06-16T10:29:47.000Z",
+      "updated_at": "2016-06-19T06:17:39.000Z",
+      "description": "Articles Related to the Android OS"
+    },
+    "pictures": [],
+    "tags": [
+      {
+        "id": 4,
+        "name": "android",
+        "created_at": "2016-06-19T01:33:46.000Z",
+        "updated_at": "2016-06-19T01:33:46.000Z"
+      },
+      {
+        "id": 2,
+        "name": "security",
+        "created_at": "2016-06-19T01:31:51.000Z",
+        "updated_at": "2016-06-19T01:31:51.000Z"
+      },
+      {
+        "id": 6,
+        "name": "permissions",
+        "created_at": "2016-06-19T01:41:44.000Z",
+        "updated_at": "2016-06-19T01:41:44.000Z"
+      }
+    ],
+    "url": "http://educate-seraphimdroid.rhcloud.com/articles/7.json"
+  },
+  {
+    "id": 8,
+    "title": "Automatic Play Store Configurations",
+    "text": "Users prefer, most of the time, to apply automatic configurations to save time or to be away of complications. This habit is however dangerous for the fact that the task is left to the host system and every related operations are ignored by the user. This element constitutes a vulnerability and therefore an open door for attackers. On Android, for instance, if default, the “automatic updates” option is selected, then the new version of the updated application could acquire new permissions in background without any knowledge of the user. These permissions are declared consciously in the new version by the attacker to gain the control of the system. The user must not select this option by default and must control the update operations carefully.",
+    "category": {
+      "id": 3,
+      "name": "Android Security",
+      "created_at": "2016-06-16T10:29:47.000Z",
+      "updated_at": "2016-06-19T06:17:39.000Z",
+      "description": "Articles Related to the Android OS"
+    },
+    "pictures": [],
+    "tags": [
+      {
+        "id": 7,
+        "name": "play store",
+        "created_at": "2016-06-19T01:42:21.000Z",
+        "updated_at": "2016-06-19T01:42:21.000Z"
+      },
+      {
+        "id": 4,
+        "name": "android",
+        "created_at": "2016-06-19T01:33:46.000Z",
+        "updated_at": "2016-06-19T01:33:46.000Z"
+      },
+      {
+        "id": 8,
+        "name": "auto-update",
+        "created_at": "2016-06-19T01:42:21.000Z",
+        "updated_at": "2016-06-19T01:42:21.000Z"
+      }
+    ],
+    "url": "http://educate-seraphimdroid.rhcloud.com/articles/8.json"
+  },
+  {
+    "id": 9,
+    "title": "Update your software",
+    "text": "It is crucial to keep your software up to date. This includes operating system and the installed applications. Why is it important? Sometimes developers make a bug or mistake that can result in security vulnerability. Because of this issue, your phone can be hacked and your data stolen. However, software vendors are prompt fixing issues reported to them as security vulnerabilities. After they fix them, they release an update, which if ignored, you are putting yourself under unnecessary risk of the known vulnerabilities that not only professional criminal can exploit, but almost every script kiddie that has access to the internet. Remember to update all your software, including operating system and all the apps \r\n\r\n<img src=\"http://cdn3.pcadvisor.co.uk/cmsdata/features/3347925/Android_Software_Update.png\"/>",
+    "category": {
+      "id": 3,
+      "name": "Android Security",
+      "created_at": "2016-06-16T10:29:47.000Z",
+      "updated_at": "2016-06-19T06:17:39.000Z",
+      "description": "Articles Related to the Android OS"
+    },
+    "pictures": [
+      {
+        "id": 1,
+        "image_file_name": "Android_Software_Check.png",
+        "image_content_type": "image/png",
+        "image_file_size": 121678,
+        "image_updated_at": "2016-07-29T07:16:28.000Z",
+        "created_at": "2016-07-29T07:16:28.000Z",
+        "updated_at": "2016-07-29T07:16:28.000Z",
+        "article_id": 9
+      }
+    ],
+    "tags": [
+      {
+        "id": 4,
+        "name": "android",
+        "created_at": "2016-06-19T01:33:46.000Z",
+        "updated_at": "2016-06-19T01:33:46.000Z"
+      },
+      {
+        "id": 2,
+        "name": "security",
+        "created_at": "2016-06-19T01:31:51.000Z",
+        "updated_at": "2016-06-19T01:31:51.000Z"
+      }
+    ],
+    "url": "http://educate-seraphimdroid.rhcloud.com/articles/9.json"
+  }
+]
