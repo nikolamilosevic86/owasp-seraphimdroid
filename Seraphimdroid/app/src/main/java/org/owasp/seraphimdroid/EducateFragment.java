@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.ArrayMap;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -62,6 +63,8 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
     private DatabaseHelper db;
     private ConnectionHelper ch;
     private SharedPreferences mSharedPreferences;
+    private SearchView searchView;
+    private MenuItem searchItem;
 
     private static final String BASE_URL = "http://educate-seraphimdroid.rhcloud.com/";
     private static final String url = BASE_URL + "articles.json";
@@ -108,18 +111,19 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
                         fis = new FileInputStream(new File(getActivity().getFilesDir().getAbsolutePath() + File.separator + item.getId() + "page.mht"));
                         if (fis.read() == 0) {
                             throw new FileNotFoundException();
+                        } else {
+                            i.putExtra("url", "file:///" + getActivity().getFilesDir().getAbsolutePath() + File.separator + item.getId() + "page.mht");
+                            i.putExtra("header", "Article from " + item.getCategory() + " Category");
+                            addOfflineRead(Integer.parseInt(item.getId()));
+                            startActivity(i);
                         }
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
-                        Toast.makeText(getActivity(), "NO Internet", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "This Article is Not Available Offline.", Toast.LENGTH_SHORT).show();
                     } catch (IOException e) {
                         e.printStackTrace();
                         Toast.makeText(getActivity(), "Some Error Occurred.", Toast.LENGTH_SHORT).show();
                     }
-                    i.putExtra("url", "file:///" + getActivity().getFilesDir().getAbsolutePath() + File.separator + item.getId() + "page.mht");
-                    i.putExtra("header", "Article from " + item.getCategory() + " Category");
-                    addOfflineRead(Integer.parseInt(item.getId()));
-                    startActivity(i);
                 }
 
             }
@@ -168,6 +172,27 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
         });
 
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if(keyEvent.getAction() == KeyEvent.ACTION_UP) {
+                    if (i == KeyEvent.KEYCODE_BACK) {
+                        if (!searchView.isIconified()) {
+                            searchView.setQuery("", false);
+                            searchItem.collapseActionView();
+//                            rebuildIndex();
+                            mArrArticle.clear();
+                            mArrArticle.addAll(db.getAllArticles());
+                            va.notifyDataSetChanged();
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
         return view;
     }
 
@@ -187,10 +212,10 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_educate, menu);
 
-        MenuItem item = menu.findItem(R.id.action_search);
-        final SearchView searchView = new SearchView(getActivity().getActionBar().getThemedContext());
-        MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
-        MenuItemCompat.setActionView(item, searchView);
+        searchItem = menu.findItem(R.id.action_search);
+        searchView = new SearchView(getActivity().getActionBar().getThemedContext());
+        MenuItemCompat.setShowAsAction(searchItem, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+        MenuItemCompat.setActionView(searchItem, searchView);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
