@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.database.Cursor;
@@ -41,7 +42,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
@@ -56,9 +56,11 @@ import org.owasp.seraphimdroid.services.CheckAppLaunchThread;
 import org.owasp.seraphimdroid.services.OutGoingSmsRecepter;
 import org.owasp.seraphimdroid.services.ServicesLockService;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends FragmentActivity {
 
@@ -135,6 +137,7 @@ public class MainActivity extends FragmentActivity {
 
 		SharedPreferences defaults = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
+		CopyGuideAssets();
 
 		//Alarm Manager for Settings Check
 		alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
@@ -501,6 +504,36 @@ public class MainActivity extends FragmentActivity {
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		drawerToggle.syncState();
+	}
+
+	private void CopyGuideAssets() {
+		AssetManager assetManager = getAssets();
+		InputStream in = null;
+		OutputStream out = null;
+		File file = new File(getFilesDir(), "userguide.pdf");
+		try {
+			in = assetManager.open("userguide.pdf");
+			out = openFileOutput(file.getName(), Context.MODE_WORLD_READABLE);
+
+			copyGuide(in, out);
+			in.close();
+			in = null;
+			out.flush();
+			out.close();
+			out = null;
+
+		} catch (Exception e) {
+			Log.e("tag", e.getMessage());
+		}
+	}
+
+	private void copyGuide(InputStream in, OutputStream out) throws IOException {
+		byte[] buffer = new byte[1024];
+		int read;
+		while ((read = in.read(buffer)) != -1)
+		{
+			out.write(buffer, 0, read);
+		}
 	}
 
 }
