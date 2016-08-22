@@ -66,17 +66,28 @@
             android:onClick="paypalDonate"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:layout_marginTop="230dp"
+            android:layout_marginTop="230dp" />
 
-            />
+        <TextView
+            android:id="@+id/tv_user_guide_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/paypal_donate"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-105dp"
+            android:text="User Guide"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#0000ff"
+            android:textColorHighlight="#00ff00"
+            android:textSize="17sp" />
 
         <TextView
             android:id="@+id/tv_project_code_link"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_below="@+id/paypal_donate"
+            android:layout_below="@+id/tv_user_guide_link"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="-80dp"
+            android:layout_marginTop="5dp"
             android:text="GitHub"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#0000ff"

@@ -1,6 +1,7 @@
 package org.owasp.seraphimdroid;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -8,18 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.apache.http.util.EncodingUtils;
 
 public class AboutFragment extends Fragment {
 
 	final int ProjectPageId = 1;
 	final int GitHubId = 0;
-	private TextView tvDevNames, tvGithub, tvProjectPage;
+	private TextView tvDevNames, tvGithub, tvProjectPage, tvGuide;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -28,10 +26,11 @@ public class AboutFragment extends Fragment {
 
 		tvDevNames = (TextView) view.findViewById(R.id.tv_dev_names);
 		tvGithub = (TextView) view.findViewById(R.id.tv_project_code_link);
+		tvGuide = (TextView) view.findViewById(R.id.tv_user_guide_link);
 		tvGithub.setTag(GitHubId);
 		tvProjectPage = (TextView) view.findViewById(R.id.tv_project_page_link);
 		tvProjectPage.setTag(ProjectPageId);
-		String devNames = "Nikola Milosevic \n\nFurquan Ahmed \n\nAleksandar Abu-Samra \n\nChetan Karande \n\nKartik Kohli";
+		String devNames = "Nikola Milosevic \n\nFurquan Ahmed \n\nAleksandar Abu-Samra \n\nChetan Karande \n\nKartik Kohli \n\nAditya Dua";
 		tvDevNames.setText(devNames);
 		
 		tvGithub.setText(Html.fromHtml("<u>GitHub</u>"));
@@ -40,6 +39,9 @@ public class AboutFragment extends Fragment {
 		OnClickListener listener = new WebLinkListener();
 		tvProjectPage.setOnClickListener(listener);
 		tvGithub.setOnClickListener(listener);
+
+		OnClickListener guideListener = new AssetListener();
+		tvGuide.setOnClickListener(guideListener);
 
 		ImageView button = (ImageView) view.findViewById(R.id.paypal_donate);
 		button.setOnClickListener(new OnClickListener()
@@ -87,6 +89,18 @@ public class AboutFragment extends Fragment {
 			}
 		}
 
+	}
+
+	private class AssetListener implements OnClickListener {
+
+		@Override
+		public void onClick(View view) {
+			Intent intent = new Intent(Intent.ACTION_VIEW);
+			intent.setDataAndType(
+					Uri.parse("file://" + getActivity().getFilesDir() + "/userguide.pdf"), "application/pdf");
+
+			startActivity(intent);
+		}
 	}
 
 }
