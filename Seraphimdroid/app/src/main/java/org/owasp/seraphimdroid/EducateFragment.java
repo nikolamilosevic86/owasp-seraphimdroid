@@ -167,7 +167,8 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     va.notifyDataSetChanged();
                     swipeRefreshLayout.setRefreshing(false);
                 } else {
-                    rebuildIndex();
+                    getAPIData();
+//                    rebuildIndex();
                 }
             }
         });
@@ -213,6 +214,23 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
         inflater.inflate(R.menu.menu_educate, menu);
 
         searchItem = menu.findItem(R.id.action_search);
+
+        searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem menuItem) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                mArrArticle.clear();
+                mArrArticle.addAll(db.getAllArticles());
+                va.notifyDataSetChanged();
+                return true;
+            }
+        });
+
         searchView = new SearchView(getActivity().getActionBar().getThemedContext());
         MenuItemCompat.setShowAsAction(searchItem, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
         MenuItemCompat.setActionView(searchItem, searchView);
@@ -250,6 +268,84 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    void getAPIData() {
+        jar = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    OutputStream outputStream = getActivity().openFileOutput("articles-index.json", Context.MODE_APPEND);
+                    outputStream.write(response.toString().getBytes());
+                    outputStream.close();
+                    for (int i = 0; i < response.length(); i++) {
+
+                        JSONObject pjo = (JSONObject) response.get(i);
+                        String id = pjo.getString("id");
+                        String title = pjo.getString("title");
+                        String text = pjo.getString("text");
+
+                        Article article = new Article();
+                        article.setId(id);
+                        article.setText(text);
+                        article.setTitle(title);
+                        article.setCachefile(getActivity().getFilesDir().getAbsolutePath() + File.separator + id + "page.mht");
+
+                        if (!Objects.equals(pjo.getString("category"), "null")){
+                            JSONObject category = pjo.getJSONObject("category");
+                            article.setCategory(category.getString("name"));
+                        }
+                        else{
+                            article.setCategory("Other");
+                        }
+
+                        if (!Objects.equals(pjo.getString("tags"), "null")){
+                            JSONArray tags = pjo.getJSONArray("tags");
+                            ArrayList<String> taglist = new ArrayList<>();
+                            for (int j=0; j < tags.length(); j++){
+                                JSONObject tag = tags.getJSONObject(j);
+                                String tag_name = tag.getString("name");
+                                taglist.add(tag_name);
+                            }
+                            article.setTags(taglist);
+                        }
+                        else{
+                            article.setTags(new ArrayList<String>());
+                        }
+                        mArrArticle.add(article);
+                    }
+
+                    db.addNewArticles(mArrArticle);
+
+                    rebuildIndex();
+
+                    va.notifyDataSetChanged();
+
+                    swipeRefreshLayout.setRefreshing(false);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getActivity(), "Some Error Occurred.", Toast.LENGTH_SHORT).show();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() != null) {
+                    Toast.makeText(getActivity(), "Please Connect to the internet", Toast.LENGTH_LONG).show();
+                    mArrArticle.addAll(db.getAllArticles());
+                    va.notifyDataSetChanged();
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        });
+        mRequestQueue.add(jar);
+
+    }
+
     File getIndexRootDir() {
         return new File(getActivity().getCacheDir(), "index");
     }
@@ -262,79 +358,6 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
             protected Boolean doInBackground(Void... voids) {
                 try {
 //                    InputStream is = getActivity().getFilesDir().
-
-                    jar = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            try {
-                                OutputStream outputStream = getActivity().openFileOutput("articles-index.json", Context.MODE_APPEND);
-                                outputStream.write(response.toString().getBytes());
-                                outputStream.close();
-                                for (int i = 0; i < response.length(); i++) {
-
-                                    JSONObject pjo = (JSONObject) response.get(i);
-                                    String id = pjo.getString("id");
-                                    String title = pjo.getString("title");
-                                    String text = pjo.getString("text");
-
-                                    Article article = new Article();
-                                    article.setId(id);
-                                    article.setText(text);
-                                    article.setTitle(title);
-                                    article.setCachefile(getActivity().getFilesDir().getAbsolutePath() + File.separator + id + "page.mht");
-
-                                    if (!Objects.equals(pjo.getString("category"), "null")){
-                                        JSONObject category = pjo.getJSONObject("category");
-                                        article.setCategory(category.getString("name"));
-                                    }
-                                    else{
-                                        article.setCategory("Other");
-                                    }
-
-                                    if (!Objects.equals(pjo.getString("tags"), "null")){
-                                        JSONArray tags = pjo.getJSONArray("tags");
-                                        ArrayList<String> taglist = new ArrayList<>();
-                                        for (int j=0; j < tags.length(); j++){
-                                            JSONObject tag = tags.getJSONObject(j);
-                                            String tag_name = tag.getString("name");
-                                            taglist.add(tag_name);
-                                        }
-                                        article.setTags(taglist);
-                                    }
-                                    else{
-                                        article.setTags(new ArrayList<String>());
-                                    }
-                                    mArrArticle.add(article);
-                                }
-
-                                db.addNewArticles(mArrArticle);
-
-                                va.notifyDataSetChanged();
-
-                                swipeRefreshLayout.setRefreshing(false);
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                Toast.makeText(getActivity(), "Some Error Occurred.", Toast.LENGTH_SHORT).show();
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            if (error.getMessage() != null) {
-                                Toast.makeText(getActivity(), "Please Connect to the internet", Toast.LENGTH_LONG).show();
-                                mArrArticle.addAll(db.getAllArticles());
-                                va.notifyDataSetChanged();
-                                swipeRefreshLayout.setRefreshing(false);
-                            }
-                        }
-                    });
-                    mRequestQueue.add(jar);
                     InputStream is = getActivity().openFileInput("articles-index.json");
                     Lucene.importData(is, getIndexRootDir().getAbsolutePath(), false);
                     return true;
@@ -385,7 +408,8 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
     public void onRefresh() {
         mArrArticle.clear();
         va.notifyDataSetChanged();
-        rebuildIndex();
+        getAPIData();
+//        rebuildIndex();
         tags=null;
     }
 
