@@ -178,9 +178,9 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
         view.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if(keyEvent.getAction() == KeyEvent.ACTION_UP) {
-                    if (i == KeyEvent.KEYCODE_BACK) {
-                        if (!searchView.isIconified()) {
+                if (!searchView.isIconified()) {
+                    if(keyEvent.getAction() == KeyEvent.ACTION_UP) {
+                        if (i == KeyEvent.KEYCODE_BACK) {
                             searchView.setQuery("", false);
                             searchItem.collapseActionView();
 //                            rebuildIndex();
@@ -188,8 +188,8 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
                             mArrArticle.addAll(db.getAllArticles());
                             va.notifyDataSetChanged();
                         }
-                        return true;
                     }
+                    return true;
                 }
                 return false;
             }
@@ -315,11 +315,10 @@ public class EducateFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
                     db.addNewArticles(mArrArticle);
 
-                    rebuildIndex();
-
                     va.notifyDataSetChanged();
 
-                    swipeRefreshLayout.setRefreshing(false);
+                    rebuildIndex();
+//                    swipeRefreshLayout.setRefreshing(false);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
