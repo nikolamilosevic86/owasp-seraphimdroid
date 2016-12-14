@@ -62,16 +62,16 @@ public class PasswordActivity extends Activity implements OnClickListener {
 	String service = "";
 	int state;
 	private boolean tryUnlocking;
-	
+
 	private boolean makeCall = false;
 	private String phoneNumber = "";
-   
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		setContentView(R.layout.activity_password);
-		
+
 		//Retrieve the intent.
 		Intent rootIntent = getIntent();
 		pkgName = rootIntent.getStringExtra("PACKAGE_NAME");
@@ -82,7 +82,7 @@ public class PasswordActivity extends Activity implements OnClickListener {
         	service = rootIntent.getStringExtra("service");
         	state = Integer.parseInt(rootIntent.getStringExtra("state"));
         }
-        
+
 		// Initializing buttons.
 		initButtons();
 
@@ -93,7 +93,7 @@ public class PasswordActivity extends Activity implements OnClickListener {
 		tvAppLabel = (TextView) findViewById(R.id.tv_app_label);
 		imgAppIcon = (ImageView) findViewById(R.id.img_app_icon);
 		imgAppIcon.setImageResource(R.drawable.ic_launcher_small);
-		
+
 		if(pkgName.length()>0) {
 			try {
 				PackageManager pm = getPackageManager();
@@ -118,7 +118,7 @@ public class PasswordActivity extends Activity implements OnClickListener {
 				tvAppLabel.setText(Html.fromHtml("<small>Seraphimdroid is set to lock this service. In order to start service, type Seraphimdroid passphrase.</small>"));
 			}
 		}
-		
+
 		// Initializing other required variables.
 
 		dbHelper = new DatabaseHelper(getApplicationContext());
@@ -134,9 +134,9 @@ public class PasswordActivity extends Activity implements OnClickListener {
 			btnPass[10].setTag("reset");
 			etPassword.setHint("Enter new 4 digit PIN");
 		}
-		
+
 	}
-	
+
 	@Override
 	protected void onResume() {
 		startService(new Intent(this, AppLockService.class));
@@ -147,7 +147,7 @@ public class PasswordActivity extends Activity implements OnClickListener {
 	protected void onStop() {
 		super.onStop();
 	}
-	
+
 	@Override
 	public void onBackPressed() {
 		Intent killIntent = new Intent(PasswordActivity.this,
@@ -303,6 +303,7 @@ public class PasswordActivity extends Activity implements OnClickListener {
 					KillBackgroundService.class);
 			killIntent.putExtra("PACKAGE_NAME", pkgName);
 			startService(killIntent);
+			MainActivity.setUnlocked(false);
 			finish();
 		} else {
 
@@ -392,18 +393,18 @@ public class PasswordActivity extends Activity implements OnClickListener {
 							default:
 								break;
 							}
-							
+
 						}
 					}
 					lastUnlocked = pkgName;
-					
+
 					this.finish();
 				}
 			}
 
 		}
 	}
-	
+
 	private boolean isPasswordCreated() {
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
 		Cursor cursor = db.rawQuery("SELECT * FROM password", null);

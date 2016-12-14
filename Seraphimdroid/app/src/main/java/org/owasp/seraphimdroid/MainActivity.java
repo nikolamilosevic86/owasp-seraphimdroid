@@ -79,7 +79,7 @@ public class MainActivity extends FragmentActivity {
 
 	private DrawerAdapter adapter;
 
-	private boolean isUnlocked = false;
+	private static boolean isUnlocked = false;
 
 	private Fragment prevSupportFlag = null;
 
@@ -278,6 +278,11 @@ public class MainActivity extends FragmentActivity {
 			return false;
 		}
 	}
+
+	// Setter for 'unlocked' variable
+public static void setUnlocked(boolean unlocked) {
+		isUnlocked = unlocked;
+}
 
 	private void populateList() {
 		// populate the list.
@@ -493,6 +498,7 @@ public class MainActivity extends FragmentActivity {
 					@Override
 					public void onClick(DialogInterface dialog, int arg1) {
 						dialog.dismiss();
+						MainActivity.setUnlocked(false);
 						MainActivity.this.finish();
 					}
 				});
