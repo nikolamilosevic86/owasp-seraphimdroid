@@ -55,7 +55,7 @@ After Setting up Studio, Follow these:
 ### Referencing
 You may reference the following paper:
 
-Milosevic, Nikola, Ali Dehghantanha, and Kim-Kwang Raymond Choo. ["Machine learning aided Android malware classification."](http://www.sciencedirect.com/science/article/pii/S0045790617303087) Computers & Electrical Engineering (2017).
+* Milosevic, Nikola, Ali Dehghantanha, and Kim-Kwang Raymond Choo. ["Machine learning aided Android malware classification."](http://www.sciencedirect.com/science/article/pii/S0045790617303087) Computers & Electrical Engineering (2017).
 
 
 
