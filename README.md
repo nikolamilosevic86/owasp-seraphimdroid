@@ -51,6 +51,9 @@ After Setting up Studio, Follow these:
 
   *Detailed Info Available [here]().*
 
+### Referencing
+You may reference the following paper:
+Milosevic, Nikola, Ali Dehghantanha, and Kim-Kwang Raymond Choo. ["Machine learning aided Android malware classification."](http://www.sciencedirect.com/science/article/pii/S0045790617303087) Computers & Electrical Engineering (2017).
 ##### Important note: Project has been ported for Android Studio, so the instructions for old Eclipse Setup are available on this [wiki](https://github.com/nikolamilosevic86/owasp-seraphimdroid/wiki/How-to-set-up-Eclipse-for-project).
 
 ### Note:
