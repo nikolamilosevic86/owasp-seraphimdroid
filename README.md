@@ -50,11 +50,15 @@ After Setting up Studio, Follow these:
   6. Click the Run button & Start digging.
 
   *Detailed Info Available [here]().*
+##### Important note: Project has been ported for Android Studio, so the instructions for old Eclipse Setup are available on this [wiki](https://github.com/nikolamilosevic86/owasp-seraphimdroid/wiki/How-to-set-up-Eclipse-for-project).
 
 ### Referencing
 You may reference the following paper:
+
 Milosevic, Nikola, Ali Dehghantanha, and Kim-Kwang Raymond Choo. ["Machine learning aided Android malware classification."](http://www.sciencedirect.com/science/article/pii/S0045790617303087) Computers & Electrical Engineering (2017).
-##### Important note: Project has been ported for Android Studio, so the instructions for old Eclipse Setup are available on this [wiki](https://github.com/nikolamilosevic86/owasp-seraphimdroid/wiki/How-to-set-up-Eclipse-for-project).
+
+
+
 
 ### Note:
 This Project is Under Active Development and Stable build is available on the [Master](https://github.com/nikolamilosevic86/owasp-seraphimdroid/tree/master).
