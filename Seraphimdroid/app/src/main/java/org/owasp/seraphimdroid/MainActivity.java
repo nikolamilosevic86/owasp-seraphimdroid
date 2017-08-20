@@ -139,6 +139,27 @@ public class MainActivity extends FragmentActivity {
 				.getDefaultSharedPreferences(getApplicationContext());
 		CopyGuideAssets();
 
+		boolean isFirstTimeUser = defaults.getBoolean("first_time_user", true);
+		if (isFirstTimeUser) {
+			AlertDialog.Builder builder;
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+				builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_Material_Dialog_Alert);
+			} else {
+				builder = new AlertDialog.Builder(MainActivity.this);
+			}
+			String alert_message = "This application requires Admin Permissions for GeoFencing feature, specifically for enabling user-controlled remote wipe ";
+			builder.setTitle("Admin Permissions Usage")
+					.setMessage(alert_message)
+					.setPositiveButton("Got it", new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.cancel();
+						}
+					})
+					.setIcon(android.R.drawable.ic_dialog_alert)
+					.show();
+			defaults.edit().putBoolean("first_time_user", false).apply();
+		}
+
 		//Alarm Manager for Settings Check
 		alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		final Intent intent = new Intent(getBaseContext(), SettingsCheckAlarmReceiver.class);
