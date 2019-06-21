@@ -1,10 +1,12 @@
 package org.owasp.seraphimdroid;
+//package org.anothermonitor;
 
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -55,6 +57,7 @@ import org.owasp.seraphimdroid.receiver.SettingsCheckAlarmReceiver;
 import org.owasp.seraphimdroid.services.CheckAppLaunchThread;
 import org.owasp.seraphimdroid.services.OutGoingSmsRecepter;
 import org.owasp.seraphimdroid.services.ServicesLockService;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -233,7 +236,6 @@ public class MainActivity extends FragmentActivity {
 
 		adapter = new DrawerAdapter(this, listItems);
 		drawerList.setAdapter(adapter);
-
 		drawerList.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -242,7 +244,7 @@ public class MainActivity extends FragmentActivity {
 				if (position == 6){
 					getIntent().removeExtra("tags");
 					selectFragment(6);
-				} else {
+				} else{
 					selectFragment(position);
 				}
 			}
@@ -301,9 +303,9 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	// Setter for 'unlocked' variable
-public static void setUnlocked(boolean unlocked) {
+	public static void setUnlocked(boolean unlocked) {
 		isUnlocked = unlocked;
-}
+	}
 
 	private void populateList() {
 		// populate the list.
@@ -324,6 +326,8 @@ public static void setUnlocked(boolean unlocked) {
 		listItems.add(new DrawerItem(itemNames[7], iconList.getResourceId(7,
 				R.drawable.ic_launcher)));
 		listItems.add(new DrawerItem(itemNames[8], iconList.getResourceId(8,
+				R.drawable.ic_launcher)));
+		listItems.add(new DrawerItem(itemNames[9], iconList.getResourceId(9,
 				R.drawable.ic_launcher)));
 
 		iconList.recycle();
@@ -436,7 +440,11 @@ public static void setUnlocked(boolean unlocked) {
 				recordUsage(7);
 				fragment = new org.owasp.seraphimdroid.EducateFragment();
 				break;
-			case 7: {
+			case 7:
+				//Intent intent = null;
+
+				break;
+			case 8: {
 				if (prevSupportFlag != null) {
 					FragmentManager fragMan = getSupportFragmentManager();
 					fragMan.beginTransaction().remove(prevSupportFlag).commit();
@@ -453,7 +461,7 @@ public static void setUnlocked(boolean unlocked) {
 				prevFrag = frag;
 			}
 			break;
-			case 8:
+			case 9:
 				fragment = new org.owasp.seraphimdroid.AboutFragment();
 				break;
 			default:
