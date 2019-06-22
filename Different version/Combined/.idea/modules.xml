@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/AnotherMonitor/AnotherMonitor.iml" filepath="$PROJECT_DIR$/AnotherMonitor/AnotherMonitor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AnotherMonitor-debug/AnotherMonitor-debug.iml" filepath="$PROJECT_DIR$/AnotherMonitor-debug/AnotherMonitor-debug.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AnotherMonitor-debug/AnotherMonitor-debug.iml" filepath="$PROJECT_DIR$/AnotherMonitor-debug/AnotherMonitor-debug.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Seraphimdroid.iml" filepath="$PROJECT_DIR$/Seraphimdroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Version_combination.iml" filepath="$PROJECT_DIR$/.idea/Version_combination.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/coach/coach.iml" filepath="$PROJECT_DIR$/coach/coach.iml" />
+      <module fileurl="file://$PROJECT_DIR$/coach/coach.iml" filepath="$PROJECT_DIR$/coach/coach.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lucenedroid/lucenedroid.iml" filepath="$PROJECT_DIR$/lucenedroid/lucenedroid.iml" />
+    </modules>
+  </component>
+</project>

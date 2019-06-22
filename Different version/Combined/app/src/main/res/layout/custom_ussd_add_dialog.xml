@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:orientation="vertical" >
+    
+      <TextView 
+          android:layout_height="wrap_content"
+          android:layout_width="wrap_content"
+          android:text="USSD Code"/>
+      
+      <EditText
+          android:id="@+id/ussd_number"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:inputType="phone"
+          android:minEms="12" />
+      
+      <TextView 
+          android:layout_height="wrap_content"
+          android:layout_width="wrap_content"
+          android:text="USSD Description"/>
+  	
+      <EditText 
+          android:id="@+id/ussd_desc"
+          android:layout_height="wrap_content"
+          android:layout_width="wrap_content"
+          android:minEms="12"/>
+      
+</LinearLayout>

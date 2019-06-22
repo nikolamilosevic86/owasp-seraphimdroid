@@ -1,0 +1,2 @@
+include ':app', ':lucenedroid', ':AnotherMonitor', ':AnotherMonitor-debug', ':coach'
+project(':AnotherMonitor').projectDir = new File('AnotherMonitor')

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="blocked_calls_keys">
+        <item>No calls blocked</item>
+        <item>Block unsaved contact calls</item>
+        <item>Block Blacklist calls, Outgoing</item>
+        <item>Block Blacklsit calls, Incoming</item>
+        <item>Block unsaved and Outgoing Blacklist calls</item>
+        <item>Block unsaved and Incoming Blacklist calls</item>
+        <item>Block Incoming and Outgoing Blacklist calls</item>
+        <item>Block unsaved, Incoming and Outgoing Blacklist calls</item>
+        <item>Block all Outgoing calls</item>
+        <item>Block all Incoming calls</item>
+        <item>Block all calls</item>
+    </string-array>
+    <string-array name="blocked_calls_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
+    <string-array name="geo_failed_attempts_keys">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    <string-array name="geo_failed_attempts_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    
+    <string-array name="send_location_interval_key">
+        <item>1 min</item>
+        <item>5 min</item>
+        <item>10 min</item>
+        <item>20 min</item>
+        <item>30 min</item>
+    </string-array>
+    <string-array name="send_location_interval_values">
+        <item>1</item>
+        <item>5</item>
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+    </string-array>
+
+</resources>

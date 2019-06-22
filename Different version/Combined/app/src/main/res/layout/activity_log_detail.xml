@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scroll_view_1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:id="@+id/RelativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="20dp" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/name_label_text"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/tv_log_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textView1"
+            android:layout_below="@+id/textView1"
+            android:layout_marginTop="0dp"
+            android:text="Furquan Ahmed"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_log_name"
+            android:layout_below="@+id/tv_log_name"
+            android:layout_marginTop="15dp"
+            android:text="Number"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/tv_log_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textView3"
+            android:layout_below="@+id/textView3"
+            android:layout_marginTop="0dp"
+            android:text="+919479430446"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_log_number"
+            android:layout_below="@+id/tv_log_number"
+            android:layout_marginTop="15dp"
+            android:text="@string/reason_label_text"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/tv_log_reason"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textView5"
+            android:layout_below="@+id/textView5"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="0dp"
+            android:text="Number not in contact list"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/tv_log_sms_type_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_log_reason"
+            android:layout_below="@+id/tv_log_reason"
+            android:layout_marginTop="15dp"
+            android:text="@string/sms_type_label"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/tv_log_sms_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_log_sms_type_label"
+            android:layout_below="@+id/tv_log_sms_type_label"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="0dp"
+            android:text="Incoming"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/tv_log_content_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_log_sms_type"
+            android:layout_below="@+id/tv_log_sms_type"
+            android:layout_marginTop="15dp"
+            android:text="@string/context_label_text"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/tv_log_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_log_content_label"
+            android:layout_below="@+id/tv_log_content_label"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="0dp"
+            android:text="Number not in contact list"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/tv_log_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tv_log_name"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:text="11:10 24/10/2014" />
+
+        <Button
+            android:id="@+id/btn_log_finish"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/tv_log_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:text="Close" />
+    </RelativeLayout>
+
+</ScrollView>
