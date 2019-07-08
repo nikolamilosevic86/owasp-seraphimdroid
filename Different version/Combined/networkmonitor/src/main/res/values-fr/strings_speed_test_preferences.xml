@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This source is part of the
+     _____  ___   ____
+ __ / / _ \/ _ | / __/___  _______ _
+/ // / , _/ __ |/ _/_/ _ \/ __/ _ `/
+\___/_/|_/_/ |_/_/ (_)___/_/  \_, /
+                             /___/
+repository.
+
+Copyright (C) 2013-2014 Carmen Alvarez (c@rmen.ca)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<resources>
+
+    <!-- Speed test preferences -->
+    <string name="pref_category_speed_test_settings">Test de vitesse</string>
+    <string name="pref_title_speed_test_enabled">Activer/Désactiver</string>
+    <!-- Speed test interval -->
+    <string name="pref_title_speed_test_interval">Fréquence du test de vitesse</string>
+    <string name="pref_summary_speed_test_interval">%s</string>
+    <string name="pref_value_speed_test_interval_network_change">Quand le réseau change</string>
+    <string name="pref_value_speed_test_interval_signal_change_5dbm">Quand le réseau change ou la force du signal WiFi change par 5 dBm</string>
+    <string name="pref_value_speed_test_interval_1_time">Chaque collecte</string>
+    <string name="pref_value_speed_test_interval_2_times">Chaque 2 collectes</string>
+    <string name="pref_value_speed_test_interval_5_times">Chaque 5 collectes</string>
+    <string name="pref_value_speed_test_interval_10_times">Chaque 10 collectes</string>
+    <string name="pref_value_speed_test_interval_20_times">Chaque 20 collectes</string>
+    <string name="pref_value_speed_test_interval_30_times">Chaque 30 collectes</string>
+    <string name="pref_value_speed_test_interval_60_times">Chaque 60 collectes</string>
+    <string name="pref_value_speed_test_interval_100_times">Chaque 100 collectes</string>
+    <string name="pref_value_speed_test_interval_1000_times">Chaque 1000 collectes</string>
+    <!-- Download speed test preferences -->
+    <string name="pref_category_speed_test_download_settings">Test de réception (HTTP)</string>
+    <string name="pref_title_speed_test_download_url">URL du fichier à télécharger</string>
+    <string name="pref_summary_speed_test_download_url">%1$s\n(%2$s Mb)\nFichier plus gros = test plus précis (et plus de trafic réseau)</string>
+    <!-- Upload speed test preferences -->
+    <string name="pref_category_speed_test_upload_settings">Test d\'émission (FTP)</string>
+    <string name="pref_title_speed_test_upload_server">Nom du serveur</string>
+    <string name="pref_summary_speed_test_upload_server">%s</string>
+    <string name="pref_hint_speed_test_upload_server">ftp.yourdomain.com</string>
+    <string name="pref_title_speed_test_upload_port">Port</string>
+    <string name="pref_summary_speed_test_upload_port">%s</string>
+    <string name="pref_value_speed_test_default_upload_port">21</string>
+    <string name="pref_title_speed_test_upload_user">Nom d\'utilisateur</string>
+    <string name="pref_summary_speed_test_upload_user">%s</string>
+    <string name="pref_hint_speed_test_upload_user">utilisateur</string>
+    <string name="pref_title_speed_test_upload_password">Mot de passe</string>
+    <string name="pref_title_speed_test_upload_path">Chemin</string>
+    <string name="pref_summary_speed_test_upload_path">%s</string>
+    <!-- About the speed test -->
+    <string name="pref_category_speed_test_about">À propos</string>
+    <string name="pref_title_speed_test_about">À propos du test de vitesse</string>
+
+</resources>

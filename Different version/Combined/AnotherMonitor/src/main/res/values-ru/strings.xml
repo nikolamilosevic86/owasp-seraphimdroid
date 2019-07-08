@@ -3,9 +3,9 @@
   <string name="app_name">AnotherMonitor</string>
   <string name="google_play_app_site">https://play.google.com/store/apps/details?id=org.anothermonitor</string>
   <string name="anim_time">100</string>
-  <string name="notify_read">AnotherMonitor читает данные</string>
+  <string name="notify_read">SeraphimDroid читает данные</string>
   <string name="notify_read2">Чтение данных в фоновом режиме</string>
-  <string name="notify_record">AnotherMonitor записывает данные</string>
+  <string name="notify_record">SeraphimDroid записывает данные</string>
   <string name="notify_record2">Запись данных в фоновом режиме</string>
   <string name="notify_toast_saved">сохранено в папке</string>
   <string name="notify_toast_error">При сохранении CSV файла возникла ошибка:</string>
@@ -27,7 +27,7 @@
   <string name="w_main_hint_title">Информация</string>
   <string name="w_main_hint">Долгое нажатие на название параметра позволит включить или отключить его.
         \n\nВы можете открыть меню настроек нажав на график.</string>
-  <string name="w_main_storage_permission">AnotherMonitor не сможет записать данные без полученного разрешения на запись.
+  <string name="w_main_storage_permission">SeraphimDroid не сможет записать данные без полученного разрешения на запись.
         Перезапустите приложение для повторного вызова запроса разрешения.</string>
   <string name="w_main_mp_button_text">Понятно</string>
   <string name="w_processes_dead">ЗАВЕРШЕН</string>
@@ -50,8 +50,8 @@
         \n\nВы можете видеть общее использование CPU и памяти всеми процессами на текущий момент времени.
 		Если устройство имеет более одного ядра, будет отображаться суммарное использование ресурсов для всех ядер.
 		Добавляйте процессы для мониторинга кнопкой \'Выбрать другие процессы\'.
-        Процесс AnotherMonitor всегда отображается в списке. Переключайтесь между мониторингом CPU и памяти нажатием кнопки \'Память\'.
-        AnotherMonitor отображает объем памяти, предоставленной куче приложения.
+        Процесс SeraphimDroid всегда отображается в списке. Переключайтесь между мониторингом CPU и памяти нажатием кнопки \'Память\'.
+        SeraphimDroid отображает объем памяти, предоставленной куче приложения.
         Если Android завершает процесс из-за недостатка памяти
         или процесс завершается сам по себе, будет отображена соответствующая метка.
         Вы можете управлять отображением процесса нажатиями на его названии на графике.
@@ -60,7 +60,7 @@
         \n\nБолее подробная информация:
         \n- http://stackoverflow.com/questions/1420426/calculating-cpu-usage-of-a-process-in-linux
         \n\n<big><b>Память</b></big>
-        \n\nAnotherMonitor отображает на экране самые важные параметры использования памяти, касающиеся как Linux, так и Android:
+        \n\nSeraphimDroid отображает на экране самые важные параметры использования памяти, касающиеся как Linux, так и Android:
         \n\n<b>Исп. память</b>: память, уже используемая системой.
         \n\n<b>Доступ. память</b>: доступный объем памяти. Из-за особенностей работы ядра данное число не стоит воспринимать как строгое значение:
         ощутимая часть из указанного объема памяти необходима самой системе для нормального функционирования. <b>Доступная память</b> является
@@ -78,12 +78,12 @@
                   \n- https://en.wikipedia.org/wiki/Procfs
                   \n- https://www.kernel.org/doc/Documentation/filesystems/proc.txt
         \n\n<big><b>Запись</b></big>
-        \n\nAnotherMonitor может записывать данные об использовании CPU и памяти в CSV файл. Для начала записи нажмите круглую красную кнопку в основном окне программы.
+        \n\nSeraphimDroid может записывать данные об использовании CPU и памяти в CSV файл. Для начала записи нажмите круглую красную кнопку в основном окне программы.
         Далее нажатием кнопки \'Выбрать другие процессы\' вы можете выбрать или добавить дополнительные процессы для мониторинга.
-        AnotherMonitor будет осуществлять мониторинг каждого приложения все время его работы.
+        SeraphimDroid будет осуществлять мониторинг каждого приложения все время его работы.
         Для остановки записи используйте белую квадратную кнопку или нажмите кнопку уведомления \'Остановить и сохранить\'.
         Значения будут записаны в файл с интервалом, определяемым параметром \'Интервал чтения\' на панели настроек.
-        \n\nПри записи AnotherMonitor сохраняет все параметры об использовании памяти и CPU независимо от того, показаны ли они на графике или нет.
+        \n\nПри записи SeraphimDroid сохраняет все параметры об использовании памяти и CPU независимо от того, показаны ли они на графике или нет.
         \n\nФайлы сохраняются в папке \'AnotherMonitor\' во внутренней памяти вашего устройства.</string>
   <string name="menu_record">Запись</string>
   <string name="menu_record_description">Запускает в фоновом режиме процесс записи данных об использовании CPU и памяти</string>
@@ -160,11 +160,11 @@
 		\nGNU General Public License v3
 		\n\nЧак Норрис одобряет это приложение.</string>
   <string name="about_text">
-		\n\nAnotherMonitor отображает и записывает данные об использовании CPU и памяти на устройствах под управлением Android.
+		\n\nSeraphimDroid отображает и записывает данные об использовании CPU и памяти на устройствах под управлением Android.
 		\n\nЧак Норрис одобряет это приложение.
 	</string>
   <string name="about_feedback_text">Написать или отредактировать отзыв:</string>
-  <string name="about_feedback_button">AnotherMonitor в Google Play</string>
+  <string name="about_feedback_button">SeraphimDroid в Google Play</string>
   <string name="about_gnugpl_text">GNU General Public License v3</string>
   <string name="about_gnugpl_link">https://gnu.org/licenses/gpl.html</string>
   <string name="cd_paramter_status_icon">Иконка уведомления</string>

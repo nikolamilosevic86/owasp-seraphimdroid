@@ -3,14 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AnotherMonitor/AnotherMonitor.iml" filepath="$PROJECT_DIR$/AnotherMonitor/AnotherMonitor.iml" />
-      <module fileurl="file://$PROJECT_DIR$/AnotherMonitor-debug/AnotherMonitor-debug.iml" filepath="$PROJECT_DIR$/AnotherMonitor-debug/AnotherMonitor-debug.iml" />
-      <module fileurl="file://$PROJECT_DIR$/AnotherMonitor-debug/AnotherMonitor-debug.iml" filepath="$PROJECT_DIR$/AnotherMonitor-debug/AnotherMonitor-debug.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Seraphimdroid.iml" filepath="$PROJECT_DIR$/Seraphimdroid.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/Version_combination.iml" filepath="$PROJECT_DIR$/.idea/Version_combination.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Combined4.iml" filepath="$PROJECT_DIR$/Combined4.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/coach/coach.iml" filepath="$PROJECT_DIR$/coach/coach.iml" />
-      <module fileurl="file://$PROJECT_DIR$/coach/coach.iml" filepath="$PROJECT_DIR$/coach/coach.iml" />
       <module fileurl="file://$PROJECT_DIR$/lucenedroid/lucenedroid.iml" filepath="$PROJECT_DIR$/lucenedroid/lucenedroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/networkmonitor/networkmonitor.iml" filepath="$PROJECT_DIR$/networkmonitor/networkmonitor.iml" />
     </modules>
   </component>
 </project>

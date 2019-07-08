@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This source is part of the
+     _____  ___   ____
+ __ / / _ \/ _ | / __/___  _______ _
+/ // / , _/ __ |/ _/_/ _ \/ __/ _ `/
+\___/_/|_/_/ |_/_/ (_)___/_/  \_, /
+                             /___/
+repository.
+
+Copyright (C) 2014-2019 Carmen Alvarez (c@rmen.ca)
+Copyright (C) 2015 Rasmus Holm
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="preferenceScreen" >
+
+    <PreferenceCategory android:title="@string/pref_category_speed_test_settings" >
+        <!--suppress AndroidElementNotAllowed -->
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:icon="@drawable/ic_pref_enable_service"
+            android:key="PREF_SPEED_TEST_ENABLED"
+            android:title="@string/pref_title_speed_test_enabled" />
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/preferences_speed_test_interval_labels"
+            android:entryValues="@array/preferences_speed_test_interval_values"
+            android:icon="@drawable/ic_pref_update_interval"
+            android:key="PREF_SPEED_TEST_INTERVAL"
+            android:summary="%s"
+            android:title="@string/pref_title_speed_test_interval" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_category_speed_test_download_settings" >
+        <EditTextPreference
+            android:defaultValue="@string/pref_value_speed_test_default_download_url"
+            android:icon="@drawable/ic_pref_url"
+            android:key="PREF_SPEED_TEST_DOWNLOAD_URL"
+            android:summary="@string/pref_summary_speed_test_download_url"
+            android:title="@string/pref_title_speed_test_download_url" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_category_speed_test_upload_settings" >
+        <EditTextPreference
+            android:hint="@string/pref_hint_speed_test_upload_server"
+            android:icon="@drawable/ic_pref_server"
+            android:key="PREF_SPEED_TEST_UPLOAD_SERVER"
+            android:summary="@string/pref_summary_speed_test_upload_server"
+            android:title="@string/pref_title_speed_test_upload_server" />
+        <EditTextPreference
+            android:defaultValue="@string/pref_value_speed_test_default_upload_port"
+            android:hint="@string/pref_value_speed_test_default_upload_port"
+            android:icon="@drawable/ic_pref_server"
+            android:key="PREF_SPEED_TEST_UPLOAD_PORT"
+            android:numeric="integer"
+            android:summary="@string/pref_summary_speed_test_upload_port"
+            android:title="@string/pref_title_speed_test_upload_port" />
+        <EditTextPreference
+            android:hint="@string/pref_hint_speed_test_upload_user"
+            android:icon="@drawable/ic_pref_email_user"
+            android:inputType="textEmailAddress"
+            android:key="PREF_SPEED_TEST_UPLOAD_USER"
+            android:summary="@string/pref_summary_speed_test_upload_user"
+            android:title="@string/pref_title_speed_test_upload_user" />
+        <!--suppress AndroidElementNotAllowed -->
+        <ca.rmen.android.networkmonitor.app.prefs.hack.PasswordPreference
+            android:defaultValue=""
+            android:icon="@drawable/ic_pref_email_password"
+            android:inputType="textPassword"
+            android:key="PREF_SPEED_TEST_UPLOAD_PASSWORD"
+            android:title="@string/pref_title_speed_test_upload_password" />
+        <EditTextPreference
+            android:defaultValue="/"
+            android:icon="@drawable/ic_pref_folder"
+            android:key="PREF_SPEED_TEST_UPLOAD_PATH"
+            android:title="@string/pref_title_speed_test_upload_path" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_category_speed_test_about" >
+        <Preference
+            android:icon="@drawable/ic_pref_question"
+            android:key="PREF_ABOUT"
+            android:title="@string/pref_title_speed_test_about" >
+            <intent android:action="ca.rmen.android.networkmonitor.app.speedtest.SpeedTestAboutActivity" />
+        </Preference>
+    </PreferenceCategory>
+
+</PreferenceScreen>

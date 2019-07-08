@@ -44,7 +44,7 @@ import android.net.Uri;
 import android.os.*;
 import android.os.Debug.MemoryInfo;
 import android.os.Process;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -459,7 +459,7 @@ public class ServiceReader extends Service {
 	@SuppressWarnings("unchecked")
 	private void record() {
 		if (mW == null) {
-			File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/AnotherMonitor");
+			File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/SeraphimDroid");
 			dir.mkdirs();
 			mFile = new File(dir, new StringBuilder().append(getString(R.string.app_name)).append("Record-").append(getDate()).append(".csv").toString());
 			
@@ -481,7 +481,7 @@ public class ServiceReader extends Service {
 						.append(intervalRead)
 						.append(",MemTotal (kB),")
 						.append(memTotal)
-						.append("\nTotal CPU usage (%),AnotherMonitor (Pid ").append(Process.myPid()).append(") CPU usage (%),AnotherMonitor Memory (kB)");
+						.append("\nTotal CPU usage (%),SeraphimDroid (Pid ").append(Process.myPid()).append(") CPU usage (%),SeraphimDroid Memory (kB)");
 				if (mListSelected != null && !mListSelected.isEmpty())
 					for (Map<String, Object> p : mListSelected)
 						sb.append(",").append(p.get(C.pAppName)).append(" (Pid ").append(p.get(C.pId)).append(") CPU usage (%)")
@@ -546,7 +546,7 @@ public class ServiceReader extends Service {
 			
 			Toast.makeText(this, new StringBuilder().append(getString(R.string.app_name)).append("Record-").append(getDate()).append(".csv ")
 					.append(getString(R.string.notify_toast_saved))
-					.append(" " + Environment.getExternalStorageDirectory().getAbsolutePath() + "/AnotherMonitor"), Toast.LENGTH_LONG).show();
+					.append(" " + Environment.getExternalStorageDirectory().getAbsolutePath() + "/Seraphimdroid"), Toast.LENGTH_LONG).show();
 		} catch (Exception e) {
 			e.printStackTrace();
 			Toast.makeText(this, getString(R.string.notify_toast_error) + " " + e.getMessage(), Toast.LENGTH_LONG).show();

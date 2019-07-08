@@ -15,6 +15,7 @@
         <item>Geo-fencing</item>
         <item>Knowledge Base</item>
         <item>Cpu Usage</item>
+        <item>Network Monitor</item>
         <item>Settings</item>
         <item>About</item>
     </string-array>
@@ -28,6 +29,7 @@
         <item>@drawable/icon_geo_fencing</item>
         <item>@drawable/icon_kbase</item>
         <item>@drawable/icon_cpu</item>
+        <item>@drawable/icon_network</item>
         <item>@drawable/icon_settings</item>
         <item>@drawable/icon_about</item>
     </integer-array>
