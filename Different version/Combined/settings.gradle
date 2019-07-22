@@ -1,2 +1,0 @@
-include ':app', ':lucenedroid', ':AnotherMonitor', ':networkmonitor'
-project(':AnotherMonitor').projectDir = new File('AnotherMonitor')

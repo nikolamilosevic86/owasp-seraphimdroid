@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Gradle: lucene-analyzers-common-5.3.0-mobile-2">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../lucenedroid/libs/lucene-analyzers-common-5.3.0-mobile-2.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
