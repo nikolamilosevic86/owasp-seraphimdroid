@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This source is part of the
+     _____  ___   ____
+ __ / / _ \/ _ | / __/___  _______ _
+/ // / , _/ __ |/ _/_/ _ \/ __/ _ `/
+\___/_/|_/_/ |_/_/ (_)___/_/  \_, /
+                             /___/
+repository.
+
+Copyright (C) 2014-2015 Carmen Alvarez (c@rmen.ca)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:divider="?android:attr/dividerHorizontal"
+    android:orientation="vertical"
+    android:showDividers="middle"
+    tools:ignore="NewApi,UnusedAttribute" >
+
+    <TextView
+        android:id="@+id/filter_columns_hint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/netmon_color_light"
+        android:padding="8dp"
+        android:text="@string/filter_columns_hint"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/netmon_color_dark" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/netmon_color" />
+
+    <fragment
+        android:id="@+id/listFragment"
+        android:name="ca.rmen.android.networkmonitor.app.prefs.FilterColumnListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <include layout="@layout/ok_cancel_bar"/>
+
+</LinearLayout>

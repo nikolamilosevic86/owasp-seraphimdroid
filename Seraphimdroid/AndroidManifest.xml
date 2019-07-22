@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.owasp.seraphimdroid"
-    android:versionCode="4"
-    android:versionName="2.0" >
+    android:versionCode="4.1"
+    android:versionName="2.1" >
 
     <!--
     Google Maps API Key
@@ -121,6 +121,17 @@
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" >
         </activity>
 
+
+        <activity
+            android:name="org.anothermonitor.ActivityMain"
+            android:launchMode="singleTask" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity android:name="org.anothermonitor.ActivityProcesses" />
+        <activity android:name="org.anothermonitor.ActivityHelp" />
+        <activity android:name="org.anothermonitor.ActivityAbout" />
         <!-- Service Declaration -->
         <service
             android:name="org.owasp.seraphimdroid.services.AppLockService"

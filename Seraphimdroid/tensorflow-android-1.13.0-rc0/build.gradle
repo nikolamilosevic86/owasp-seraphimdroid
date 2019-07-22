@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('tensorflow-android-1.13.0-rc0.aar'))

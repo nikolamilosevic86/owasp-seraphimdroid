@@ -68,7 +68,7 @@ public class DrawerAdapter extends BaseAdapter {
 
 		boolean isInfoVisible = defaults.getBoolean("info_visible_" + position, true);
 
-		if (position > 6 || !isInfoVisible) {
+		if (position > 7 || !isInfoVisible) {
 			imgInfoIcon.setVisibility(View.GONE);
 			imgInfoIcon.setClickable(false);
 		}
@@ -96,7 +96,7 @@ public class DrawerAdapter extends BaseAdapter {
 
 			Integer position = (Integer) view.getTag();
 			Intent infoIntent = new Intent(context, MainActivity.class);
-			infoIntent.putExtra("FRAGMENT_NO", 6);
+			infoIntent.putExtra("FRAGMENT_NO", 7);
 
 			switch (position) {
 				case 0:
@@ -124,6 +124,9 @@ public class DrawerAdapter extends BaseAdapter {
 					break;
 				case 6:
 					info.setMessage(context.getString(R.string.info_knowledge_api));
+					break;
+				case 7:
+					info.setMessage(context.getString(R.string.info_cpu_usage));
 					break;
 			}
 //			defaults.edit().putBoolean("info_visible_" + position, false).commit();

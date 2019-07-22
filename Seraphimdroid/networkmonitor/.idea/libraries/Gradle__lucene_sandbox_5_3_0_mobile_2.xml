@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: lucene-sandbox-5.3.0-mobile-2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../lucenedroid/libs/lucene-sandbox-5.3.0-mobile-2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

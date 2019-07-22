@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This source is part of the
+     _____  ___   ____
+ __ / / _ \/ _ | / __/___  _______ _
+/ // / , _/ __ |/ _/_/ _ \/ __/ _ `/
+\___/_/|_/_/ |_/_/ (_)___/_/  \_, /
+                             /___/
+repository.
+
+Copyright (C) 2013-2017 Carmen Alvarez (c@rmen.ca)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="UnusedResources">
+    <string name="timestamp">Horodatage</string>
+    <string name="network_type">Type de réseau</string>
+    <string name="mobile_data_network_type">Type de réseau de données mobiles</string>
+    <string name="google_connection_test">Test de connexion (socket)</string>
+    <string name="http_connection_test">Test de connexion (HTTP)</string>
+    <string name="sim_state">État de la carte SIM</string>
+    <string name="service_state">État du service</string>
+    <string name="detailed_state">État détaillé</string>
+    <string name="is_connected">Connecté</string>
+    <string name="is_roaming">En itinérance</string>
+    <string name="is_available">Disponible</string>
+    <string name="is_failover">Failover</string>
+    <string name="data_activity">Activité des données</string>
+    <string name="data_state">État de la connexion des données</string>
+    <string name="reason">Raison</string>
+    <string name="extra_info">Info supplémentaire</string>
+    <string name="wifi_ssid">SSID WiFi</string>
+    <string name="wifi_bssid">BSSID WiFi</string>
+    <string name="wifi_frequency">Fréquence WiFi</string>
+    <string name="wifi_channel">Canal WiFi</string>
+    <string name="wifi_signal_strength">Force du signal WiFi (0&#8211;4)</string>
+    <string name="wifi_rssi">Force du signal WiFi (RSSI)</string>
+    <string name="sim_operator">Opérateur de la carte SIM</string>
+    <string name="sim_mcc">MCC SIM</string>
+    <string name="sim_mnc">MNC SIM</string>
+    <string name="network_operator">Opérateur du réseau</string>
+    <string name="network_mcc">MCC réseau</string>
+    <string name="network_mnc">MNC réseau</string>
+    <string name="is_network_metered">Réseau forfaitaire</string>
+    <string name="device_latitude">Latitude de l\'appareil</string>
+    <string name="device_longitude">Longitude de l\'appareil</string>
+    <string name="device_position_accuracy">Précision de la position de l\'appareil (m)</string>
+    <string name="device_speed">Vitesse de l\'appareil (m/s)</string>
+    <string name="cell_signal_strength">Force du signal mobile (0&#8211;4)</string>
+    <string name="cell_signal_strength_dbm">Force du signal mobile (dBm)</string>
+    <string name="cell_asu_level">Niveau ASU</string>
+    <string name="gsm_ber">RxQual</string>
+    <!--string name="evdo_">EVDO ECIO</string-->
+    <string name="lte_rsrq">LTE RSRQ</string>
+    <string name="cdma_cell_base_station_id">Id de la station de base (CDMA)</string>
+    <string name="cdma_cell_latitude">Latitude de la station de base (CDMA)</string>
+    <string name="cdma_cell_longitude">Longitude de la station de base (CDMA)</string>
+    <string name="cdma_cell_network_id">Id du réseau (CDMA)</string>
+    <string name="cdma_cell_system_id">Id système (CDMA)</string>
+    <string name="gsm_full_cell_id">Id complet de l\'antenne (GSM)</string>
+    <string name="gsm_rnc">RNC (GSM)</string>
+    <string name="gsm_short_cell_id">Id court de l\'antenne (GSM)</string>
+    <string name="gsm_cell_lac">LAC (GSM)</string>
+    <string name="gsm_cell_psc">PSC (GSM)</string>
+    <string name="lte_cell_ci">Id de l\'antenne (LTE)</string>
+    <string name="lte_cell_earfcn">Canal RF (LTE)</string>
+    <string name="lte_cell_pci">Id de l\'antenne physique (LTE)</string>
+    <string name="lte_cell_tac">TAC (LTE)</string>
+    <string name="network_interface">Interface réseau</string>
+    <string name="ipv4_address">Adresse IPv4</string>
+    <string name="ipv6_address">Adresse IPv6</string>
+    <string name="battery_level">Niveau de batterie</string>
+    <string name="most_consuming_app_name">L\'appli la plus gourmande</string>
+    <string name="most_consuming_app_bytes">L\'appli la plus gourmande (octets)</string>
+    <string name="download_speed">Vitesse de réception (Mbps)</string>
+    <string name="upload_speed">Vitesse d\'émission (Mbps)</string>
+
+    <string name="gsm_ber_help">GSM bit error rate (0–7, 99) tel que défini par TS 27.007 8.5. Absent dans beaucoup de terminaux. Documentation: https://goo.gl/v93sYj</string>
+    <string name="most_consuming_app_name_help">L\'application qui a consommé le plus de données pour le type de réseau donné, depuis le démarrage du terminal.</string>
+    <string name="most_consuming_app_bytes_help">La quantité de données consommées par l\'application qui a consommé le plus de données pour le type de réseau donné, depuis le démarrage du terminal.</string>
+    <string name="download_speed_help">Activer le test de vitesse dans les options avancées pour calculer la vitesse de réception.</string>
+    <string name="upload_speed_help">Activer le test de vitesse dans les options avancées, et fournir un serveur FTP, pour calculer la vitesse d\'émission.</string>
+
+</resources>

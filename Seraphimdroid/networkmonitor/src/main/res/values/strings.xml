@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This source is part of the
+     _____  ___   ____
+ __ / / _ \/ _ | / __/___  _______ _
+/ // / , _/ __ |/ _/_/ _ \/ __/ _ `/
+\___/_/|_/_/ |_/_/ (_)___/_/  \_, /
+                             /___/
+repository.
+
+Copyright (C) 2013 Benoit 'BoD' Lubek (BoD@JRAF.org)
+Copyright (C) 2013-2019 Carmen Alvarez (c@rmen.ca)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <string name="app_name">Network Monitor</string>
+    <string name="log_title">Log file</string>
+
+    <string name="app_warning_title">Warning!</string>
+    <string name="app_warning_battery_icon">Battery</string>
+    <string name="app_warning_data_usage_icon">Data usage</string>
+    <string name="app_warning_message">Activating the service may result in high battery and data consumption.</string>
+    <string name="app_warning_ok">Fine with me!</string>
+    <string name="app_warning_cancel">Yikes, nevermind</string>
+    <string name="app_warning_stfu">Don\'t show this again</string>
+
+    <!-- Strings for the log screen -->
+    <string name="action_share">Share log file</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_clear">Clear log file</string>
+    <string name="action_filter">Number of rows</string>
+    <string name="action_cell_id_format">Cell id format</string>
+    <string name="action_reset_filters">Clear all filters</string>
+    <string name="action_freeze_header">Freeze header (beta)</string>
+    <string name="action_unfreeze_header">Unfreeze header</string>
+    <string name="error_reading_log">Could not read log file.</string>
+    <string name="confirm_logs_clear">Do you really want to clear all the logs?</string>
+    <string name="clear_filters_confirm_dialog_title">Clear filters?</string>
+    <string name="clear_filters_confirm_dialog_message">Are you sure you want to remove all filters?</string>
+
+    <!-- Strings for the select_fields activity -->
+    <string name="action_select_all">Select all</string>
+    <string name="action_select_none">Select none</string>
+    <string name="action_select_profile_wifi">WiFi profile</string>
+    <string name="action_select_profile_mobile_gsm">Mobile profile (GSM)</string>
+    <string name="action_select_profile_mobile_cdma">Mobile profile (CDMA)</string>
+    <string name="action_select_profile_location">Location profile</string>
+
+    <!-- Strings for the filter_columns activity -->
+    <string name="filter_columns_title">Filter values (beta)</string>
+    <string name="filter_columns_empty_value">Empty</string>
+    <string name="filter_columns_hint">Select the values for \"%s\" you wish to appear in the report. If you select no values, no filtering will be done (all values will appear).</string>
+
+    <!-- Strings for warning about location settings -->
+    <string name="no_location_confirm_dialog_title">Locations not enabled</string>
+    <string name="no_location_confirm_dialog_message">You have disabled location tracking in your system settings.  Enable location tracking so that Network Monitor can log your location.</string>
+
+    <!-- Strings for the about screen -->
+    <string name="about_title">About</string>
+    <string name="about_version" translatable="false">%1$s v%2$s</string>
+    <string name="about_copyright_1" tools:ignore="TypographyOther">Copyright (C) 2013&#8211;2019 Carmen Alvarez\nc@rmen.ca\nhttp://rmen.ca</string>
+    <string name="about_copyright_2" tools:ignore="TypographyOther">Copyright (C) 2013&#8211;2014 Benoit \'BoD\' Lubek\nBoD@JRAF.org\nhttp://JRAF.org</string>
+    <string name="about_legal">License/disclaimer</string>
+    <string name="about_privacyUrl">Privacy policy:\nhttps://github.com/caarmen/network-monitor/blob/master/PRIVACY.md</string>
+    <string name="about_projectUrl">Source code:\nhttps://github.com/caarmen/network-monitor</string>
+    <string name="about_issues">Report bugs:\nhttps://github.com/caarmen/network-monitor/issues</string>
+    <string name="about_rate">Rate the app on the Play Store:\nhttps://play.google.com/store/apps/details?id=ca.rmen.android.networkmonitor</string>
+    <string name="about_libraries">3rd party libraries</string>
+    <string name="about_contributions">Contributions:</string>
+    <string name="about_contribution1" translatable="false">* Abdallah Ali: https://www.linkedin.com/in/abdullahshaikhali</string>
+    <string name="about_contribution2" translatable="false">* Rasmus Holm: https://github.com/motorolja</string>
+    <string name="about_contribution3" translatable="false">* Gary Huyser: http://bitaether.net</string>
+    <string name="license_header">Network Monitor License</string>
+
+    <!-- Notification -->
+    <string name="service_notification_ticker">Network Monitor is collecting data</string>
+    <string name="service_notification_text">Collecting data</string>
+    <string name="service_notification_action_stop">Stop</string>
+    <string name="service_notification_action_logs">Logs</string>
+    <string name="service_ongoing_notification_channel_id" translatable="false">Network Monitor Ongoing Channel</string>
+    <string name="service_ongoing_notification_channel_name">Ongoing</string>
+    <string name="service_ongoing_notification_channel_description">Notification for the ongoing service</string>
+    <string name="service_alert_notification_channel_id" translatable="false">Network Monitor Alerts Channel</string>
+    <string name="service_alert_notification_channel_name">Alerts</string>
+    <string name="service_alert_notification_channel_description">Notifications for alerts</string>
+
+    <!-- Strings about sending emails -->
+    <string name="missing_email_settings_info_dialog_title">Missing information</string>
+    <string name="missing_email_settings_info_dialog_message">E-mail reports cannot be sent, because not all of the e-mail settings have been filled in. The e-mail report frequency has been reset to \'Never\'.</string>
+    <string name="warning_notification_ticker_email_failed">Error sending report</string>
+    <string name="warning_notification_message_email_failed">Could not send the report.</string>
+    <string name="email_help_file">file:///android_asset/email_help.html</string>
+
+    <!-- Strings for the notification about a failed test -->
+    <string name="warning_notification_ticker_test_failed">Network test failed.</string>
+    <string name="warning_notification_message_test_failed">Problem with the data connection.</string>
+
+    <!-- Speed test strings -->
+    <string name="speed_test_warning_title">Warning!</string>
+    <string name="speed_test_warning_message">Enabling the speed test will result in significant network traffic (and battery drain).  Don\'t enable it if you have a quota for network traffic!</string>
+    <string name="speed_test_missing_info_dialog_title">Missing information</string>
+    <string name="speed_test_missing_info_dialog_message">The speed test cannot be enabled because the URL field is empty</string>
+    <string name="speed_test_disabled">Disabled</string>
+    <string name="speed_test_close">Close</string>
+    <string name="speed_test_about_file">file:///android_asset/speed_test_about.html</string>
+
+    <!-- Polling frequency strings -->
+    <string name="warning_fast_polling_title">Warning!</string>
+    <string name="warning_fast_polling_message">You have selected a very fast polling frequency. Data tests have been disabled, and a maximum limit to the database size has been set. You can re-enable data tests by selecting a slower polling frequency, and going to the advanced options.</string>
+
+    <!-- Strings about db operations -->
+    <string name="db_op_in_progress">(%s in progress)</string>
+
+    <string name="permission_data_usage_permission_title">Necessary annoying popup</string>
+    <string name="permission_read_phone_state_message"><![CDATA[<b>¯\\_(ツ)_/¯</b><br><br>\nNetwork Monitor needs access to your phone state to collect app mobile data usage stats. If you deny this permission, those fields will not be reported. Network Monitor <b>will not place any calls</b> and will only retrieve the number of bytes consumed by each app.]]></string>
+    <string name="permission_data_usage_denied">App data usage statistics will not be reported.</string>
+    <string name="permission_data_usage_message"><![CDATA[<b>¯\\_(ツ)_/¯</b><br><br>\nIn the following screen, please grant Network Monitor access to data usage statistics.]]></string>
+    <string name="permission_location_rationale">Network Monitor needs access to your location to report certain fields. If you deny this permission, those fields will not be reported.</string>
+    <string name="permission_location_denied">Some fields will not be included in the logs</string>
+    <string name="permission_button_allow">Continue</string>
+    <string name="permission_button_deny">Cancel</string>
+
+
+
+
+</resources>

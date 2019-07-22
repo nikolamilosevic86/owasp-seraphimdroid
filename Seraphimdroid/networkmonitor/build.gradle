@@ -1,0 +1,141 @@
+/*
+ * This source is part of the
+ *      _____  ___   ____
+ *  __ / / _ \/ _ | / __/___  _______ _
+ * / // / , _/ __ |/ _/_/ _ \/ __/ _ `/
+ * \___/_/|_/_/ |_/_/ (_)___/_/  \_, /
+ *                              /___/
+ * repository.
+ *
+ * Copyright (C) 2015-2019 Carmen Alvarez (c@rmen.ca)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
+    }
+}
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.ben-manes.versions'
+
+ext.androidxVersion = '1.0.0'
+ext.appCompatVersion= '1.0.2'
+
+android {
+//    File signFile = rootProject.file('signing.properties')
+//    if (signFile.exists()) {
+//        Properties p = new Properties()
+//        p.load(new FileInputStream(signFile))
+//
+//        signingConfigs {
+//            release {
+//                keyAlias p.KeyAlias
+//                keyPassword p.KeyPassword
+//                storeFile file(p.StoreFile)
+//                storePassword p.StorePassword
+//            }
+//        }
+//        android.buildTypes.release.signingConfig =signingConfigs.release
+//    } else  {
+//        android.buildTypes.release.signingConfig = null
+//    }
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
+    dataBinding {
+        enabled = true
+    }
+
+    defaultConfig {
+//        applicationId "ca.rmen.android.networkmonitor"
+        minSdkVersion 14
+        targetSdkVersion 26
+        versionName "1.31.1"
+        versionCode 13101
+        archivesBaseName += "-" + versionName
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+//    buildTypes {
+//        debug {
+//            applicationIdSuffix = ".debug"
+//        }
+//        release {
+//            minifyEnabled true
+//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-project.txt'
+//        }
+//    }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+    lintOptions {
+        disable 'GoogleAppIndexingWarning'
+    }
+}
+
+dependencies {
+
+    implementation 'de.psdev.licensesdialog:licensesdialog:2.0.0'
+    implementation "androidx.appcompat:appcompat:${project.appCompatVersion}"
+    implementation "com.google.android.material:material:${project.androidxVersion}"
+    implementation "androidx.preference:preference:${project.androidxVersion}"
+    implementation "androidx.legacy:legacy-preference-v14:${project.androidxVersion}"
+    implementation 'org.greenrobot:eventbus:3.0.0'
+
+    implementation 'org.tensorflow:tensorflow-android:+'
+
+    implementation ('net.sourceforge.jexcelapi:jxl:2.6.12') {
+        exclude group: "log4j"
+    }
+    implementation 'commons-net:commons-net:3.6'
+
+    implementation 'net.sourceforge.streamsupport:streamsupport:1.7.0'
+}
+
+dependencyUpdates.resolutionStrategy = {
+  componentSelection { rules ->
+    rules.all { ComponentSelection selection ->
+      boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm', 'alpha-preview'].any { qualifier ->
+        selection.candidate.version ==~ /(?i).*[.-]${qualifier}[.\d-]*/
+      }
+      if (rejected) {
+        selection.reject('Release candidate')
+      }
+    }
+  }
+}
+
+/* Not needed now, but keep for later (since I never remember how to do this when needed)
+configurations.all {
+    resolutionStrategy {
+        eachDependency { details ->
+            if (details.requested.group == 'com.android.support'
+                    && details.requested.name != 'multidex'
+                    && details.requested.name != 'multidex-instrumentation') {
+                details.useVersion project.androidxVersion
+            }
+        }
+    }
+}
+*/

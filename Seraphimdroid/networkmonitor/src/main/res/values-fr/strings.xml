@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This source is part of the
+     _____  ___   ____
+ __ / / _ \/ _ | / __/___  _______ _
+/ // / , _/ __ |/ _/_/ _ \/ __/ _ `/
+\___/_/|_/_/ |_/_/ (_)___/_/  \_, /
+                             /___/
+repository.
+
+Copyright (C) 2013-2019 Carmen Alvarez (c@rmen.ca)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <string name="app_name">Network Monitor</string>
+    <string name="log_title">Fichier journal</string>
+
+    <string name="app_warning_title">Attention !</string>
+    <string name="app_warning_battery_icon">Batterie</string>
+    <string name="app_warning_data_usage_icon">Données mobiles</string>
+    <string name="app_warning_message">Activer le service peut engendrer une forte utilisation de la batterie et des données mobiles.</string>
+    <string name="app_warning_ok">Ça me va !</string>
+    <string name="app_warning_cancel">Aïe, j\'ai peur</string>
+    <string name="app_warning_stfu">Ne plus montrer ce message</string>
+
+    <!-- Strings for the log screen -->
+    <string name="action_share">Partager le fichier journal</string>
+    <string name="action_refresh">Actualiser</string>
+    <string name="action_clear">Réinitialiser le fichier journal</string>
+    <string name="action_filter">Nombre de lignes</string>
+    <string name="action_cell_id_format">Format des ids d\'antenne</string>
+    <string name="action_reset_filters">Supprimer les filtres</string>
+    <string name="error_reading_log">Impossible de lire le fichier journal.</string>
+    <string name="confirm_logs_clear">Êtes-vous sur de vouloir supprimer les données enregistrées ?</string>
+    <string name="clear_filters_confirm_dialog_title">Supprimer les filtres?</string>
+    <string name="clear_filters_confirm_dialog_message">Êtes-vous sur de vouloir supprimer tous les filtres?</string>
+
+    <!-- Strings for the select_fields activity -->
+    <string name="action_select_all">Tout cocher</string>
+    <string name="action_select_none">Tout décocher</string>
+    <string name="action_select_profile_wifi">Profil WiFi</string>
+    <string name="action_select_profile_mobile_gsm">Profil mobile (GSM)</string>
+    <string name="action_select_profile_mobile_cdma">Profil mobile (CDMA)</string>
+    <string name="action_select_profile_location">Profil localisation</string>
+
+    <!-- Strings for the filter_columns activity -->
+    <string name="filter_columns_title">Filtrer des valeurs (beta)</string>
+    <string name="filter_columns_empty_value">Vide</string>
+    <string name="filter_columns_hint">Selectionner les valeurs de \"%s\" à inclure dans le journal.  Si aucune valeur n\'est cochée, les données ne seront pas filtrées (toutes les valeurs apparaitront).</string>
+
+    <!-- Strings for warning about location settings -->
+    <string name="no_location_confirm_dialog_title">Localisation désactivée</string>
+    <string name="no_location_confirm_dialog_message">La localisation est désactivée dans les préférences systèmes. Activer la localisation pour que Network Monitor puisse récupérer vos coordonées.</string>
+
+    <!-- Strings for the about screen -->
+    <string name="about_title">À propos</string>
+    <string name="about_copyright_1" tools:ignore="TypographyOther">Copyright (C) 2013&#8211;2019 Carmen Alvarez\nc@rmen.ca\nhttp://rmen.ca</string>
+    <string name="about_copyright_2" tools:ignore="TypographyOther">Copyright (C) 2013&#8211;2014 Benoit \'BoD\' Lubek\nBoD@JRAF.org\nhttp://JRAF.org</string>
+    <string name="about_legal">License/avertissement</string>
+    <string name="about_privacyUrl">Politique de confidentialité :\nhttps://github.com/caarmen/network-monitor/blob/master/PRIVACY.md</string>
+    <string name="about_projectUrl">Code source : https://github.com/caarmen/network-monitor</string>
+    <string name="about_issues">Remonter des anomalies :\nhttps://github.com/caarmen/network-monitor/issues</string>
+    <string name="about_rate">Donnez votre avis sur le Play Store :\nhttps://play.google.com/store/apps/details?id=ca.rmen.android.networkmonitor</string>
+    <string name="about_libraries">Librairies externes</string>
+    <string name="about_contributions">Contributions :</string>
+    <string name="license_header">License Network Monitor</string>
+
+    <!-- Notification -->
+    <string name="service_notification_ticker">Network Monitor recueille des données.</string>
+    <string name="service_notification_text">Tests de connexion en cours</string>
+    <string name="service_notification_action_stop">Arrêt</string>
+    <string name="service_notification_action_logs">Fichier journal</string>
+
+    <!-- Strings about sending emails -->
+    <string name="missing_email_settings_info_dialog_title">Informations manquantes</string>
+    <string name="missing_email_settings_info_dialog_message">Impossible d\'envoyer des courriels, parce qu\'au moins un des champs n\'a pas été rempli. La fréquence de l\'envoi des rapports a été mis à \'jamais\'"</string>
+    <string name="warning_notification_ticker_email_failed">Erreur de l\'envoi du rapport</string>
+    <string name="warning_notification_message_email_failed">Impossible d\'envoyer le rapport.</string>
+    <string name="email_help_file">file:///android_asset/email_help-fr.html</string>
+
+    <!-- Strings for the notification about a failed test -->
+    <string name="warning_notification_ticker_test_failed">Test de connexion echoué.</string>
+    <string name="warning_notification_message_test_failed">Problème avec la connexion de données.</string>
+
+    <!-- Speed test strings -->
+    <string name="speed_test_warning_title">Attention !</string>
+    <string name="speed_test_warning_message">Activer le test de vitesse va engendrer beaucoup de trafic réseau (et une consommation de la batterie).  Ne pas l\'activer si vous avez un quota de trafic réseau !</string>
+    <string name="speed_test_missing_info_dialog_title">Informations manquantes</string>
+    <string name="speed_test_missing_info_dialog_message">Le test de vitesse ne peut être activé parce que le champ URL est vide.</string>
+    <string name="speed_test_disabled">Désactivé</string>
+    <string name="speed_test_close">Fermer</string>
+    <string name="speed_test_about_file">file:///android_asset/speed_test_about-fr.html</string>
+
+    <!-- Polling frequency strings -->
+    <string name="warning_fast_polling_title">Attention !</string>
+    <string name="warning_fast_polling_message">Vous avez choisi une fréquence de test très rapide. Les tests de connexion ont été desactivés, et le nombre de lignes dans la base de données est maintenant limité. Vous pouvez reactiver les tests de connexion si vous choisissez une frequence plus lente et vous ouvrez les options avancées.</string>
+
+    <!-- Strings about db operations -->
+    <string name="db_op_in_progress">(%s en cours)</string>
+    <string name="permission_data_usage_permission_title">Pop-up agaçante mais nécessaire</string>
+    <string name="permission_read_phone_state_message"><![CDATA[<b>¯\\_(ツ)_/¯</b><br><br>\nNetwork Monitor a besoin d\'accèder à l\'état du terminal afin de collecter des statistiques sur la consommation des données par les applications. Sans cet accès, ces champs seront absents du fichier journal. Network Monitor <b>ne placera aucun appel</b> et ne collectera que le nombre d\'octets transmis par chaque application.]]></string>
+    <string name="permission_data_usage_denied">Les informations sur la consommation de données seront absentes du fichier journal.</string>
+    <string name="permission_data_usage_message"><![CDATA[<b>¯\\_(ツ)_/¯</b><br><br>\nDans l\'écran suivant, veuillez donner accès à Network Monitor aux statistiques de consommation de données.]]></string>
+    <string name="permission_button_allow">Continuer</string>
+    <string name="permission_button_deny">Annuler</string>
+    <string name="permission_location_denied">Quelques champs seront absents du fichier journal.</string>
+    <string name="permission_location_rationale">Network Monitor a besoin d\'accéder à la localisation du terminal pour remplir certains champs.  Sans cet accès, ces champs seront absents du fichier journal.</string>
+    <string name="action_freeze_header">Bloquer les entêtes (beta)</string>
+    <string name="action_unfreeze_header">Debloquer les entêtes</string>
+    <string name="service_alert_notification_channel_description">Notification des alertes</string>
+    <string name="service_alert_notification_channel_name">Alertes</string>
+    <string name="service_ongoing_notification_channel_description">Notification du service en cours</string>
+    <string name="service_ongoing_notification_channel_name">En cours</string>
+
+</resources>

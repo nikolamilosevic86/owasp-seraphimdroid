@@ -1,0 +1,56 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.3'
+    }
+}
+apply plugin: 'com.android.library'
+
+repositories {
+    jcenter()
+    maven {
+        url "https://maven.google.com"
+    }
+}
+
+
+android {
+    compileSdkVersion 25
+
+    defaultConfig {
+        //applicationId "org.anothermonitor"
+        minSdkVersion 14
+        targetSdkVersion 26
+        versionCode 9
+        versionName "3.1.0"
+        sourceSets {
+            main {
+                jniLibs.srcDirs = ['libs']
+            }
+        }
+
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_6
+        targetCompatibility JavaVersion.VERSION_1_6
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    api 'androidx.core:core:1.0.0'
+    api 'androidx.appcompat:appcompat:1.0.0'
+    api 'com.jaredrummler:android-processes:1.0.9'
+    implementation 'org.apache.commons:commons-math3:3.6.1'
+    implementation 'org.tensorflow:tensorflow-android:1.13.1'
+    implementation 'org.tensorflow:tensorflow-lite:0.0.0-nightly'
+    implementation files('libs/commons-math3-3.6.1.jar')
+}

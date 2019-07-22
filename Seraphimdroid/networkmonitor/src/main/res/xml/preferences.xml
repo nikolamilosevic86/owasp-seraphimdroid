@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This source is part of the
+     _____  ___   ____
+ __ / / _ \/ _ | / __/___  _______ _
+/ // / , _/ __ |/ _/_/ _ \/ __/ _ `/
+\___/_/|_/_/ |_/_/ (_)___/_/  \_, /
+                             /___/
+repository.
+
+Copyright (C) 2013 Benoit 'BoD' Lubek (BoD@JRAF.org)
+Copyright (C) 2013-2015 Carmen Alvarez (c@rmen.ca)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="preferenceScreen">
+
+    <PreferenceCategory android:title="@string/pref_category_monitoring_settings" >
+        <!--suppress AndroidElementNotAllowed -->
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:icon="@drawable/ic_pref_enable_service"
+            android:key="PREF_SERVICE_ENABLED"
+            android:title="@string/pref_title_service_enabled" />
+
+        <ListPreference
+            android:defaultValue="10000"
+            android:entries="@array/preferences_updateInterval_labels"
+            android:entryValues="@array/preferences_updateInterval_values"
+            android:icon="@drawable/ic_pref_update_interval"
+            android:key="PREF_UPDATE_INTERVAL"
+            android:summary="@string/pref_summary_update_interval"
+            android:title="@string/pref_title_update_interval" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_category_log_actions" >
+        <Preference
+            android:icon="@drawable/ic_pref_show_log"
+            android:key="PREF_SHOW_LOG_FILE"
+            android:title="@string/pref_title_show_log_file"
+            android:theme="@style/Theme.AppCompat">
+            <intent android:action="ca.rmen.android.networkmonitor.app.log.LogActivity" />
+        </Preference>
+        <Preference
+            android:icon="@drawable/ic_pref_show_log"
+            android:key="PREF_SHOW_MODEL"
+            android:title="@string/pref_title_model"
+            android:theme="@style/Theme.AppCompat">
+            <intent android:action="ca.rmen.android.networkmonitor.app.log.Model" />
+        </Preference>
+        <Preference
+            android:icon="@drawable/ic_pref_share"
+            android:key="PREF_SHARE"
+            android:title="@string/action_share" >
+        </Preference>
+        <Preference
+            android:icon="@drawable/ic_pref_clear"
+            android:key="PREF_CLEAR_LOG_FILE"
+            android:title="@string/action_clear" >
+        </Preference>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_category_other" >
+        <Preference
+            android:icon="@drawable/ic_pref_settings"
+            android:title="@string/pref_title_advanced" >
+            <intent android:action="ca.rmen.android.networkmonitor.app.prefs.AdvancedPreferencesActivity" />
+        </Preference>
+        <Preference
+            android:icon="@drawable/ic_pref_about"
+            android:key="PREF_ABOUT"
+            android:title="@string/pref_title_about" >
+            <intent android:action="ca.rmen.android.networkmonitor.app.about.AboutActivity" />
+        </Preference>
+    </PreferenceCategory>
+
+</PreferenceScreen>
