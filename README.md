@@ -1,25 +1,75 @@
-# Project Name
-OWASP Seraphimdroid
+# Project summary for GSoC 2019
+Project name: OWASP Seraphimdroid 
 
-# Project Expectation
-Develop an advanced system/model to detect the anomaly usage and distinguish different types of malicious apps by applying machine learning techniques.
+Mentor: Nikola Milosevic (nikola.milosevic@owasp.org)
+
 
 # Project Description
-OWASP Seraphimdroid has previously applied a system, based on permissions, which is able to distinguish malicious apps from non-malicious. But it still has some false positive, like foodpanda app. In order to improve OWASP Seraphimdroid’s  performance, we would like to learn from other outputs (like network, CPU, buttery and memory usage, system call logs) can monitor about application whether it can be malicious.  
 
-# Project Overview
-My plan mainly consists of three stages: preparation, application designing and modelling, comparison.
+OWASP Seraphimdroid has previously applied a system, based on permissions, which is able to distinguish malicious apps from non-malicious. This time, my contribution is ultilise the data usage information for Seraphimdroid to detect malicious behavior.
 
-In the preparation stage, I will firstly work on data collection and Android malware behaviours research. Now, I have found two datasets contain the network traffic data for both malware and benign applications, which might be useful in our project. Also, there is an open source app named AnotherMonitor, through which we are able to get the CPU and memory usage information. However, it should be noticed that in Android 7+ Google has made undocumented changes and has significantly restricted access to the proc file system. This means it is hard to obtain more information for new Android versions. As for Android malware behaviours research, I will combine with reading paper and analysing malware data to obtain a better intuition.
+# Work Flow
 
-In the application designing and modelling stage, since Seraphimdroid has the ability to distinguish some malicious apps already, my plan can be divided into two main parts:
+This project developing periods could be divided into 3 parts: data collection, data analysis and function integration.
+  - Data collection (log)
+    - Android development preparation and Feature selection
+    - Merge open source applications
+      - Another Monitor
+      - Network Monitor
+  - Data analysis (modelling)
+      - Explore different models for data analysis
+        - Supervised learning
+            - KNN, Random forest, SVM, Neural network, CNN
+        - Anomaly detection
+            - LSTM, Autoencoder, PCA
+      - Labelling, data collection and malware testing
+  - Function integration: 
+    - Integrate Autoencoder and LSTM methods into android application
+    - Warning notification
 
-The first part is to collect user’s dynamic CPU, memory, etc. usage data, through which we are able to build a model for anomaly detection to calculate the probability of the situation occurring given the normal data. If the probability is lower than the threshold we defined, the system will give the user a warning message. Here is a diagram of my thought.
+# What can we collect from Seraphimdroid?
 
-(Diagram: zoom in, the installed application here means the test application)
+Currently, Seraphimdroid is able to collect different device usage information thanks to these two open source applications: AnotherMonitor and NetworkMonitor. Another Monitor helped us collect cpu usage, memory usage and cached information, while Network Monitor provided functions to obtain system battery status and other network information. 
 
-The second part is to train the existing dynamic dataset do malware classification. After the unknown application installed, we can do the same job to collect smartphone usage information (for this application). After collecting a certain period, two days, for example, we are able to train the machine to distinguish this application from malware and benign. In addition, rather than only malware and benign classification, it can contain more clusters for different types of malware apps. If the malware data is limited, SMOTE algorithm might be a feasible choice for oversampling.
+Example: What data could AnotherMonitor collect?
 
-As for system log files, I have a rough idea either use topic modelling methods to extract the abnormal behaviours or inductive logic programming to build a rule for classification, like behaviour 1, behaviour 2 -> malware behaviour.
 
-Lastly, it is necessary to do a comparison to evaluate our model. For the anomaly detection part, choosing a suitable model distributions and thresholds might be the key to improve. I will compare different models and thresholds and try to visualise the results. For the classification part, ideally, Deep Learning can perform well given a large training set. It is worth to test the previous false positive apps and see how the system improved.
+Device usage|
+Totoal CPU |
+Seraphi’s CPU|
+Totoal Memory|
+Seraphi’s Memory|
+Cached|
+---|---|---|---|---|---
+Android 7|✔️|✔️|✔️|✔️|✔️
+Androdi 8+|❌|❌|✔️|✔️|✔️
+
+
+# What can we learn from collected data?
+
+Compared with benign, malware’s behavior would cause the abnormal device usage, for example, cpu used rapidly, battery ran out quicker. Since Seraphimdroid is able to record these information, it is possible to detect malicious behaviors based on previous behaviors. 
+
+# Techinical details
+
+Our anomaly detection techniques are the implementation of Autoencoder and LSTM. The main idea is to predict the data at current stage, and by calculating the distance between our prediction and the collected data and comparing with our threshold, we are able to decide whether this behavior is abnormal or not. 
+
+Autoencoder is a special neural network that encodes the real data into a small dimension, and then decodes it back. After this operation, it could usually recover well for normal data. However, if it is a malicious behavior, it is possible to obtain a large distance between model prediction and real data.
+
+(Figure: Autoencoder architechture)
+Similarly, our LSTM methods is based on previous M timelines data to predict the M+1 data. By calculating the distance between prediction and real data and comparing with threshold, it could detect the anomaly.
+
+# Future work & other effort
+
+For malware classification part, I still explored other machine learning techniques, like CNN, Random Forest, SVM, etc. It could performs well for our naive labelling (when malware runs, say it is abnormal). However, since we don’t have the source code of malware, it is impossible to know when the malicious behavior happen exactly. It worth to say that our model for predicting if the user plays youtube videos perform quite well, which shows that if we label correctly our model could learn better. So the future work could be find a proper way to label the collected data. Once we did that, I believe it could detect the anomaly more precisely. 
+
+# Malware Testing
+
+During the data collecting period, I have tested 10 different malware as well as 10 benign which can be found here. By labelling the whole period as malware running period and benign running period, our random forest is able to classify the malicious data out with max 99.69% accuracy and 91% F1 score. (details: pre1, pre2, pre3) In the future, the improvement should be focus on fixing labelling issue. Luckily, in our implementation, it could be detected precisely for SMS malware which sends message out and could be seen in the user interface.
+
+# Where can you find the code?
+Our code can be found in these two github repos:
+  - Main repo
+  - Private repo
+
+
+
