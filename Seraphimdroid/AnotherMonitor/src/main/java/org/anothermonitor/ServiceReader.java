@@ -67,7 +67,7 @@ public class ServiceReader extends Service {
 	private String s;
 	private String[] sa;
 	private List<Float> cpuTotal, cpuAM, Input_20, dis_auto, dis_RNN;
-	private List<Integer> memoryAM;
+	private List<Integer> memoryAM, numofwarning;
 	private List<Map<String, Object>> mListSelected; // Integer		 C.pId
 												  // String		 C.pName
 												  // Integer	 C.work
@@ -91,10 +91,10 @@ public class ServiceReader extends Service {
 			// However the ViewGraphic is drew with a Handler because the drawing code must be executed in the UI thread.
 			Thread thisThread = Thread.currentThread();
 
-			String MODEL_FILE = "file:///android_asset/model2.pb";  //Load tensorflow Model
+			String MODEL_FILE = "file:///android_asset/model2.pb";  //Load Autoencoder tensorflow Model
 			TensorFlowInferenceInterface tensorflow = new TensorFlowInferenceInterface(getAssets(), MODEL_FILE);
 
-			String MODEL_FILE_RNN = "file:///android_asset/model_RNN_1.pb";  //Load tensorflow Model
+			String MODEL_FILE_RNN = "file:///android_asset/model_RNN.pb";  //Load LSTM tensorflow Model
 			TensorFlowInferenceInterface tensorflow_RNN = new TensorFlowInferenceInterface(getAssets(), MODEL_FILE_RNN);
 
 			while (readThread == thisThread) {
@@ -174,8 +174,10 @@ public class ServiceReader extends Service {
 		Input_20 = new ArrayList<Float>(maxSamples*6);
 		dis_auto = new ArrayList<Float>(maxSamples);
 		dis_RNN = new ArrayList<Float>(maxSamples);
+		numofwarning= new ArrayList<Integer>(maxSamples);
 		dis_auto.add(0,0f);
 		dis_RNN.add(0,0f);
+		numofwarning.add(0,0);
 
 		pId = Process.myPid();
 		
@@ -279,9 +281,6 @@ public class ServiceReader extends Service {
 	@SuppressLint("NewApi")
 	@SuppressWarnings("unchecked")
 	private void read(TensorFlowInferenceInterface tensorflow, TensorFlowInferenceInterface tensorflow_RNN) {
-//		String MODEL_FILE = "file:///android_asset/model2.pb";  //模型存放路径
-//		TensorFlowInferenceInterface tensorflow = new TensorFlowInferenceInterface(getAssets(), MODEL_FILE);
-
 		try {
 			reader = new BufferedReader(new FileReader("/proc/meminfo"));
 			s = reader.readLine();
@@ -486,50 +485,15 @@ public class ServiceReader extends Service {
 	}
 
 
-	private float[] gettensorflowinput(ArrayList<Float> myIntegers){
-
-		float cpu_std = 3.962832f;
-		float cpuam_std = 0.565675f;
-		float memoryam_std = 0.000000f;
-		float memused_std = 22950.313937f;
-		float memavil_std = 22950.313937f;
-		float memfree_std = 16205.462286f;
-		float cached_std = 14519.936550f;
-		float threshold_std = 0.000000f;
-
-		float cpu_mean = 3.705264f;
-		float cpuam_mean = 2.260897f;
-		float memoryam_mean = 3.705264f;
-		float memused_mean = 771590.796872f;
-		float memavil_mean = 778957.203128f;
-		float memfree_mean = 343344.630335f;
-		float cached_mean = 435617.041246f;
-		float threshold_mean = 0.000000f;
-
-		float[] Input = new float[6];
-
-		Input[0]  =  (myIntegers.get(0) - cpu_mean)/cpu_std;
-		Input[2]  =  (myIntegers.get(3) - memused_mean)/memused_std;
-		Input[3]  =  (myIntegers.get(4) - memavil_mean)/memavil_std;
-		Input[4]  =  (myIntegers.get(5) - memfree_mean)/memfree_std;
-		Input[5]  =  (myIntegers.get(6) - cached_mean)/cached_std;
-		Input[1]  =  (myIntegers.get(1) - cpuam_mean)/cpuam_std;
-
-
-
-		return Input;
-	}
-
-
 	public float[] mean_std(List<Float> x) {
 		int m=x.size();
 		float sum=0;
-		for(int i=0;i<m;i++){//求和
+		for(int i=0;i<m;i++){//sum
 			sum+=x.get(i);
 		}
-		float dAve=sum/m;//求平均值
+		float dAve=sum/m;//mean
 		float dVar=0;
-		for(int i=0;i<m;i++){//求方差
+		for(int i=0;i<m;i++){//var
 			dVar+=(x.get(i)-dAve)*(x.get(i)-dAve);
 		}
 		float[] std_mean = new float[2];
@@ -541,12 +505,12 @@ public class ServiceReader extends Service {
 	public float[] mean_std_int(List<Integer> x) {
 		int m=x.size();
 		float sum=0;
-		for(int i=0;i<m;i++){//求和
+		for(int i=0;i<m;i++){//sum
 			sum+=x.get(i);
 		}
-		float dAve=sum/m;//求平均值
+		float dAve=sum/m;//mean
 		float dVar=0;
-		for(int i=0;i<m;i++){//求方差
+		for(int i=0;i<m;i++){//var
 			dVar+=(x.get(i)-dAve)*(x.get(i)-dAve);
 		}
 		float[] std_mean = new float[2];
@@ -558,13 +522,13 @@ public class ServiceReader extends Service {
 	public float[] mean_std_str(List<String> x) {
 		int m=x.size();
 		float sum=0;
-		for(int i=0;i<m;i++){//求和
+		for(int i=0;i<m;i++){//sum
 
 			sum+=Float.parseFloat(x.get(i));
 		}
-		float dAve=sum/m;//求平均值
+		float dAve=sum/m;//mean
 		float dVar=0;
-		for(int i=0;i<m;i++){//求方差
+		for(int i=0;i<m;i++){//var
 			dVar+=(Float.parseFloat(x.get(i))-dAve)*(Float.parseFloat(x.get(i))-dAve);
 		}
 		float[] std_mean = new float[2];
@@ -573,39 +537,6 @@ public class ServiceReader extends Service {
 		return std_mean;
 	}
 
-
-	private float[] std(ArrayList<Float> myIntegers){
-
-		float cpu_std = 3.962832f;
-		float cpuam_std = 0.565675f;
-		float memoryam_std = 0.000000f;
-		float memused_std = 22950.313937f;
-		float memavil_std = 22950.313937f;
-		float memfree_std = 16205.462286f;
-		float cached_std = 14519.936550f;
-		float threshold_std = 0.000000f;
-
-		float cpu_mean = 3.705264f;
-		float cpuam_mean = 2.260897f;
-		float memoryam_mean = 3.705264f;
-		float memused_mean = 771590.796872f;
-		float memavil_mean = 778957.203128f;
-		float memfree_mean = 343344.630335f;
-		float cached_mean = 435617.041246f;
-		float threshold_mean = 0.000000f;
-
-		float[] Input = new float[6];
-
-		Input[0]  =  (myIntegers.get(0) - cpu_mean)/cpu_std;
-		Input[2]  =  (myIntegers.get(3) - memused_mean)/memused_std;
-		Input[3]  =  (myIntegers.get(4) - memavil_mean)/memavil_std;
-		Input[4]  =  (myIntegers.get(5) - memfree_mean)/memfree_std;
-		Input[5]  =  (myIntegers.get(6) - cached_mean)/cached_std;
-		Input[1]  =  (myIntegers.get(1) - cpuam_mean)/cpuam_std;
-
-
-		return Input;
-	}
 
 	private float distance(float[] input, float[] output){
 		float dis = 0;
@@ -803,6 +734,12 @@ public class ServiceReader extends Service {
 				Input_20.add(Input[i]);
 			}
 
+//			Iterator<Operation> operationIterator = tensorflow.graph().operations();
+//			while (operationIterator.hasNext()){
+//				Operation operation = operationIterator.next();
+//				System.out.print(operation.name());
+//			}
+
 			tensorflow.feed("input",Input,1,6);
 
 
@@ -832,7 +769,10 @@ public class ServiceReader extends Service {
 //			System.out.println("suriv");
 //			System.out.println(Output1);
 
+
 			if(abs(dis)>50||abs(RNN_dis)>50||(abs(dis)+abs(RNN_dis)>70)){
+
+				numofwarning.add(0,numofwarning.get(0)+1);
 				int dis_auto_anomaly = max(distance_list(Input,Output));
 				int dis_RNN_anomaly = max(distance_list(Input,Output_RNN));
 				String message = "The anomaly is from: ";
@@ -891,6 +831,9 @@ public class ServiceReader extends Service {
 						.build();
 
 				notificationManager.notify(null, 0, notification);
+
+				System.out.println("Warning times:");
+				System.out.println(numofwarning.get(0));
 
 			}
 

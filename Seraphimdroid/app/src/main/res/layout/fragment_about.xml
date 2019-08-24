@@ -53,20 +53,20 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_dev_by_label"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
             android:gravity="center"
             android:text="text"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp" />
+            android:textStyle="bold" />
 
         <ImageView
-            android:layout_width="150dp"
-            android:layout_height="300dp"
             android:id="@+id/paypal_donate"
-            android:src="@drawable/paypaldonate"
-            android:onClick="paypalDonate"
+            android:layout_width="148dp"
+            android:layout_height="357dp"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="230dp"
             android:gravity="center"
-            android:layout_marginTop="230dp" />
+            android:onClick="paypalDonate"
+            android:src="@drawable/paypaldonate" />
 
         <TextView
             android:id="@+id/tv_user_guide_link"

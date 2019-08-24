@@ -30,7 +30,7 @@ public class AboutFragment extends Fragment {
 		tvGithub.setTag(GitHubId);
 		tvProjectPage = (TextView) view.findViewById(R.id.tv_project_page_link);
 		tvProjectPage.setTag(ProjectPageId);
-		String devNames = "Nikola Milosevic \n\nFurquan Ahmed \n\nAleksandar Abu-Samra \n\nChetan Karande \n\nKartik Kohli \n\nAditya Dua \n\nJunfan Huang";
+		String devNames = "Nikola Milosevic \n\nFurquan Ahmed, Aleksandar Abu-Samra\n\n Chetan Karande, Kartik Kohli\n\n Aditya Dua, Junfan Huang \n\n";
 		tvDevNames.setText(devNames);
 		
 		tvGithub.setText(Html.fromHtml("<u>GitHub</u>"));
