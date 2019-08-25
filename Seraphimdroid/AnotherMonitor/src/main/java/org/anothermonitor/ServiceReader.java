@@ -770,7 +770,7 @@ public class ServiceReader extends Service {
 //			System.out.println(Output1);
 
 
-			if(abs(dis)>50||abs(RNN_dis)>50||(abs(dis)+abs(RNN_dis)>70)){
+			if(abs(dis)>100&&abs(RNN_dis)>100){ //||(abs(dis)+abs(RNN_dis)>80)){
 
 				numofwarning.add(0,numofwarning.get(0)+1);
 				int dis_auto_anomaly = max(distance_list(Input,Output));
