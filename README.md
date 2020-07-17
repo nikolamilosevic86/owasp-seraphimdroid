@@ -34,12 +34,7 @@ Currently, Seraphimdroid is able to collect different device usage information t
 Example: What data could AnotherMonitor collect?
 
 
-Device usage|
-Totoal CPU |
-Seraphi’s CPU|
-Totoal Memory|
-Seraphi’s Memory|
-Cached|
+Device usage|Totoal CPU |Seraphi’s CPU|Totoal Memory|Seraphi’s Memory|Cached|
 ---|---|---|---|---|---
 Android 7|✔️|✔️|✔️|✔️|✔️
 Androdi 8+|❌|❌|✔️|✔️|✔️
